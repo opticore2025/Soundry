@@ -1,0 +1,8 @@
+framework module "APIClient" {
+    umbrella header "APIClient.h"
+
+    export *
+    module * { export * }
+
+    use Foundation
+}

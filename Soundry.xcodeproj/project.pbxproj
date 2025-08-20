@@ -1,0 +1,774 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 63;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4D5BD0CF55D1F26BE56744E9 /* Pods_Soundry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E6AEA6868E09D9EC677A1F5 /* Pods_Soundry.framework */; };
+		91EB78602E54932000257CC8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91EB785F2E54932000257CC8 /* StoreKit.framework */; };
+		91EB7BFC2E55704500257CC8 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BB52E55704500257CC8 /* AppConfig.swift */; };
+		91EB7BFD2E55704500257CC8 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BB62E55704500257CC8 /* AppState.swift */; };
+		91EB7BFE2E55704500257CC8 /* MeViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BB72E55704500257CC8 /* MeViewState.swift */; };
+		91EB7BFF2E55704500257CC8 /* TokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BB82E55704500257CC8 /* TokenManager.swift */; };
+		91EB7C002E55704500257CC8 /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BBA2E55704500257CC8 /* Container.swift */; };
+		91EB7C012E55704500257CC8 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BBC2E55704500257CC8 /* Color+Extensions.swift */; };
+		91EB7C022E55704500257CC8 /* AuthModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BBE2E55704500257CC8 /* AuthModels.swift */; };
+		91EB7C032E55704500257CC8 /* ResourceUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BC02E55704500257CC8 /* ResourceUtils.swift */; };
+		91EB7C042E55704500257CC8 /* AppApiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BC22E55704500257CC8 /* AppApiViewModel.swift */; };
+		91EB7C052E55704500257CC8 /* ApplePayApiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BC32E55704500257CC8 /* ApplePayApiViewModel.swift */; };
+		91EB7C062E55704500257CC8 /* AuthenticationApiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BC42E55704500257CC8 /* AuthenticationApiViewModel.swift */; };
+		91EB7C072E55704500257CC8 /* FeedbackApiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BC52E55704500257CC8 /* FeedbackApiViewModel.swift */; };
+		91EB7C082E55704500257CC8 /* MusicApiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BC62E55704500257CC8 /* MusicApiViewModel.swift */; };
+		91EB7C092E55704500257CC8 /* MusicPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BC72E55704500257CC8 /* MusicPlayerViewModel.swift */; };
+		91EB7C0A2E55704500257CC8 /* ReportApiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BC82E55704500257CC8 /* ReportApiViewModel.swift */; };
+		91EB7C0B2E55704500257CC8 /* UploadApiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BC92E55704500257CC8 /* UploadApiViewModel.swift */; };
+		91EB7C0C2E55704500257CC8 /* UserSessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BCA2E55704500257CC8 /* UserSessionViewModel.swift */; };
+		91EB7C0D2E55704500257CC8 /* VIPApiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BCB2E55704500257CC8 /* VIPApiViewModel.swift */; };
+		91EB7C0E2E55704500257CC8 /* EmailLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BCD2E55704500257CC8 /* EmailLoginView.swift */; };
+		91EB7C0F2E55704500257CC8 /* EmailSignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BCE2E55704500257CC8 /* EmailSignupView.swift */; };
+		91EB7C102E55704500257CC8 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BCF2E55704500257CC8 /* ForgotPasswordView.swift */; };
+		91EB7C112E55704500257CC8 /* LoginOverlaysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BD02E55704500257CC8 /* LoginOverlaysView.swift */; };
+		91EB7C122E55704500257CC8 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BD12E55704500257CC8 /* LoginView.swift */; };
+		91EB7C132E55704500257CC8 /* SharedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BD22E55704500257CC8 /* SharedComponents.swift */; };
+		91EB7C142E55704500257CC8 /* RootTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BD42E55704500257CC8 /* RootTabBar.swift */; };
+		91EB7C152E55704500257CC8 /* HomeStyleMusicCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BD62E55704500257CC8 /* HomeStyleMusicCard.swift */; };
+		91EB7C162E55704500257CC8 /* MusicCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BD72E55704500257CC8 /* MusicCardView.swift */; };
+		91EB7C172E55704500257CC8 /* MusicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BD82E55704500257CC8 /* MusicListView.swift */; };
+		91EB7C182E55704500257CC8 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BDA2E55704500257CC8 /* SearchView.swift */; };
+		91EB7C192E55704500257CC8 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BDC2E55704500257CC8 /* HomeView.swift */; };
+		91EB7C1A2E55704500257CC8 /* MusicItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BDD2E55704500257CC8 /* MusicItemView.swift */; };
+		91EB7C1B2E55704500257CC8 /* MusicReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BDE2E55704500257CC8 /* MusicReportView.swift */; };
+		91EB7C1E2E55704500257CC8 /* MeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BE22E55704500257CC8 /* MeView.swift */; };
+		91EB7C1F2E55704500257CC8 /* AttachGenerate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BE42E55704500257CC8 /* AttachGenerate.swift */; };
+		91EB7C202E55704500257CC8 /* MusicGenerationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BE52E55704500257CC8 /* MusicGenerationView.swift */; };
+		91EB7C212E55704500257CC8 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BE72E55704500257CC8 /* NotificationsView.swift */; };
+		91EB7C222E55704500257CC8 /* PlayerBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BE92E55704500257CC8 /* PlayerBarView.swift */; };
+		91EB7C232E55704500257CC8 /* PlayerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BEA2E55704500257CC8 /* PlayerDetailView.swift */; };
+		91EB7C242E55704500257CC8 /* AboutUs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BEC2E55704500257CC8 /* AboutUs.swift */; };
+		91EB7C252E55704500257CC8 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BED2E55704500257CC8 /* AccountView.swift */; };
+		91EB7C262E55704500257CC8 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BEE2E55704500257CC8 /* ProfileView.swift */; };
+		91EB7C282E55704500257CC8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BF02E55704500257CC8 /* SettingsView.swift */; };
+		91EB7C292E55704500257CC8 /* SafariWithBackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BF22E55704500257CC8 /* SafariWithBackButton.swift */; };
+		91EB7C2A2E55704500257CC8 /* VipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BF42E55704500257CC8 /* VipView.swift */; };
+		91EB7C2B2E55704500257CC8 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BF62E55704500257CC8 /* MainView.swift */; };
+		91EB7C2C2E55704500257CC8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BF92E55704500257CC8 /* ContentView.swift */; };
+		91EB7C2D2E55704500257CC8 /* SoundryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BFA2E55704500257CC8 /* SoundryApp.swift */; };
+		91EB7C2E2E55704500257CC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91EB7BF82E55704500257CC8 /* Assets.xcassets */; };
+		91EB7D262E55A86B00257CC8 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7D252E55A86B00257CC8 /* FeedbackView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7E6AEA6868E09D9EC677A1F5 /* Pods_Soundry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Soundry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		912651A42E4596EB00F26239 /* Soundry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Soundry.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		91EB785F2E54932000257CC8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		91EB7BB52E55704500257CC8 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		91EB7BB62E55704500257CC8 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		91EB7BB72E55704500257CC8 /* MeViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeViewState.swift; sourceTree = "<group>"; };
+		91EB7BB82E55704500257CC8 /* TokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenManager.swift; sourceTree = "<group>"; };
+		91EB7BBA2E55704500257CC8 /* Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
+		91EB7BBC2E55704500257CC8 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
+		91EB7BBE2E55704500257CC8 /* AuthModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModels.swift; sourceTree = "<group>"; };
+		91EB7BC02E55704500257CC8 /* ResourceUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceUtils.swift; sourceTree = "<group>"; };
+		91EB7BC22E55704500257CC8 /* AppApiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppApiViewModel.swift; sourceTree = "<group>"; };
+		91EB7BC32E55704500257CC8 /* ApplePayApiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplePayApiViewModel.swift; sourceTree = "<group>"; };
+		91EB7BC42E55704500257CC8 /* AuthenticationApiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationApiViewModel.swift; sourceTree = "<group>"; };
+		91EB7BC52E55704500257CC8 /* FeedbackApiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackApiViewModel.swift; sourceTree = "<group>"; };
+		91EB7BC62E55704500257CC8 /* MusicApiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicApiViewModel.swift; sourceTree = "<group>"; };
+		91EB7BC72E55704500257CC8 /* MusicPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerViewModel.swift; sourceTree = "<group>"; };
+		91EB7BC82E55704500257CC8 /* ReportApiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportApiViewModel.swift; sourceTree = "<group>"; };
+		91EB7BC92E55704500257CC8 /* UploadApiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadApiViewModel.swift; sourceTree = "<group>"; };
+		91EB7BCA2E55704500257CC8 /* UserSessionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSessionViewModel.swift; sourceTree = "<group>"; };
+		91EB7BCB2E55704500257CC8 /* VIPApiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIPApiViewModel.swift; sourceTree = "<group>"; };
+		91EB7BCD2E55704500257CC8 /* EmailLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginView.swift; sourceTree = "<group>"; };
+		91EB7BCE2E55704500257CC8 /* EmailSignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailSignupView.swift; sourceTree = "<group>"; };
+		91EB7BCF2E55704500257CC8 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
+		91EB7BD02E55704500257CC8 /* LoginOverlaysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginOverlaysView.swift; sourceTree = "<group>"; };
+		91EB7BD12E55704500257CC8 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		91EB7BD22E55704500257CC8 /* SharedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedComponents.swift; sourceTree = "<group>"; };
+		91EB7BD42E55704500257CC8 /* RootTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBar.swift; sourceTree = "<group>"; };
+		91EB7BD62E55704500257CC8 /* HomeStyleMusicCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeStyleMusicCard.swift; sourceTree = "<group>"; };
+		91EB7BD72E55704500257CC8 /* MusicCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicCardView.swift; sourceTree = "<group>"; };
+		91EB7BD82E55704500257CC8 /* MusicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicListView.swift; sourceTree = "<group>"; };
+		91EB7BDA2E55704500257CC8 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		91EB7BDC2E55704500257CC8 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		91EB7BDD2E55704500257CC8 /* MusicItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicItemView.swift; sourceTree = "<group>"; };
+		91EB7BDE2E55704500257CC8 /* MusicReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicReportView.swift; sourceTree = "<group>"; };
+		91EB7BE22E55704500257CC8 /* MeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeView.swift; sourceTree = "<group>"; };
+		91EB7BE42E55704500257CC8 /* AttachGenerate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachGenerate.swift; sourceTree = "<group>"; };
+		91EB7BE52E55704500257CC8 /* MusicGenerationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicGenerationView.swift; sourceTree = "<group>"; };
+		91EB7BE72E55704500257CC8 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		91EB7BE92E55704500257CC8 /* PlayerBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBarView.swift; sourceTree = "<group>"; };
+		91EB7BEA2E55704500257CC8 /* PlayerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDetailView.swift; sourceTree = "<group>"; };
+		91EB7BEC2E55704500257CC8 /* AboutUs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutUs.swift; sourceTree = "<group>"; };
+		91EB7BED2E55704500257CC8 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		91EB7BEE2E55704500257CC8 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		91EB7BF02E55704500257CC8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		91EB7BF22E55704500257CC8 /* SafariWithBackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWithBackButton.swift; sourceTree = "<group>"; };
+		91EB7BF42E55704500257CC8 /* VipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VipView.swift; sourceTree = "<group>"; };
+		91EB7BF62E55704500257CC8 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		91EB7BF82E55704500257CC8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		91EB7BF92E55704500257CC8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		91EB7BFA2E55704500257CC8 /* SoundryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundryApp.swift; sourceTree = "<group>"; };
+		91EB7D252E55A86B00257CC8 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
+		BDCD09F3823C9469E006CC09 /* Pods-Soundry.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundry.debug.xcconfig"; path = "Target Support Files/Pods-Soundry/Pods-Soundry.debug.xcconfig"; sourceTree = "<group>"; };
+		DA86443E7D7EDC4E2CA75B91 /* Pods-Soundry.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Soundry.release.xcconfig"; path = "Target Support Files/Pods-Soundry/Pods-Soundry.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		912651A12E4596EB00F26239 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D5BD0CF55D1F26BE56744E9 /* Pods_Soundry.framework in Frameworks */,
+				91EB78602E54932000257CC8 /* StoreKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		04AC6AA993A50F8B2081405D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				91EB785F2E54932000257CC8 /* StoreKit.framework */,
+				7E6AEA6868E09D9EC677A1F5 /* Pods_Soundry.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4E2BC73E3D3E1B8117C0C45B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BDCD09F3823C9469E006CC09 /* Pods-Soundry.debug.xcconfig */,
+				DA86443E7D7EDC4E2CA75B91 /* Pods-Soundry.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		9126519B2E4596EB00F26239 = {
+			isa = PBXGroup;
+			children = (
+				91EB7BFB2E55704500257CC8 /* Soundry */,
+				912651A52E4596EB00F26239 /* Products */,
+				4E2BC73E3D3E1B8117C0C45B /* Pods */,
+				04AC6AA993A50F8B2081405D /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		912651A52E4596EB00F26239 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				912651A42E4596EB00F26239 /* Soundry.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		91EB7BB92E55704500257CC8 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BB52E55704500257CC8 /* AppConfig.swift */,
+				91EB7BB62E55704500257CC8 /* AppState.swift */,
+				91EB7BB72E55704500257CC8 /* MeViewState.swift */,
+				91EB7BB82E55704500257CC8 /* TokenManager.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		91EB7BBB2E55704500257CC8 /* DI */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BBA2E55704500257CC8 /* Container.swift */,
+			);
+			path = DI;
+			sourceTree = "<group>";
+		};
+		91EB7BBD2E55704500257CC8 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BBC2E55704500257CC8 /* Color+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		91EB7BBF2E55704500257CC8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BBE2E55704500257CC8 /* AuthModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		91EB7BC12E55704500257CC8 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BC02E55704500257CC8 /* ResourceUtils.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		91EB7BCC2E55704500257CC8 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BC22E55704500257CC8 /* AppApiViewModel.swift */,
+				91EB7BC32E55704500257CC8 /* ApplePayApiViewModel.swift */,
+				91EB7BC42E55704500257CC8 /* AuthenticationApiViewModel.swift */,
+				91EB7BC52E55704500257CC8 /* FeedbackApiViewModel.swift */,
+				91EB7BC62E55704500257CC8 /* MusicApiViewModel.swift */,
+				91EB7BC72E55704500257CC8 /* MusicPlayerViewModel.swift */,
+				91EB7BC82E55704500257CC8 /* ReportApiViewModel.swift */,
+				91EB7BC92E55704500257CC8 /* UploadApiViewModel.swift */,
+				91EB7BCA2E55704500257CC8 /* UserSessionViewModel.swift */,
+				91EB7BCB2E55704500257CC8 /* VIPApiViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		91EB7BD32E55704500257CC8 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BCD2E55704500257CC8 /* EmailLoginView.swift */,
+				91EB7BCE2E55704500257CC8 /* EmailSignupView.swift */,
+				91EB7BCF2E55704500257CC8 /* ForgotPasswordView.swift */,
+				91EB7BD02E55704500257CC8 /* LoginOverlaysView.swift */,
+				91EB7BD12E55704500257CC8 /* LoginView.swift */,
+				91EB7BD22E55704500257CC8 /* SharedComponents.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		91EB7BD52E55704500257CC8 /* Bar */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BD42E55704500257CC8 /* RootTabBar.swift */,
+			);
+			path = Bar;
+			sourceTree = "<group>";
+		};
+		91EB7BD92E55704500257CC8 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BD62E55704500257CC8 /* HomeStyleMusicCard.swift */,
+				91EB7BD72E55704500257CC8 /* MusicCardView.swift */,
+				91EB7BD82E55704500257CC8 /* MusicListView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		91EB7BDB2E55704500257CC8 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BDA2E55704500257CC8 /* SearchView.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		91EB7BDF2E55704500257CC8 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BDB2E55704500257CC8 /* Search */,
+				91EB7BDC2E55704500257CC8 /* HomeView.swift */,
+				91EB7BDD2E55704500257CC8 /* MusicItemView.swift */,
+				91EB7BDE2E55704500257CC8 /* MusicReportView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		91EB7BE32E55704500257CC8 /* Me */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BE22E55704500257CC8 /* MeView.swift */,
+			);
+			path = Me;
+			sourceTree = "<group>";
+		};
+		91EB7BE62E55704500257CC8 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BE42E55704500257CC8 /* AttachGenerate.swift */,
+				91EB7BE52E55704500257CC8 /* MusicGenerationView.swift */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
+		91EB7BE82E55704500257CC8 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BE72E55704500257CC8 /* NotificationsView.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		91EB7BEB2E55704500257CC8 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BE92E55704500257CC8 /* PlayerBarView.swift */,
+				91EB7BEA2E55704500257CC8 /* PlayerDetailView.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
+		91EB7BF12E55704500257CC8 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7D252E55A86B00257CC8 /* FeedbackView.swift */,
+				91EB7BEC2E55704500257CC8 /* AboutUs.swift */,
+				91EB7BED2E55704500257CC8 /* AccountView.swift */,
+				91EB7BEE2E55704500257CC8 /* ProfileView.swift */,
+				91EB7BF02E55704500257CC8 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		91EB7BF32E55704500257CC8 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BF22E55704500257CC8 /* SafariWithBackButton.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		91EB7BF52E55704500257CC8 /* Vip */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BF42E55704500257CC8 /* VipView.swift */,
+			);
+			path = Vip;
+			sourceTree = "<group>";
+		};
+		91EB7BF72E55704500257CC8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BD32E55704500257CC8 /* Auth */,
+				91EB7BD52E55704500257CC8 /* Bar */,
+				91EB7BD92E55704500257CC8 /* Components */,
+				91EB7BDF2E55704500257CC8 /* Home */,
+				91EB7BE32E55704500257CC8 /* Me */,
+				91EB7BE62E55704500257CC8 /* Music */,
+				91EB7BE82E55704500257CC8 /* Notifications */,
+				91EB7BEB2E55704500257CC8 /* Player */,
+				91EB7BF12E55704500257CC8 /* Settings */,
+				91EB7BF32E55704500257CC8 /* Shared */,
+				91EB7BF52E55704500257CC8 /* Vip */,
+				91EB7BF62E55704500257CC8 /* MainView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		91EB7BFB2E55704500257CC8 /* Soundry */ = {
+			isa = PBXGroup;
+			children = (
+				91EB7BB92E55704500257CC8 /* Core */,
+				91EB7BBB2E55704500257CC8 /* DI */,
+				91EB7BBD2E55704500257CC8 /* Extensions */,
+				91EB7BBF2E55704500257CC8 /* Models */,
+				91EB7BC12E55704500257CC8 /* Utils */,
+				91EB7BCC2E55704500257CC8 /* ViewModels */,
+				91EB7BF72E55704500257CC8 /* Views */,
+				91EB7BF82E55704500257CC8 /* Assets.xcassets */,
+				91EB7BF92E55704500257CC8 /* ContentView.swift */,
+				91EB7BFA2E55704500257CC8 /* SoundryApp.swift */,
+			);
+			path = Soundry;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		912651A32E4596EB00F26239 /* Soundry */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 912651AF2E4596EE00F26239 /* Build configuration list for PBXNativeTarget "Soundry" */;
+			buildPhases = (
+				CC62E77CB52C7A48672C7E7E /* [CP] Check Pods Manifest.lock */,
+				912651A02E4596EB00F26239 /* Sources */,
+				912651A12E4596EB00F26239 /* Frameworks */,
+				912651A22E4596EB00F26239 /* Resources */,
+				2AAE77A15232CA172EB54B9C /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Soundry;
+			productName = SonarMusic;
+			productReference = 912651A42E4596EB00F26239 /* Soundry.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9126519C2E4596EB00F26239 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					912651A32E4596EB00F26239 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+				};
+			};
+			buildConfigurationList = 9126519F2E4596EB00F26239 /* Build configuration list for PBXProject "Soundry" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 9126519B2E4596EB00F26239;
+			minimizedProjectReferenceProxies = 1;
+			productRefGroup = 912651A52E4596EB00F26239 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				912651A32E4596EB00F26239 /* Soundry */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		912651A22E4596EB00F26239 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91EB7C2E2E55704500257CC8 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2AAE77A15232CA172EB54B9C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Soundry/Pods-Soundry-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Soundry/Pods-Soundry-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Soundry/Pods-Soundry-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CC62E77CB52C7A48672C7E7E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Soundry-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		912651A02E4596EB00F26239 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91EB7BFC2E55704500257CC8 /* AppConfig.swift in Sources */,
+				91EB7BFD2E55704500257CC8 /* AppState.swift in Sources */,
+				91EB7BFE2E55704500257CC8 /* MeViewState.swift in Sources */,
+				91EB7BFF2E55704500257CC8 /* TokenManager.swift in Sources */,
+				91EB7C002E55704500257CC8 /* Container.swift in Sources */,
+				91EB7C012E55704500257CC8 /* Color+Extensions.swift in Sources */,
+				91EB7C022E55704500257CC8 /* AuthModels.swift in Sources */,
+				91EB7C032E55704500257CC8 /* ResourceUtils.swift in Sources */,
+				91EB7C042E55704500257CC8 /* AppApiViewModel.swift in Sources */,
+				91EB7C052E55704500257CC8 /* ApplePayApiViewModel.swift in Sources */,
+				91EB7C062E55704500257CC8 /* AuthenticationApiViewModel.swift in Sources */,
+				91EB7C072E55704500257CC8 /* FeedbackApiViewModel.swift in Sources */,
+				91EB7C082E55704500257CC8 /* MusicApiViewModel.swift in Sources */,
+				91EB7C092E55704500257CC8 /* MusicPlayerViewModel.swift in Sources */,
+				91EB7C0A2E55704500257CC8 /* ReportApiViewModel.swift in Sources */,
+				91EB7C0B2E55704500257CC8 /* UploadApiViewModel.swift in Sources */,
+				91EB7C0C2E55704500257CC8 /* UserSessionViewModel.swift in Sources */,
+				91EB7C0D2E55704500257CC8 /* VIPApiViewModel.swift in Sources */,
+				91EB7C0E2E55704500257CC8 /* EmailLoginView.swift in Sources */,
+				91EB7C0F2E55704500257CC8 /* EmailSignupView.swift in Sources */,
+				91EB7C102E55704500257CC8 /* ForgotPasswordView.swift in Sources */,
+				91EB7C112E55704500257CC8 /* LoginOverlaysView.swift in Sources */,
+				91EB7C122E55704500257CC8 /* LoginView.swift in Sources */,
+				91EB7C132E55704500257CC8 /* SharedComponents.swift in Sources */,
+				91EB7C142E55704500257CC8 /* RootTabBar.swift in Sources */,
+				91EB7C152E55704500257CC8 /* HomeStyleMusicCard.swift in Sources */,
+				91EB7C162E55704500257CC8 /* MusicCardView.swift in Sources */,
+				91EB7C172E55704500257CC8 /* MusicListView.swift in Sources */,
+				91EB7C182E55704500257CC8 /* SearchView.swift in Sources */,
+				91EB7C192E55704500257CC8 /* HomeView.swift in Sources */,
+				91EB7C1A2E55704500257CC8 /* MusicItemView.swift in Sources */,
+				91EB7C1B2E55704500257CC8 /* MusicReportView.swift in Sources */,
+				91EB7C1E2E55704500257CC8 /* MeView.swift in Sources */,
+				91EB7C1F2E55704500257CC8 /* AttachGenerate.swift in Sources */,
+				91EB7C202E55704500257CC8 /* MusicGenerationView.swift in Sources */,
+				91EB7C212E55704500257CC8 /* NotificationsView.swift in Sources */,
+				91EB7C222E55704500257CC8 /* PlayerBarView.swift in Sources */,
+				91EB7C232E55704500257CC8 /* PlayerDetailView.swift in Sources */,
+				91EB7C242E55704500257CC8 /* AboutUs.swift in Sources */,
+				91EB7C252E55704500257CC8 /* AccountView.swift in Sources */,
+				91EB7C262E55704500257CC8 /* ProfileView.swift in Sources */,
+				91EB7C282E55704500257CC8 /* SettingsView.swift in Sources */,
+				91EB7C292E55704500257CC8 /* SafariWithBackButton.swift in Sources */,
+				91EB7C2A2E55704500257CC8 /* VipView.swift in Sources */,
+				91EB7C2B2E55704500257CC8 /* MainView.swift in Sources */,
+				91EB7C2C2E55704500257CC8 /* ContentView.swift in Sources */,
+				91EB7C2D2E55704500257CC8 /* SoundryApp.swift in Sources */,
+				91EB7D262E55A86B00257CC8 /* FeedbackView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		912651AD2E4596EE00F26239 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3H69R3G362;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		912651AE2E4596EE00F26239 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3H69R3G362;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		912651B02E4596EE00F26239 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BDCD09F3823C9469E006CC09 /* Pods-Soundry.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Soundry/Soundry.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JZT9NPY56A;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "This app needs access to Apple Music to enhance your music experience.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs to access your camera permissions to edit your profile picture,Please authorize and agree.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs access to the microphone to record voice descriptions for AI music generation.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access your photo album to edit your profile picture, Please authorize and agree.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.opticore.soundry;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		912651B12E4596EE00F26239 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DA86443E7D7EDC4E2CA75B91 /* Pods-Soundry.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Soundry/Soundry.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JZT9NPY56A;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "This app needs access to Apple Music to enhance your music experience.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs to access your camera permissions to edit your profile picture,Please authorize and agree.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs access to the microphone to record voice descriptions for AI music generation.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app needs access your photo album to edit your profile picture, Please authorize and agree.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.opticore.soundry;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9126519F2E4596EB00F26239 /* Build configuration list for PBXProject "Soundry" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				912651AD2E4596EE00F26239 /* Debug */,
+				912651AE2E4596EE00F26239 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		912651AF2E4596EE00F26239 /* Build configuration list for PBXNativeTarget "Soundry" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				912651B02E4596EE00F26239 /* Debug */,
+				912651B12E4596EE00F26239 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9126519C2E4596EB00F26239 /* Project object */;
+}
