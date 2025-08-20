@@ -1,0 +1,132 @@
+name: Build and Distribute Native iOS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app
+
+      - name: Import Certificate
+        run: |
+          echo "${{ secrets.CERTIFICATE_BASE64 }}" | base64 --decode > certificate.p12
+          security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+          security import certificate.p12 -k build.keychain -P "${{ secrets.CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "${{ secrets.KEYCHAIN_PASSWORD }}" build.keychain
+          
+      - name: Install Provisioning Profile
+        run: |
+          # 首先创建目录
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          
+          # 解码并安装描述文件
+          echo "${{ secrets.PROVISIONING_PROFILE_BASE64 }}" | base64 --decode > profile.mobileprovision
+          
+          # 获取描述文件的 UUID
+          PROFILE_UUID=$(security cms -D -i profile.mobileprovision | plutil -extract UUID raw -)
+          if [ $? -ne 0 ]; then
+            echo "❌ 无法读取描述文件 UUID"
+            exit 1
+          fi
+          
+          # 复制到正确位置并设置权限
+          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/${PROFILE_UUID}.mobileprovision
+          chmod 644 ~/Library/MobileDevice/Provisioning\ Profiles/${PROFILE_UUID}.mobileprovision
+          
+          echo "✅ 描述文件已安装"
+      - name: Verify Provisioning Profile
+        run: |
+          # 验证目录是否存在
+          if [ ! -d ~/Library/MobileDevice/Provisioning\ Profiles ]; then
+            echo "❌ 描述文件目录不存在"
+            exit 1
+          fi
+          
+          # 显示目录内容
+          echo "📁 描述文件目录内容："
+          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
+          
+          # 验证描述文件内容
+          echo "\n📄 描述文件信息："
+          security cms -D -i profile.mobileprovision
+          
+          # 显示 UUID
+          echo "\n🔑 描述文件 UUID："
+          PROFILE_UUID=$(security cms -D -i profile.mobileprovision | plutil -extract UUID raw -)
+          echo $PROFILE_UUID
+          
+          # 验证权限
+          echo "\n📋 文件权限："
+          ls -l profile.mobileprovision
+      - name: Build and Archive
+        run: |
+          xcodebuild archive \
+            -workspace Soundry.xcworkspace \
+            -scheme Soundry \
+            -archivePath ./build/Soundry.xcarchive \
+            -allowProvisioningUpdates \
+            DEVELOPMENT_TEAM=${{ secrets.APPLE_TEAM_ID }} \
+            PROVISIONING_PROFILE_SPECIFIER="Soundry_dist"
+      - name: Export IPA
+        run: |
+          xcodebuild -exportArchive -archivePath ./build/Soundry.xcarchive -exportPath ./build/ios/ipa -exportOptionsPlist ios/ExportOptions.plist
+      - name: Archive IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-ipa
+          path: build/ios/ipa
+
+      - name: Upload using iTMSTransporter
+        env:
+          WORKING_DIRECTORY: "build/ios/ipa"
+          IPA_FILE_NAME: "Soundry.ipa"
+          APPLE_USERNAME: ${{ secrets.APPLE_USERNAME }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_ASC_PROVIDER: ${{ secrets.APPLE_TEAM_ID }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd $WORKING_DIRECTORY
+          
+          # 检查 Transporter 是否已安装
+          if ! command -v xcrun altool &> /dev/null; then
+            echo "❌ xcrun altool 不存在"
+            exit 1
+          fi
+          
+          # 使用 xcrun altool 替代 iTMSTransporter
+          echo "🚀 开始上传 IPA..."
+          xcrun altool --upload-app \
+            --type ios \
+            --file "$IPA_FILE_NAME" \
+            --username "$APPLE_USERNAME" \
+            --password "$APPLE_PASSWORD" \
+            --provider "$APPLE_ASC_PROVIDER" \
+            --verbose
+          
+          if [ $? -eq 0 ]; then
+            echo "✅ IPA 上传成功"
+          else
+            echo "❌ IPA 上传失败"
+            exit 1
+          fi
+      # - name: Clean project and update README
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      #     git config --global user.name "github-actions[bot]"
+      #     git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+      #     git rm -rf .
+      #     git clean -fxd
+      #     echo "Last updated: $(date '+%Y-%m-%d %H:%M:%S')" > README.md
+      #     git add README.md
+      #     git commit -m "清空项目，仅保留更新时间戳的 README"
+      #     git push origin main --force
