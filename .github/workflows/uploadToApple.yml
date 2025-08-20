@@ -77,7 +77,7 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="Soundry_dist"
       - name: Export IPA
         run: |
-          xcodebuild -exportArchive -archivePath ./build/Soundry.xcarchive -exportPath ./build/ios/ipa -exportOptionsPlist ios/ExportOptions.plist
+          xcodebuild -exportArchive -archivePath ./build/Soundry.xcarchive -exportPath ./build/ios/ipa -exportOptionsPlist ./ExportOptions.plist
       - name: Archive IPA
         uses: actions/upload-artifact@v4
         with:
