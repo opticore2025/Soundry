@@ -16,6 +16,7 @@
 			dependencies = (
 			);
 			name = APIClient;
+			productName = APIClient;
 		};
 /* End PBXAggregateTarget section */
 
@@ -126,6 +127,7 @@
 		2D3ABA0D7EE85B222917B13FBDA3D0F4 /* Pods-Soundry-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1453BFC1492D7F3F03032E913D43F6BD /* Pods-Soundry-dummy.m */; };
 		2DCF467433C2A10EB7708F9D85B39F9C /* AnimatedSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7822EF4A5BAAAF8A61082761176D2C3 /* AnimatedSwitch.swift */; };
 		2DDD48230ED9E8068C7E439D79B99A8E /* SDInternalMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = ABF6221F9E13348C78E11AB307AD5E83 /* SDInternalMacros.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		2EC484B22E56AF0700A22F9A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 2EC484B12E56AF0700A22F9A /* PrivacyInfo.xcprivacy */; };
 		2F3FF27F1699BC6EFE18C3A0082FDBC8 /* PolygonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3C2976B610664FD086E849ECAB5A4D /* PolygonNode.swift */; };
 		2F6D9BEA582A2DBB70A6C3B2FC2DB91E /* SDWebImageDownloaderResponseModifier.m in Sources */ = {isa = PBXBuildFile; fileRef = E572F9210AAF2524F09E962246A28F5B /* SDWebImageDownloaderResponseModifier.m */; };
 		2F9D332FE2802C10436D738C950852DF /* AnimationCacheProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF4D9E8D809B64E59B3A788A0B8004D /* AnimationCacheProvider.swift */; };
@@ -807,7 +809,7 @@
 		065FD09B0F8BDD1730C3ADC68A378D90 /* KeyedDecodingContainerExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeyedDecodingContainerExtensions.swift; path = Sources/Private/Model/Extensions/KeyedDecodingContainerExtensions.swift; sourceTree = "<group>"; };
 		06A4C129A2255177BB0D78136AE0E013 /* ConstraintMakerRelatable+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "ConstraintMakerRelatable+Extensions.swift"; path = "Sources/ConstraintMakerRelatable+Extensions.swift"; sourceTree = "<group>"; };
 		06C0AA1960488D87937E09368F41FC7D /* SDWebImagePrefetcher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImagePrefetcher.h; path = SDWebImage/Core/SDWebImagePrefetcher.h; sourceTree = "<group>"; };
-		073F6E61E17B1C60AAA434CDF386ABE9 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Source/SwiftyJSON/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		073F6E61E17B1C60AAA434CDF386ABE9 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Source/SwiftyJSON/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		0760C21388941F81EF8C9BE69BAE8B82 /* SwiftUIMeasurementContainer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftUIMeasurementContainer.swift; path = Sources/Private/EmbeddedLibraries/EpoxyCore/SwiftUI/LayoutUtilities/SwiftUIMeasurementContainer.swift; sourceTree = "<group>"; };
 		088FAA293CCB10F4A3E9C994AE6D063D /* Archive+WritingDeprecated.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Archive+WritingDeprecated.swift"; path = "Sources/Private/EmbeddedLibraries/ZipFoundation/Archive+WritingDeprecated.swift"; sourceTree = "<group>"; };
 		08B9CA57AE22BE64DD90328090158F11 /* StringEncoding+Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "StringEncoding+Alamofire.swift"; path = "Source/StringEncoding+Alamofire.swift"; sourceTree = "<group>"; };
@@ -849,7 +851,7 @@
 		16A3059717675BC578CDD37D0ADF086E /* TextLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TextLayer.swift; path = Sources/Private/CoreAnimation/Layers/TextLayer.swift; sourceTree = "<group>"; };
 		1712BDC828C62EFED3A600247361CE89 /* HTTPMethod.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HTTPMethod.swift; path = Source/HTTPMethod.swift; sourceTree = "<group>"; };
 		175C66945C667BADAB2AE2F72A6B0218 /* SDImageHEICCoder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageHEICCoder.m; path = SDWebImage/Core/SDImageHEICCoder.m; sourceTree = "<group>"; };
-		17EA4ED9854F9B2F2700A80181D2EDAE /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = WebImage/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		17EA4ED9854F9B2F2700A80181D2EDAE /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = WebImage/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		1809CEBFDA9132699F2B162326061DDE /* View+ValueChanged.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "View+ValueChanged.swift"; path = "Sources/Private/Utility/Helpers/View+ValueChanged.swift"; sourceTree = "<group>"; };
 		185586F9FDD78872525A88C00B04106C /* GradientFillRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GradientFillRenderer.swift; path = Sources/Private/MainThread/NodeRenderSystem/Nodes/OutputNodes/Renderables/GradientFillRenderer.swift; sourceTree = "<group>"; };
 		186CA9040ABABDEE401729E3965BA774 /* VisibilityAnimation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VisibilityAnimation.swift; path = Sources/Private/CoreAnimation/Animations/VisibilityAnimation.swift; sourceTree = "<group>"; };
@@ -902,6 +904,7 @@
 		2E1E51066408528BDE4BA4ECC688FDCC /* LayerEffect.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LayerEffect.swift; path = Sources/Private/Model/LayerEffects/LayerEffect.swift; sourceTree = "<group>"; };
 		2E467EAB617E8FC88B88BD28B6CC9F9C /* UIImage+ExtendedCacheData.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ExtendedCacheData.m"; path = "SDWebImage/Core/UIImage+ExtendedCacheData.m"; sourceTree = "<group>"; };
 		2EB8E84F66CDAB7B500B6E12EB9D261C /* SQLite.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SQLite.h; path = Sources/SQLite/SQLite.h; sourceTree = "<group>"; };
+		2EC484B12E56AF0700A22F9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		2EFC175E952B9A775E4EB2A072250438 /* SDWebImageOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageOperation.m; path = SDWebImage/Core/SDWebImageOperation.m; sourceTree = "<group>"; };
 		2F8FB602E3269A23B1BA93FB206A83E3 /* DotLottieImageProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DotLottieImageProvider.swift; path = Sources/Private/Model/DotLottie/DotLottieImageProvider.swift; sourceTree = "<group>"; };
 		2FF080999EFE2CBCC6AAB83708284A86 /* SVProgressHUD-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-umbrella.h"; sourceTree = "<group>"; };
@@ -945,7 +948,7 @@
 		3DCD0E6A47DE28BD17B8E9E69A389B1C /* SVProgressAnimatedView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVProgressAnimatedView.m; path = SVProgressHUD/SVProgressAnimatedView.m; sourceTree = "<group>"; };
 		3E19A204C3CED5C4A5DE57279C180EF3 /* AnimatorNode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AnimatorNode.swift; path = Sources/Private/MainThread/NodeRenderSystem/Protocols/AnimatorNode.swift; sourceTree = "<group>"; };
 		3EDE9E4B283AE370BF5C6D0EDD752C7C /* SDImageCodersManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageCodersManager.m; path = SDWebImage/Core/SDImageCodersManager.m; sourceTree = "<group>"; };
-		3EF048B3330DAEA01844C3862F2F6488 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Sources/FactoryKit/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		3EF048B3330DAEA01844C3862F2F6488 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Sources/FactoryKit/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3F2CC098BA12671C3F91CAE673014898 /* SessionDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionDelegate.swift; path = Source/SessionDelegate.swift; sourceTree = "<group>"; };
 		3F3E0C982100CC6505673D17E78AD6DB /* SDWebImageDownloaderRequestModifier.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageDownloaderRequestModifier.h; path = SDWebImage/Core/SDWebImageDownloaderRequestModifier.h; sourceTree = "<group>"; };
 		3FAC546ECA8EB577663A32EB575AEACE /* SQLiteFeature.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SQLiteFeature.swift; path = Sources/SQLite/Core/SQLiteFeature.swift; sourceTree = "<group>"; };
@@ -981,7 +984,7 @@
 		4AAD6D141E0C526A97BFF33B3F1451A5 /* BehaviorsConfigurableView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BehaviorsConfigurableView.swift; path = Sources/Private/EmbeddedLibraries/EpoxyCore/Views/BehaviorsConfigurableView.swift; sourceTree = "<group>"; };
 		4AB68B507B6E164B2B1C733BAF5A6EB9 /* SDImageGraphics.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageGraphics.h; path = SDWebImage/Core/SDImageGraphics.h; sourceTree = "<group>"; };
 		4AECA1283A0087FEFAF7B09EC8AC91E9 /* RenderNode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RenderNode.swift; path = Sources/Private/MainThread/NodeRenderSystem/Protocols/RenderNode.swift; sourceTree = "<group>"; };
-		4B4775426821C8B83E2112349389C76E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Sources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		4B4775426821C8B83E2112349389C76E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Sources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4BEC84AF7BF005191B2FB1E3FFD4FAF3 /* SQLite.swift.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SQLite.swift.modulemap; sourceTree = "<group>"; };
 		4C292D3AE0752F16F688D9361B13019F /* GroupNode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GroupNode.swift; path = Sources/Private/MainThread/NodeRenderSystem/Nodes/RenderContainers/GroupNode.swift; sourceTree = "<group>"; };
 		4C38010CFACB75178B434766EEE44EDD /* CompatibleAnimationKeypath.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CompatibleAnimationKeypath.swift; path = Sources/Public/iOS/Compatibility/CompatibleAnimationKeypath.swift; sourceTree = "<group>"; };
@@ -1039,7 +1042,7 @@
 		64C529B0A375C8A47CA19DA5AFF371BE /* SectionedChangeset.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SectionedChangeset.swift; path = Sources/Private/EmbeddedLibraries/EpoxyCore/Diffing/SectionedChangeset.swift; sourceTree = "<group>"; };
 		64CDF1DC578D9025D3CDFDDDC78E4F26 /* lottie-ios-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "lottie-ios-Info.plist"; sourceTree = "<group>"; };
 		64F7659567DCEEB06E8849C74F54B4F4 /* TextAnimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TextAnimator.swift; path = Sources/Private/Model/Text/TextAnimator.swift; sourceTree = "<group>"; };
-		6517E0B7E716498C2015CBAFBFF2D379 /* APIClient.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; path = APIClient.xcframework; sourceTree = "<group>"; };
+		6517E0B7E716498C2015CBAFBFF2D379 /* APIClient.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcframework; path = APIClient.xcframework; sourceTree = "<group>"; };
 		651DA6C8CF702576962B9C4BE369DB9E /* UIButton+WebCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIButton+WebCache.h"; path = "SDWebImage/Core/UIButton+WebCache.h"; sourceTree = "<group>"; };
 		65312DCBCB178C3179B1C6FFB159D28C /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVIndefiniteAnimatedView.h; path = SVProgressHUD/SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
 		65749D5E16A46BF7AB3589052D22A7D2 /* ViewEpoxyModeled.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ViewEpoxyModeled.swift; path = Sources/Private/EmbeddedLibraries/EpoxyCore/Model/ViewEpoxyModeled.swift; sourceTree = "<group>"; };
@@ -1114,7 +1117,7 @@
 		7C6F7E0C7AC565941D53E789F8827D85 /* Debugging.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Debugging.swift; path = Sources/Debugging.swift; sourceTree = "<group>"; };
 		7CA3B05F07B063827B34AD2B0DB23706 /* SwiftyJSON-SwiftyJSON */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "SwiftyJSON-SwiftyJSON"; path = SwiftyJSON.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D3F75691AD2E6C4D10D830392C9CE72 /* SDWebImageOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageOperation.h; path = SDWebImage/Core/SDWebImageOperation.h; sourceTree = "<group>"; };
-		7D9030C029F58A2F0A6B1D57FB5C812A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = SDWebImageSwiftUI/Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		7D9030C029F58A2F0A6B1D57FB5C812A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = SDWebImageSwiftUI/Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		7DB7F86A65DF119AB809394F5473A130 /* Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Alamofire.swift; path = Source/Alamofire.swift; sourceTree = "<group>"; };
 		7DBF70AAF8B36D086E1BBD0B48FC239F /* ContentConfigurableView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContentConfigurableView.swift; path = Sources/Private/EmbeddedLibraries/EpoxyCore/Views/ContentConfigurableView.swift; sourceTree = "<group>"; };
 		7E25DC1E57B27390AD192724815174CE /* SVProgressHUD.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVProgressHUD.m; path = SVProgressHUD/SVProgressHUD.m; sourceTree = "<group>"; };
@@ -1211,9 +1214,9 @@
 		9BF9BD29FF1A4162424F9BD22A0063CF /* VectorsExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VectorsExtensions.swift; path = Sources/Private/Utility/Primitives/VectorsExtensions.swift; sourceTree = "<group>"; };
 		9CC7C3466FF2B213E207A561AD792805 /* ParameterEncoding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ParameterEncoding.swift; path = Source/ParameterEncoding.swift; sourceTree = "<group>"; };
 		9D5196943054D19CF8AF3B5819CBFA91 /* Vector1DEffectValue.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Vector1DEffectValue.swift; path = Sources/Private/Model/LayerEffects/EffectValues/Vector1DEffectValue.swift; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9E0318835E182F72042B3CC4B1682B22 /* SDImageLoadersManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageLoadersManager.m; path = SDWebImage/Core/SDImageLoadersManager.m; sourceTree = "<group>"; };
-		9E19193E25BA7015921B8572FC839B34 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Sources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		9E19193E25BA7015921B8572FC839B34 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Sources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		9E58C8128E3346513810F949FD9015C7 /* EpoxySwiftUILayoutMargins.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EpoxySwiftUILayoutMargins.swift; path = Sources/Private/EmbeddedLibraries/EpoxyCore/SwiftUI/EpoxySwiftUILayoutMargins.swift; sourceTree = "<group>"; };
 		9E72DACE7111F903637F8149060D7BF0 /* APIClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = APIClient.debug.xcconfig; sourceTree = "<group>"; };
 		9EFDA0D863C282FFF94467B6E3D53B5E /* Vectors.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Vectors.swift; path = Sources/Public/Primitives/Vectors.swift; sourceTree = "<group>"; };
@@ -1422,7 +1425,7 @@
 		EA4DED6FE9878FCD063C323D89D8B412 /* SQLite.swift-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SQLite.swift-Info.plist"; sourceTree = "<group>"; };
 		EBDA6A302EC0E30ABCCF33B60C1F2900 /* CGColor+RGB.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "CGColor+RGB.swift"; path = "Sources/Private/Utility/Extensions/CGColor+RGB.swift"; sourceTree = "<group>"; };
 		EBE0C679CD32F6173B7791684139AF54 /* TraitCollectionProviding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TraitCollectionProviding.swift; path = Sources/Private/EmbeddedLibraries/EpoxyCore/Model/Providers/TraitCollectionProviding.swift; sourceTree = "<group>"; };
-		EBE295935E22946B67CD2620068425E5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = SVProgressHUD/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		EBE295935E22946B67CD2620068425E5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = SVProgressHUD/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		EC3BA11CEAAA33A8DE12E2AC2908077C /* AFError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFError.swift; path = Source/AFError.swift; sourceTree = "<group>"; };
 		EC4B3B243AB62FBC389274D92F2881C0 /* ConstraintPriorityTarget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintPriorityTarget.swift; path = Sources/ConstraintPriorityTarget.swift; sourceTree = "<group>"; };
 		EDE84C95F3E371439EE34DE9E1B31199 /* SDAnimatedImageView+WebCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "SDAnimatedImageView+WebCache.m"; path = "SDWebImage/Core/SDAnimatedImageView+WebCache.m"; sourceTree = "<group>"; };
@@ -1439,7 +1442,7 @@
 		F4D47B2FC7BA55806E874E366855A3F6 /* ShapeRenderLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShapeRenderLayer.swift; path = Sources/Private/MainThread/NodeRenderSystem/RenderLayers/ShapeRenderLayer.swift; sourceTree = "<group>"; };
 		F4E27B977CDC6EA87AEA4ABDCEF84C5F /* PreCompLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreCompLayer.swift; path = Sources/Private/CoreAnimation/Layers/PreCompLayer.swift; sourceTree = "<group>"; };
 		F4EBC94872348D8EF6739C22DB01972E /* ImagePlayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImagePlayer.swift; path = SDWebImageSwiftUI/Classes/ImagePlayer.swift; sourceTree = "<group>"; };
-		F5061E812B9526299283931C9DA0363F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Sources/SQLite/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		F5061E812B9526299283931C9DA0363F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Sources/SQLite/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		F563F43C546EDE661F6130617DD0547A /* ResourceBundle-LottiePrivacyInfo-lottie-ios-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-LottiePrivacyInfo-lottie-ios-Info.plist"; sourceTree = "<group>"; };
 		F572993468F750ED73423585F46F586F /* SDWebImageError.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageError.m; path = SDWebImage/Core/SDWebImageError.m; sourceTree = "<group>"; };
 		F5FA45A44C42CC2CA3A324A3E914CE19 /* SQLite.swift */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SQLite.swift; path = SQLite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1681,7 +1684,6 @@
 				3BCBAE180D768974918D9EFD139DD872 /* Resources */,
 				3A3824CBECD5076D3A5BD788C8DBD440 /* Support Files */,
 			);
-			name = SwiftyJSON;
 			path = SwiftyJSON;
 			sourceTree = "<group>";
 		};
@@ -2001,7 +2003,6 @@
 				F2A018B4773329EB9896DEE5E6BE0B9C /* Resources */,
 				FC2E17F80F1B7F38EAC6011A54C45C94 /* Support Files */,
 			);
-			name = Factory;
 			path = Factory;
 			sourceTree = "<group>";
 		};
@@ -2011,7 +2012,6 @@
 				3709046870CAB4CC33421D98ACC1E1EA /* standard */,
 				70F7B861EDF0B9816147FB1AF8190A7D /* Support Files */,
 			);
-			name = SQLite.swift;
 			path = SQLite.swift;
 			sourceTree = "<group>";
 		};
@@ -2031,7 +2031,6 @@
 				3EF697123D2B1B9FA9226F23083EA47B /* Resources */,
 				EF0BD54BCFDB70A08912F7A860950462 /* Support Files */,
 			);
-			name = SDWebImageSwiftUI;
 			path = SDWebImageSwiftUI;
 			sourceTree = "<group>";
 		};
@@ -2053,6 +2052,7 @@
 		6DDDAAA527396936E33C22EC3829265D /* Alamofire */ = {
 			isa = PBXGroup;
 			children = (
+				2EC484B12E56AF0700A22F9A /* PrivacyInfo.xcprivacy */,
 				EC3BA11CEAAA33A8DE12E2AC2908077C /* AFError.swift */,
 				7DB7F86A65DF119AB809394F5473A130 /* Alamofire.swift */,
 				F9A17C8198F343274F55245E4D353C2F /* AlamofireExtended.swift */,
@@ -2092,7 +2092,6 @@
 				47A8176ABD3D784DA44FBA4C6DBD6907 /* Validation.swift */,
 				07C33E2E45B31B1BA64124E5476E0750 /* Support Files */,
 			);
-			name = Alamofire;
 			path = Alamofire;
 			sourceTree = "<group>";
 		};
@@ -2102,7 +2101,6 @@
 				849108FF484112ECC6AA69DA9F1B482F /* Frameworks */,
 				5042F08FAC0962AF46CCD5C3F2444684 /* Support Files */,
 			);
-			name = APIClient;
 			path = APIClient;
 			sourceTree = "<group>";
 		};
@@ -2136,7 +2134,6 @@
 				4CB15D211D84CEB58C0EBE69F8B94197 /* Core */,
 				473CB9CB05846F9481D1A2FE4CF636BD /* Support Files */,
 			);
-			name = SDWebImage;
 			path = SDWebImage;
 			sourceTree = "<group>";
 		};
@@ -2154,7 +2151,6 @@
 				F715DFC6FA6942C1E85E72727F8BFFCE /* Core */,
 				6BEADC943B217ED89D3DF4F78837235B /* Support Files */,
 			);
-			name = SVProgressHUD;
 			path = SVProgressHUD;
 			sourceTree = "<group>";
 		};
@@ -2230,7 +2226,6 @@
 				BC98A4A231FCE31CD9096BBC0469E8AD /* Resources */,
 				408802225943D5A97E1CC6879A11E41E /* Support Files */,
 			);
-			name = SnapKit;
 			path = SnapKit;
 			sourceTree = "<group>";
 		};
@@ -2276,7 +2271,6 @@
 				84E0C7694BC2727683399FB83CC1976D /* Keychain.swift */,
 				250D0EA92DFA5CB013E61CEB6CF2FA7C /* Support Files */,
 			);
-			name = KeychainAccess;
 			path = KeychainAccess;
 			sourceTree = "<group>";
 		};
@@ -2621,7 +2615,6 @@
 				BC5BC67309E607923ED87FBD2509010F /* Resources */,
 				066657D434C2194A88042E08FDA453D4 /* Support Files */,
 			);
-			name = "lottie-ios";
 			path = "lottie-ios";
 			sourceTree = "<group>";
 		};
@@ -3196,8 +3189,6 @@
 				en,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
-			minimizedProjectReferenceProxies = 0;
-			preferredProjectObjectVersion = 77;
 			productRefGroup = FC50D06A9E6246C6E337A902A7AB15D0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -3230,6 +3221,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EC484B22E56AF0700A22F9A /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

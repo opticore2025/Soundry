@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2EC484AE2E56ACEE00A22F9A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 2EC484AD2E56ACEE00A22F9A /* PrivacyInfo.xcprivacy */; };
 		4D5BD0CF55D1F26BE56744E9 /* Pods_Soundry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E6AEA6868E09D9EC677A1F5 /* Pods_Soundry.framework */; };
 		91EB78602E54932000257CC8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91EB785F2E54932000257CC8 /* StoreKit.framework */; };
 		91EB7BFC2E55704500257CC8 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BB52E55704500257CC8 /* AppConfig.swift */; };
@@ -61,6 +62,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2EC484AD2E56ACEE00A22F9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		7E6AEA6868E09D9EC677A1F5 /* Pods_Soundry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Soundry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		912651A42E4596EB00F26239 /* Soundry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Soundry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91EB785F2E54932000257CC8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -151,6 +153,7 @@
 		9126519B2E4596EB00F26239 = {
 			isa = PBXGroup;
 			children = (
+				2EC484AD2E56ACEE00A22F9A /* PrivacyInfo.xcprivacy */,
 				91EB7BFB2E55704500257CC8 /* Soundry */,
 				912651A52E4596EB00F26239 /* Products */,
 				4E2BC73E3D3E1B8117C0C45B /* Pods */,
@@ -435,6 +438,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EC484AE2E56ACEE00A22F9A /* PrivacyInfo.xcprivacy in Resources */,
 				91EB7C2E2E55704500257CC8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -676,7 +680,7 @@
 				CODE_SIGN_ENTITLEMENTS = Soundry/Soundry.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution: OptiCore Inc (JZT9NPY56A)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = JZT9NPY56A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -716,7 +720,7 @@
 				CODE_SIGN_ENTITLEMENTS = Soundry/Soundry.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution: OptiCore Inc (JZT9NPY56A)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = JZT9NPY56A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
