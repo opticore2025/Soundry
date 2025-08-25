@@ -81,42 +81,6 @@ class ApplePayApiViewModel: ObservableObject {
         isLoading = false
     }
     
-    func handleNotice(
-        environment: PostAppleNoticeRequest.Environment? = nil,
-        transactionId: String? = nil,
-        notificationType: PostAppleNoticeRequest.NotificationType? = nil,
-        notificationUuid: String? = nil
-    ) async {
-        isLoading = true
-        errorMessage = nil
-        noticeResult = nil
-        noticeRawResponse = nil
-        
-        do {
-            let request = PostAppleNoticeRequest(
-                environment: environment,
-                transactionId: transactionId,
-                notificationType: notificationType,
-                notificationUuid: notificationUuid
-            )
-            let response = try await applePayApi.postAppleNotice(postAppleNoticeRequest: request)
-            // 打印 HTTP 状态码
-            print("[ApplePay] Notice HTTP Status: \(response.status)")
-            
-            // 打印解析后的响应体
-            let body = try await response.body()
-            print("[ApplePay] Notice Body: \(String(describing: body))")
-            if let status = body.status {
-                print("[ApplePay] Notice status: \(status)")
-            }
-            noticeResult = body.status
-            isLoading = false
-        } catch {
-            errorMessage = "Notice Error: \(error.localizedDescription)"
-            isLoading = false
-        }
-    }
-    
     func verifyPayment(
         tranNo: String,
         productId: String? = nil,
@@ -138,13 +102,15 @@ class ApplePayApiViewModel: ObservableObject {
             )
             let response = try await applePayApi.postAppleVerify(postAppleVerifyRequest: request)
             
-            let body1 = response.response.rawContent
             let body = try await response.body()
+            
             guard let data = body.data, body.ok == 1 else {
                 errorMessage = "Verify Payment Failed"
                 isLoading = false
                 return
             }
+            
+            print("Verify Payment Success: \(data)")
             verifyResult = data
             isLoading = false
         } catch {

@@ -129,6 +129,7 @@ struct EmailInputField: View {
         let emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
         emailValid = NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email.trimmingCharacters(in: .whitespaces))
     }
+    
 }
 
 struct PasswordInputField: View {

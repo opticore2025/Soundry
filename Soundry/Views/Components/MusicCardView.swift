@@ -1,5 +1,6 @@
 import SwiftUI
 import Factory
+import SDWebImageSwiftUI
 import APIClient
 
 struct MusicCardView: View {
@@ -25,7 +26,7 @@ struct MusicCardView: View {
         Button(action: onPlay) {
             ZStack {
                 // Background Image
-                AsyncImage(url: URL(string: song.coverMediaUrl ?? "")) { image in
+                WebImage(url: URL(string: song.coverMediaUrl ?? "")) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)

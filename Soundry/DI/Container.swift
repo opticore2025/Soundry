@@ -110,6 +110,18 @@ extension Container {
             .singleton
     }
 
+    // MARK: - Subscription
+    @MainActor
+    var subscriptionProvider: Factory<SubscriptionProvider> {
+        self { @MainActor in StoreKitSubscriptionProvider() }.singleton
+    }
+
+    @MainActor
+    var subscriptionService: Factory<SubscriptionService> {
+        self { @MainActor in SubscriptionService(provider: self.subscriptionProvider(), api: self.applePayApiViewModel()) }
+            .singleton
+    }
+
     @MainActor
     var authenticationApiViewModel: Factory<AuthenticationApiViewModel> {
         self { @MainActor in

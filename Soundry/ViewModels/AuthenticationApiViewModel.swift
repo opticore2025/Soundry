@@ -17,6 +17,7 @@ class AuthenticationApiViewModel: ObservableObject {
     @Published var isEmailCodeVerified = false
     @Published var isEmailResetPasswdSuccess = false
     @Published var profileCompleted = false
+    @Published var accountDeleted = false
 
     init(client: Ktor_client_coreHttpClient) {
         self.authenticationApi = AuthenticationApi(
@@ -345,6 +346,33 @@ class AuthenticationApiViewModel: ObservableObject {
             profileCompleted = false
             errorMessage = "Edit user profile error: \(error.localizedDescription)"
             print("Edit user profile error: \(error)")
+        }
+
+        isLoading = false
+    }
+    
+    func deleteAccount() async {
+        isLoading = true
+        errorMessage = nil
+        accountDeleted = false
+
+        do {
+            let response = try await authenticationApi.postDeleteAccount()
+            
+            let body = try await response.body()
+            print(body)
+            guard body.ok == 1 else {
+                errorMessage = "Edit user profile error, \(response)"
+                accountDeleted = false
+                isLoading = false
+                print("account deleted failed")
+                return
+            }
+            print("account deleted successfully")
+            accountDeleted = true
+         } catch {
+            accountDeleted = false
+            errorMessage = "Edit user profile error: \(error.localizedDescription)"
         }
 
         isLoading = false

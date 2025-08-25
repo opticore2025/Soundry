@@ -1,7 +1,5 @@
 import SwiftUI
 import Factory
-import StoreKit
-import PassKit
 
 import UIKit
 import APIClient
@@ -46,7 +44,7 @@ extension View {
 struct VipView: View {
     
     @Injected(\.vipApiViewModel) private var vipVM: VIPApiViewModel
-    @Injected(\.applePayApiViewModel) private var applePayVM: ApplePayApiViewModel
+    @Injected(\.subscriptionService) private var subscriptionService: SubscriptionService
 
     
     @State private var selectedPlan: Int = 0
@@ -61,13 +59,6 @@ struct VipView: View {
         vipType: nil
     )
     @State private var mainTitle: String = "Unlock Your Music Universe"
-    
-    // Apple Pay 相关状态
-    @State private var isApplePayProcessing = false
-    @State private var showApplePayError = false
-    @State private var applePayErrorMessage = ""
-    @State private var showApplePaySuccess = false
-    @State private var currentOrderTransactionNo: String?
     
     @Environment(\.dismiss) var dismiss
 
@@ -137,20 +128,9 @@ struct VipView: View {
                         // 订阅按钮区域（占下半部分30%）
                         VStack(spacing: adaptiveSpacing(geometry: geometry, baseSpacing: 10)) {
                             Button(action: handleSubscribe) {
-                                if isApplePayProcessing {
-                                    HStack {
-                                        ProgressView()
-                                            .progressViewStyle(CircularProgressViewStyle(tint: .black))
-                                            .scaleEffect(0.8)
-                                        Text("Processing...")
-                                            .font(.system(size: adaptiveFontSize(geometry: geometry, baseSize: 16), weight: .medium))
-                                            .foregroundColor(.black)
-                                    }
-                                } else {
                                 Text("Subscribe Now")
                                     .font(.system(size: adaptiveFontSize(geometry: geometry, baseSize: 18), weight: .bold))
                                     .foregroundColor(.black)
-                                }
                             }
                                     .frame(height: adaptiveSize(geometry: geometry, baseSize: 50))
                                     .frame(maxWidth: .infinity)
@@ -163,8 +143,8 @@ struct VipView: View {
                                     )
                                     .cornerRadius(adaptiveCornerRadius(geometry: geometry, baseRadius: 25))
                                     .shadow(color: Color.yellow.opacity(0.3), radius: adaptiveShadowRadius(geometry: geometry, baseRadius: 15), x: 0, y: 6)
-                            .disabled(isApplePayProcessing || vipItems.isEmpty)
-                            .opacity((isApplePayProcessing || vipItems.isEmpty) ? 0.6 : 1.0)
+                            .disabled(vipItems.isEmpty)
+                            .opacity(vipItems.isEmpty ? 0.6 : 1.0)
                             .padding()
                             .padding(.horizontal, adaptiveHorizontalPadding(geometry: geometry))
                         }
@@ -220,26 +200,6 @@ struct VipView: View {
                 }
             }
         }
-        // Apple Pay 成功提示
-        .alert("Payment Successful", isPresented: $showApplePaySuccess) {
-            Button("OK") {
-                showApplePaySuccess = false
-            }
-        } message: {
-            Text("Congratulations! You are now a VIP member and can enjoy all member privileges")
-        }
-        // Apple Pay 错误提示
-        .alert("Payment Failed", isPresented: $showApplePayError) {
-            Button("Retry") {
-                showApplePayError = false
-                handleSubscribe()
-            }
-            Button("Cancel", role: .cancel) {
-                showApplePayError = false
-            }
-        } message: {
-            Text(applePayErrorMessage)
-        }
     }
     
     // MARK: - 核心布局组件
@@ -275,17 +235,17 @@ struct VipView: View {
     }
     
     
-    @MainActor private func subscriptionCards(geometry: GeometryProxy) -> some View {
+    private func subscriptionCards(geometry: GeometryProxy) -> some View {
         VStack(spacing: adaptiveSpacing(geometry: geometry, baseSpacing: 12)) {
-            if vipVM.isLoading {
-                loadingView(geometry: geometry)
-            } else if vipVM.errorMessage != nil {
-                errorView(geometry: geometry)
-            } else {
-                ForEach(Array(vipItems.enumerated()), id: \.offset) { index, plan in
-                    subscriptionCard(plan: plan, index: index, geometry: geometry)
-                }
-            }
+//            if vipVM.isLoading {
+//                loadingView(geometry: geometry)
+//            } else if vipVM.errorMessage != nil {
+//                errorView(geometry: geometry)
+//            } else {
+//                ForEach(Array(vipItems.enumerated()), id: \.offset) { index, plan in
+//                    subscriptionCard(plan: plan, index: index, geometry: geometry)
+//                }
+//            }
         }
         .padding(.vertical, 8)
     }
@@ -475,305 +435,72 @@ struct VipView: View {
         guard selectedPlan < vipItems.count else {
             return 
         }
-        
-
         let plan = vipItems[selectedPlan]
-//        print("🔍 [Apple Pay] 开始订阅流程")
-//        print("  - 选中套餐: \(plan.title)")
-//        print("  - 套餐ID: \(plan.id)")
-//        print("  - SKU: \(plan.sku)")
-//        print("  - 价格: $\(plan.price)")
-
-        
         Task {
-            await startApplePayFlow(for: plan)
-        }
-    }
-    
-    // MARK: - Apple Pay 流程
-    
-    /// 1. 创建订单并启动 Apple Pay
-
-    
-    private func startApplePayFlow(for plan: VipPackage) async {
-//        print("🔍 [Apple Pay] 步骤1：开始创建后端订单")
-
-        
-        // 设置加载状态
-        await MainActor.run {
-            isApplePayProcessing = true
-            showApplePayError = false
-            applePayErrorMessage = ""
-        }
-        
-        // 创建后端订单
-        await applePayVM.createOrder(
-            goodsId: Int32((plan.id as? Int) ?? 0),
-            productType: .vip  // 2 表示 VIP
-        )
-        
-        // 检查订单创建结果
-        guard let orderData = await applePayVM.createResult else {
-            if let errorMsg = await applePayVM.errorMessage {
-            }
-            return
-        }
-        
-        
-        // 保存订单信息
-        await MainActor.run {
-            currentOrderTransactionNo = orderData.tranNo as? String
-        }
-        
-        // 启动 StoreKit 支付
-        await startStoreKitPayment(plan: plan, orderData: orderData)
-    }
-    
-    /// 2. 启动 StoreKit 支付流程（IAP）
-
-    private func startStoreKitPayment(plan: VipPackage, orderData: PostAppleCreate200ResponseData) async {
-//        print("🔍 [IAP] 开始购买商品: \(plan.sku)")
-
-        
-        do {
-            let products = try await Product.products(for: [ (plan.sku as? String) ?? "" ])
-            guard let product = products.first else {
-                return
-            }
-            
-            
-            let result = try await product.purchase()
-            
-            switch result {
-            case .success(let verificationResult):
-                let transaction = try verificationResult.payloadValue
-                let transactionId = String(transaction.id)
-                
-                
-                // 获取收据数据
-                let receiptBase64 = try await loadAppReceiptBase64()
-                
-                await applePayVM.handleNotice(
-                    environment: nil,
-                    transactionId: transactionId,
-                    notificationType: nil,
-                    notificationUuid: nil
-                )
-                
-                // 完成交易
-                await transaction.finish()
-                
-                // 验证支付
-                await verifyPaymentWithBackend(
-                    plan: plan,
-                    orderData: orderData,
-                    transactionId: transactionId,
-                    receiptData: receiptBase64
-                )
-                
-//            case .userCancelled:
-                
-//            case .pending:
-                
-            @unknown default:
-                print("")
-            }
-            
+            do {
+                try await subscriptionService.subscribe(plan: plan)
+                await fetchPlans()
+                dismiss()
         } catch {
-        }
-    }
-
-    private func loadAppReceiptBase64() async throws -> String {
-        if let url = Bundle.main.appStoreReceiptURL,
-           let data = try? Data(contentsOf: url),
-           !data.isEmpty {
-            return data.base64EncodedString()
-        }
-        try await AppStore.sync()
-        guard let url2 = Bundle.main.appStoreReceiptURL,
-              let data2 = try? Data(contentsOf: url2),
-              !data2.isEmpty else {
-            throw NSError(domain: "IAP", code: 404, userInfo: [NSLocalizedDescriptionKey: "App receipt not found"])
-        }
-        return data2.base64EncodedString()
-    }
-    
-    /// 3. 模拟 Apple Pay 支付（测试环境）
-
-    private func simulateApplePayPayment(plan: VipPackage, orderData: PostAppleCreate200ResponseData) async {
-//        print("🔍 [Apple Pay] 步骤3：模拟支付流程（测试环境）")
-
-        
-        // 模拟支付延迟
-        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2秒
-        
-        // 模拟支付成功（90%概率成功，10%失败用于测试）
-        let isPaymentSuccess = Int.random(in: 1...10) <= 9
-        
-        if isPaymentSuccess {
-//            print("🔍 [Apple Pay] 模拟支付成功")
-            
-            // 模拟交易信息
-            let mockTransactionId = "mock_transaction_\(UUID().uuidString.prefix(8))"
-            let mockReceiptData = "mock_receipt_data_\(Date().timeIntervalSince1970)"
-            
-            // 先上报 Apple 交易ID（handle notice）
-            await applePayVM.handleNotice(
-                environment: nil,               // 可按需传 .sandbox / .production
-                transactionId: mockTransactionId,
-                notificationType: nil,
-                notificationUuid: nil
-            )
-            
-            // 再使用同一个 transactionId 进行支付验证
-            await verifyPaymentWithBackend(
-                plan: plan,
-                orderData: orderData,
-                transactionId: mockTransactionId,
-                receiptData: mockReceiptData
-            )
-        } else {
-        }
-    }
-    
-    /// 4. 后端验证支付
-    private func verifyPaymentWithBackend(
-        plan: VipPackage,
-        orderData: PostAppleCreate200ResponseData,
-        transactionId: String,
-        receiptData: String
-    ) async {
-//        
-        guard let tranNo = orderData.tranNo as? String else {
-
-            return
-        }
-        
-        // 调用验证接口
-        await applePayVM.verifyPayment(
-            tranNo: tranNo,
-            productId: (plan.sku as? String) ?? "",
-            productType: .vip,
-            receiptData: receiptData,
-            transactionId: transactionId
-        )
-        
-        // 检查验证结果
-        if let verifyResult = await applePayVM.verifyResult {
-
-            await handleApplePaySuccess()
-        } else {
-//            if let errorMsg = applePayVM.errorMessage {
-//            }
-            
-            // 根据错误类型提供不同的用户提示
-            let userMessage: String
-            if let errorMsg = await applePayVM.errorMessage {
-                if errorMsg.contains("network") || errorMsg.contains("timeout") {
-                    userMessage = "Network connection timeout, please check your network and try again"
-                } else if errorMsg.contains("invalid") || errorMsg.contains("failed") {
-                    userMessage = "Payment verification failed, please contact customer service"
-                } else {
-                    userMessage = "Payment verification failed:\(errorMsg)"
-                }
-            } else {
-                userMessage = "Payment verification failed, please contact customer service"
+                print("Subscribe failed: \(error)")
             }
-            
-            await handleApplePayError(userMessage)
         }
-    }
-    
-    /// 5. 处理支付成功
-    @MainActor
-    private func handleApplePaySuccess() async {
-        
-        isApplePayProcessing = false
-        showApplePaySuccess = true
-        
-        // 刷新用户VIP状态
-        Task {
-            await fetchPlans()
-        }
-        
-        // 3秒后自动关闭成功提示
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-            self.showApplePaySuccess = false
-            self.dismiss() // 支付成功后返回
-        }
-    }
-    
-    /// 6. 处理支付错误
-    @MainActor
-    private func handleApplePayError(_ message: String) async {
-//        print("🔍 [Apple Pay] 支付流程完成：失败 - \(message)")
-        
-        isApplePayProcessing = false
-        applePayErrorMessage = message
-        showApplePayError = true
     }
     
     private func fetchPlans() async {
-//        print("🔍 开始获取VIP套餐...")
-            
-            // 简化版：不依赖userSession，直接从Container获取用户信息
-            let userSession = await Container.shared.userSessionViewModel()
-            let uidString = await userSession.userInfo?.uid != nil ? String(userSession.userInfo!.uid) : "Not logged in"
-            let email = await userSession.userInfo?.email ?? "None"
-//            print("🔍 当前用户: \(uidString), email: \(email)")
-        
-        do {
-            await vipVM.getVIPList()
-            
-            guard let data = await vipVM.vipList else {
-//                print("🔍 警告：vipList 为 nil")
-                return
-            }
-            
-//            print("🔍 调试：原始套餐数据 = \(data)")
-
-            // 主标题（新字段）
-            if let apiMainTitle = (data.mainTitle as? String) {
-                self.mainTitle = apiMainTitle
-            }
-
-            // 更新用户 VIP 状态，兼容新旧字段
-            if let status = data.userVipStatus {
-                // isVip 可能为 Int(0/1) 或 Bool
-                let isVipFlag = ((status.isVip as? Int) == 1) || ((status.isVip as? Bool) == true)
-
-                // 过期时间，单位秒
-                let expSeconds = (status.vipExp as? Int) ?? 0
-                let expDate: Date? = expSeconds > 0 ? Date(timeIntervalSince1970: TimeInterval(expSeconds)) : nil
-
-                
-                let remainDays = (status.remainingDays as? Int) ?? 0
-
-                let vipType = (status.vipType as? Int)
-
-                userVipStatus = UserVIPStatus(
-                    isVip: isVipFlag,
-                    vipExp: expDate,
-                    remainingDays: remainDays,
-                    vipType: vipType
-                )
-//                print("🔍 用户VIP状态更新：isVip = \(isVipFlag), remainingDays = \(remainDays)")
-            }
-
-            // 直接使用后端返回的 VIP 列表
-            self.vipItems = data.vipList ?? []
-
-            
-        } catch {
-
-        }
+//            let userSession = Container.shared.userSessionViewModel()
+//        
+//        do {
+//            await vipVM.getVIPList()
+//            
+//            guard let data = vipVM.vipList else {
+//                return
+//            }
+//            
+//            if let apiMainTitle = (data.mainTitle) {
+//                self.mainTitle = apiMainTitle
+//            }
+//
+//            if let status = data.userVipStatus {
+//                let isVipFlag = ((status.isVip as? Int) == 1) || ((status.isVip as? Bool) == true)
+//
+//                // 过期时间，单位秒
+//                let expSeconds = (status.vipExp as? Int) ?? 0
+//                let expDate: Date? = expSeconds > 0 ? Date(timeIntervalSince1970: TimeInterval(expSeconds)) : nil
+//
+//                
+//                let remainDays = (status.remainingDays as? Int) ?? 0
+//
+//                let vipType = (status.vipType as? Int)
+//
+//                userVipStatus = UserVIPStatus(
+//                    isVip: isVipFlag,
+//                    vipExp: expDate,
+//                    remainingDays: remainDays,
+//                    vipType: vipType
+//                )
+//            }
+//            self.vipItems = data.vipList ?? []
+//
+//            
+//        } catch {
+//
+//        }
     }
     
 
     
-    private func handleRestore() { print("Restore Purchase") }
-    private func handleUserAgreement() { print("User Agreement") }
-    private func handlePrivacyPolicy() { print("Privacy Policy") }
+    private func handleRestore() {
+        Task {
+            do {
+                try await subscriptionService.restore()
+                await fetchPlans()
+            } catch {
+                print("Restore failed: \(error)")
+            }
+        }
+    }
+    //打开指定URL
     private func openExternalURL(_ urlString: String) {
         guard let url = URL(string: urlString) else { return }
         UIApplication.shared.open(url)

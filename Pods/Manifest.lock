@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (5.8.1)
-  - APIClient (0.3.1)
+  - APIClient (0.3.5)
   - Factory (2.5.2)
   - KeychainAccess (4.2.2)
   - lottie-ios (4.5.2)
@@ -20,7 +20,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 5.8.0)
-  - APIClient (~> 0.3.1)
+  - APIClient (~> 0.3.5)
   - Factory (~> 2.5.2)
   - KeychainAccess (~> 4.2.2)
   - lottie-ios (~> 4.5.2)
@@ -48,7 +48,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
-  APIClient: a31be1b0cdac005c6c09af79788bbfce40aed185
+  APIClient: d9b04b1bfa87b9c58544ef08c6a2f87dd1509e52
   Factory: bfc0d3ec51e8f1b0c91e715ea9b541bb2e1a6f85
   KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
   lottie-ios: 96784afc26ea031d3e2b6cae342a4b8915072489
@@ -59,6 +59,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 4837c74bdfe2e51e8821c397825996a8d7de6e22
   SwiftyJSON: f5b1bf1cd8dd53cd25887ac0eabcfd92301c6a5a
 
-PODFILE CHECKSUM: 484f55ee1bbec73dfc007c895d33f0d49b5a73f0
+PODFILE CHECKSUM: d8a1030076eb1449a4f73a979c5debf4090bf49e
 
 COCOAPODS: 1.16.2

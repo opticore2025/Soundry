@@ -1,6 +1,7 @@
 import Factory
 import SVProgressHUD
 import SwiftUI
+import SDWebImageSwiftUI
 import UIKit
 
 struct ProfileView: View {
@@ -74,7 +75,7 @@ struct ProfileView: View {
                                 .avatar, !urlStr.isEmpty
                             {
                                 ZStack {
-                                    AsyncImage(
+                                    WebImage(
                                         url: ResourceUtils.shared.imageURL(
                                             userSessionViewModel.userInfo?
                                                 .avatar ?? ""

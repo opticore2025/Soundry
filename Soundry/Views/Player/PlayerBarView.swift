@@ -1,5 +1,6 @@
 import Factory
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct PlayerBarView: View {
     @InjectedObject(\.musicPlayerViewModel) var musicPlayer:
@@ -32,7 +33,7 @@ struct PlayerBarView: View {
                 Button {
                     showingPlayerDetail = true
                 } label: {
-                    AsyncImage(
+                    WebImage(
                         url: ResourceUtils.shared.imageURL(
                             musicPlayer.currentSong?.coverMediaUrl ?? ""
                         )

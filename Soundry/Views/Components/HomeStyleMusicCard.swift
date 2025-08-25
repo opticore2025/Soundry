@@ -1,5 +1,6 @@
 import SwiftUI
 import Factory
+import SDWebImageSwiftUI
 import APIClient
 
 // MARK: - Home Style Music Card (对应 nvue 中的音乐卡片)
@@ -33,7 +34,7 @@ struct HomeStyleMusicCard: View {
         Button(action: onPlay) {
             ZStack {
                 // Background Image (对应 nvue 的 card-bg)
-                AsyncImage(url: URL(string: song.coverMediaUrl ?? "")) { image in
+                WebImage(url: URL(string: song.coverMediaUrl ?? "")) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)

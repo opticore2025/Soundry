@@ -127,7 +127,7 @@
 		2D3ABA0D7EE85B222917B13FBDA3D0F4 /* Pods-Soundry-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1453BFC1492D7F3F03032E913D43F6BD /* Pods-Soundry-dummy.m */; };
 		2DCF467433C2A10EB7708F9D85B39F9C /* AnimatedSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7822EF4A5BAAAF8A61082761176D2C3 /* AnimatedSwitch.swift */; };
 		2DDD48230ED9E8068C7E439D79B99A8E /* SDInternalMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = ABF6221F9E13348C78E11AB307AD5E83 /* SDInternalMacros.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		2EC484B22E56AF0700A22F9A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 2EC484B12E56AF0700A22F9A /* PrivacyInfo.xcprivacy */; };
+		2EC484B42E5C9B8000A22F9A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 2EC484B32E5C9B8000A22F9A /* PrivacyInfo.xcprivacy */; };
 		2F3FF27F1699BC6EFE18C3A0082FDBC8 /* PolygonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3C2976B610664FD086E849ECAB5A4D /* PolygonNode.swift */; };
 		2F6D9BEA582A2DBB70A6C3B2FC2DB91E /* SDWebImageDownloaderResponseModifier.m in Sources */ = {isa = PBXBuildFile; fileRef = E572F9210AAF2524F09E962246A28F5B /* SDWebImageDownloaderResponseModifier.m */; };
 		2F9D332FE2802C10436D738C950852DF /* AnimationCacheProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF4D9E8D809B64E59B3A788A0B8004D /* AnimationCacheProvider.swift */; };
@@ -904,7 +904,7 @@
 		2E1E51066408528BDE4BA4ECC688FDCC /* LayerEffect.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LayerEffect.swift; path = Sources/Private/Model/LayerEffects/LayerEffect.swift; sourceTree = "<group>"; };
 		2E467EAB617E8FC88B88BD28B6CC9F9C /* UIImage+ExtendedCacheData.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ExtendedCacheData.m"; path = "SDWebImage/Core/UIImage+ExtendedCacheData.m"; sourceTree = "<group>"; };
 		2EB8E84F66CDAB7B500B6E12EB9D261C /* SQLite.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SQLite.h; path = Sources/SQLite/SQLite.h; sourceTree = "<group>"; };
-		2EC484B12E56AF0700A22F9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		2EC484B32E5C9B8000A22F9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		2EFC175E952B9A775E4EB2A072250438 /* SDWebImageOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageOperation.m; path = SDWebImage/Core/SDWebImageOperation.m; sourceTree = "<group>"; };
 		2F8FB602E3269A23B1BA93FB206A83E3 /* DotLottieImageProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DotLottieImageProvider.swift; path = Sources/Private/Model/DotLottie/DotLottieImageProvider.swift; sourceTree = "<group>"; };
 		2FF080999EFE2CBCC6AAB83708284A86 /* SVProgressHUD-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-umbrella.h"; sourceTree = "<group>"; };
@@ -2052,7 +2052,7 @@
 		6DDDAAA527396936E33C22EC3829265D /* Alamofire */ = {
 			isa = PBXGroup;
 			children = (
-				2EC484B12E56AF0700A22F9A /* PrivacyInfo.xcprivacy */,
+				2EC484B32E5C9B8000A22F9A /* PrivacyInfo.xcprivacy */,
 				EC3BA11CEAAA33A8DE12E2AC2908077C /* AFError.swift */,
 				7DB7F86A65DF119AB809394F5473A130 /* Alamofire.swift */,
 				F9A17C8198F343274F55245E4D353C2F /* AlamofireExtended.swift */,
@@ -3221,7 +3221,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2EC484B22E56AF0700A22F9A /* PrivacyInfo.xcprivacy in Resources */,
+				2EC484B42E5C9B8000A22F9A /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -27,6 +27,7 @@ class VIPApiViewModel: ObservableObject {
         isLoading = false
     }
     
+    
     func getVIPList(channel: VIPApi.ChannelGetVipList = .comperiodaimusicperiodhomeperioda) async {
         isLoading = true
         errorMessage = nil

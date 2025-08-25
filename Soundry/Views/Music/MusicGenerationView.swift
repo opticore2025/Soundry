@@ -1,5 +1,6 @@
 import AVFoundation
 import Factory
+import SDWebImageSwiftUI
 import APIClient
 import SwiftUI
 import UIKit
@@ -666,7 +667,7 @@ struct MusicGenerationView: View {
                 }
             } else if resultType == "image" {
                 if !resultImagePath.isEmpty {
-                    AsyncImage(url: URL(fileURLWithPath: resultImagePath)) {
+                    WebImage(url: URL(fileURLWithPath: resultImagePath)) {
                         image in
                         image
                             .resizable()
@@ -722,14 +723,14 @@ struct MusicGenerationView: View {
                             hasGenerationData
                                 ? .white : Color.white.opacity(0.5)
                         )
-//                    Image(systemName: "diamond.fill")
-//                        .foregroundColor(.white)
-//                        .opacity(hasGenerationData ? 1 : 0.5)
-//                    Text("100")
-//                        .foregroundColor(
-//                            hasGenerationData
-//                                ? .white : Color.yellow.opacity(0.5)
-//                        )
+                    Image(systemName: "diamond.fill")
+                        .foregroundColor(.white)
+                        .opacity(hasGenerationData ? 1 : 0.5)
+                    Text("100")
+                        .foregroundColor(
+                            hasGenerationData
+                                ? .white : Color.yellow.opacity(0.5)
+                        )
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 56)

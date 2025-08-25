@@ -1,5 +1,6 @@
 import SwiftUI
 import Factory
+import SDWebImageSwiftUI
 import APIClient
 
 struct MusicReportView: View {
@@ -223,7 +224,7 @@ struct MusicReportView: View {
     private var coverView: some View {
         Group {
             if let urlStr = coverURLString, let url = URL(string: urlStr) {
-                AsyncImage(url: url) { phase in
+                WebImage(url: url) { phase in
                     switch phase {
                     case .empty:
                         placeholder

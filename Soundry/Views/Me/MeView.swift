@@ -1,5 +1,6 @@
 import SwiftUI
 import Factory
+import SDWebImageSwiftUI
 import AuthenticationServices
 import UIKit
 import APIClient
@@ -47,7 +48,7 @@ struct MeView: View {
                             UserInfoView(onCopy: {
                                 showToast()
                             })
-//                            CreditsSectionView()
+                           CreditsSectionView()
                             TabsSectionView()
                         }
                         .padding(.top)
@@ -114,7 +115,7 @@ struct CopyToastView: View {
 }
 
 // 通用底部弹出容器
-struct BottomSheetOverlay<Content: View>: View {
+struct BottomSheet<Content: View>: View {
     let isPresented: Bool
     let onDismiss: () -> Void
     let content: Content
@@ -140,7 +141,7 @@ struct BottomSheetOverlay<Content: View>: View {
                     
                     // 内容区域
                     VStack(spacing: 0) {
-                        // 增加上半部分透明区域，让MeView的登录按钮能够显示
+                        // 增加上半部分透明区域
                         Spacer()
                             .frame(height: geometry.size.height * Constants.transparentHeightRatio)
                         
@@ -190,7 +191,7 @@ struct UserInfoView: View {
             //         .foregroundColor(.gray)
             // }
             if let avatarUrlStr = userSession.userInfo?.avatar, !avatarUrlStr.isEmpty {
-                AsyncImage(url: ResourceUtils.shared.imageURL(avatarUrlStr))
+                WebImage(url: ResourceUtils.shared.imageURL(avatarUrlStr))
                     .scaledToFill()
                     .frame(width: 80, height: 80)
                     .clipShape(Circle())
@@ -305,66 +306,66 @@ struct UserInfoView: View {
 }
 
 // 积分区域组件
-//struct CreditsSectionView: View {
-//    @InjectedObject(\.appState) var appState: AppState
-//    @InjectedObject(\.userSessionViewModel) var userSession: UserSessionViewModel
-//    @State private var navigateToVip: Bool = false
-//    
-//    var body: some View {
-//        VStack(spacing: 20) {
-//            HStack {
-//                Text("Remaining Credits")
-//                    .font(.headline)
-//                    .fontWeight(.semibold)
-//                    .foregroundColor(.white)
-//                Spacer()
-//                HStack(spacing: 6) {
-//                    Image("credit_icon")
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 25, height: 25)
-//                        .foregroundColor(.yellow)
-//                    if userSession.isLoggedIn {
-//                        Text("\(userSession.userInfo?.balance ?? 0)") // TODO: 从API获取真实积分
-//                            .fontWeight(.bold)
-//                            .foregroundColor(.yellow)
-//                    } else {
-//                        Text("0")
-//                            .fontWeight(.bold)
-//                            .foregroundColor(.gray)
-//                    }
-//                }
-//            }
-//
-//            Button {
-//                if userSession.isLoggedIn {
-//                    // 已登录：跳转到 VIP 购买页
-//                    navigateToVip = true
-//                } else {
-//                    // 未登录状态下弹出登录界面
-//                    appState.showLogin()
-//                }
-//            } label: {
-//                Text("Add Credits")
-//                    .font(.headline)
-//                    .fontWeight(.semibold)
-//                    .frame(maxWidth: .infinity)
-//                    .padding(.vertical, 12)
-//                    .background(Color(UIColor.systemYellow).opacity(0.2))
-//                    .foregroundColor(.yellow)
-//                    .cornerRadius(12)
-//                    .shadow(color: .blue.opacity(0.2), radius: 4, x: 0, y: 2)
-//            }
-//        }
-//        .padding(20)
-//        .cornerRadius(18)
-//        .padding(.horizontal)
-//        .frame(height: 160)
-//        .fullScreenCover(isPresented: $navigateToVip) {
-//            VipView()
-//        }
-//    }
-//}
+struct CreditsSectionView: View {
+    @InjectedObject(\.appState) var appState: AppState
+    @InjectedObject(\.userSessionViewModel) var userSession: UserSessionViewModel
+    @State private var navigateToVip: Bool = false
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            HStack {
+                Text("Remaining Credits")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                Spacer()
+                HStack(spacing: 6) {
+                    Image("credit_icon")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 25, height: 25)
+                        .foregroundColor(.yellow)
+                    if userSession.isLoggedIn {
+                        Text("\(userSession.userInfo?.balance ?? 0)") // TODO: 从API获取真实积分
+                            .fontWeight(.bold)
+                            .foregroundColor(.yellow)
+                    } else {
+                        Text("0")
+                            .fontWeight(.bold)
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
+
+            Button {
+                if userSession.isLoggedIn {
+                    // 已登录：跳转到 VIP 购买页
+                    navigateToVip = true
+                } else {
+                    // 未登录状态下弹出登录界面
+                    appState.showLogin()
+                }
+            } label: {
+                Text("Add Credits")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(Color(UIColor.systemYellow).opacity(0.2))
+                    .foregroundColor(.yellow)
+                    .cornerRadius(12)
+                    .shadow(color: .blue.opacity(0.2), radius: 4, x: 0, y: 2)
+            }
+        }
+        .padding(20)
+        .cornerRadius(18)
+        .padding(.horizontal)
+        .frame(height: 160)
+        .fullScreenCover(isPresented: $navigateToVip) {
+            VipView()
+        }
+    }
+}
 
 // 标签区域组件
 struct TabsSectionView: View {
@@ -595,20 +596,20 @@ struct MyLibraryView: View {
                     }
                     
                     // 刷新按钮
-                    Button(action: refreshMyWorks) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "arrow.clockwise")
-                            Text("Refresh")
-                        }
-                        .font(.subheadline)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(Color.blue.opacity(0.3))
-                        .cornerRadius(8)
-                    }
-                    .disabled(isLoading)
-                    .opacity(isLoading ? 0.6 : 1.0)
+//                    Button(action: refreshMyWorks) {
+//                        HStack(spacing: 4) {
+//                            Image(systemName: "arrow.clockwise")
+//                            Text("Refresh")
+//                        }
+//                        .font(.subheadline)
+//                        .foregroundColor(.white)
+//                        .padding(.horizontal, 16)
+//                        .padding(.vertical, 8)
+//                        .background(Color.blue.opacity(0.3))
+//                        .cornerRadius(8)
+//                    }
+//                    .disabled(isLoading)
+//                    .opacity(isLoading ? 0.6 : 1.0)
                 }
             }
         }
@@ -685,8 +686,8 @@ struct MyLikesView: View {
     var body: some View {
         VStack {
             // 顶部刷新按钮
-//            HStack {
-//                Spacer()
+            HStack {
+                Spacer()
 //                Button(action: refreshLikedMusic) {
 //                    HStack(spacing: 4) {
 //                        Image(systemName: "arrow.clockwise")
@@ -702,9 +703,9 @@ struct MyLikesView: View {
 //                }
 //                .disabled(isLoading)
 //                .opacity(isLoading ? 0.6 : 1.0)
-//            }
-//            .padding(.horizontal)
-//            .padding(.bottom, 8)
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 8)
             
             if isLoading && (musicVM.musicCategoryList?.list?.isEmpty ?? true) {
                 // 加载状态
@@ -772,20 +773,20 @@ struct MyLikesView: View {
                     }
                     
                     // 刷新按钮
-                    Button(action: refreshLikedMusic) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "arrow.clockwise")
-                            Text("Refresh")
-                        }
-                        .font(.subheadline)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(Color.blue.opacity(0.3))
-                        .cornerRadius(8)
-                    }
-                    .disabled(isLoading)
-                    .opacity(isLoading ? 0.6 : 1.0)
+//                    Button(action: refreshLikedMusic) {
+//                        HStack(spacing: 4) {
+//                            Image(systemName: "arrow.clockwise")
+//                            Text("Refresh")
+//                        }
+//                        .font(.subheadline)
+//                        .foregroundColor(.white)
+//                        .padding(.horizontal, 16)
+//                        .padding(.vertical, 8)
+//                        .background(Color.blue.opacity(0.3))
+//                        .cornerRadius(8)
+//                    }
+//                    .disabled(isLoading)
+//                    .opacity(isLoading ? 0.6 : 1.0)
                 }
             }
         }
@@ -864,7 +865,7 @@ struct LikedMusicItemView: View {
     var body: some View {
         HStack(spacing: 12) {
             // 封面（使用 ResourceUtils 生成图片URL）
-            AsyncImage(url: ResourceUtils.shared.imageURL(getCoverUrl())) { image in
+            WebImage(url: ResourceUtils.shared.imageURL(getCoverUrl())) { image in
                 image
                     .resizable()
                     .scaledToFill()

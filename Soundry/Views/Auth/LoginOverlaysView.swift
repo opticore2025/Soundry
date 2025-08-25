@@ -7,7 +7,7 @@ struct LoginOverlaysView: View {
     var body: some View {
         Group {
             if appState.showingLogin {
-                BottomSheetOverlay(
+                BottomSheet(
                     isPresented: appState.showingLogin,
                     onDismiss: appState.goBack
                 ) {
@@ -18,7 +18,7 @@ struct LoginOverlaysView: View {
             }
             
             if appState.showingEmailLogin {
-                BottomSheetOverlay(
+                BottomSheet(
                     isPresented: appState.showingEmailLogin,
                     onDismiss: appState.goBack
                 ) {
@@ -29,7 +29,7 @@ struct LoginOverlaysView: View {
             }
             
             if appState.showingEmailSignup {
-                BottomSheetOverlay(
+                BottomSheet(
                     isPresented: appState.showingEmailSignup,
                     onDismiss: appState.goBack
                 ) {
@@ -40,7 +40,7 @@ struct LoginOverlaysView: View {
             }
             
             if appState.showingForgotPassword {
-                BottomSheetOverlay(
+                BottomSheet(
                     isPresented: appState.showingForgotPassword,
                     onDismiss: appState.goBack
                 ) {

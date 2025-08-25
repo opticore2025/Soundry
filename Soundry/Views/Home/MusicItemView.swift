@@ -1,10 +1,12 @@
 import SwiftUI
 import Factory
+import SDWebImageSwiftUI
 import SVProgressHUD
 import APIClient
 
 struct MusicItemView: View {
-    @InjectedObject(\.appState) var appstate: AppState
+    @InjectedObject(\.appState) var appState: AppState
+    @InjectedObject(\.userSessionViewModel) var userSessionViewModel: UserSessionViewModel
     @InjectedObject(\.musicApiViewModel) var musicApiViewModel: MusicApiViewModel
     @InjectedObject(\.musicPlayerViewModel) var musicPlayerViewModel: MusicPlayerViewModel
     
@@ -34,7 +36,6 @@ struct MusicItemView: View {
         ZStack(alignment: .topTrailing) {
             // 跳转到举报页（状态驱动）
             NavigationLink(isActive: $navigateToReport) {
-                
                 MusicReportView(
                     musicId: Int(musicItem.id!)!,
                     titleText: musicItem.title ?? "",
@@ -45,7 +46,7 @@ struct MusicItemView: View {
                 EmptyView()
             }
             // Background Image
-            AsyncImage(url: ResourceUtils.shared.imageURL(musicItem.coverMediaUrl!)) { image in
+            WebImage(url: ResourceUtils.shared.imageURL(musicItem.coverMediaUrl!)) { image in
                 image.resizable()
             } placeholder: {
                 Color(white: 0.1, opacity: 1.0)
@@ -60,11 +61,7 @@ struct MusicItemView: View {
                 HStack {
                     Spacer()
                     Button {
-                        // 在这里检查登录状态
-                        let userSession = Container.shared.userSessionViewModel()
-                        let appState = Container.shared.appState()
-                        
-                        if !userSession.isLoggedIn {
+                        if !userSessionViewModel.isLoggedIn {
                             appState.showLogin()
                             return
                         }
@@ -99,7 +96,7 @@ struct MusicItemView: View {
                             if let avatar = userItem.avatar,
                                let url = ResourceUtils.shared.imageURL(avatar)
                             {
-                                AsyncImage(url: url) { image in
+                                WebImage(url: url) { image in
                                     image.resizable()
                                 } placeholder: {
                                     Color(white: 0.1, opacity: 1.0)

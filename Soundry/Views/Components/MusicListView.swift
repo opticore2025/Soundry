@@ -1,5 +1,6 @@
 import SwiftUI
 import Factory
+import SDWebImageSwiftUI
 import APIClient
 
 struct MusicListView: View {
@@ -50,7 +51,7 @@ struct MusicRowView: View {
         HStack(spacing: 12) {
             // Album Art
             Button(action: onPlay) {
-                AsyncImage(url: URL(string: song.coverMediaUrl ?? "")) { image in
+                WebImage(url: URL(string: song.coverMediaUrl ?? "")) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
