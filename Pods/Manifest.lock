@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.8.1)
+  - Alamofire (5.10.2)
   - APIClient (0.3.5)
   - Factory (2.5.2)
   - KeychainAccess (4.2.2)
@@ -19,7 +19,7 @@ PODS:
   - SwiftyJSON (5.0.2)
 
 DEPENDENCIES:
-  - Alamofire (~> 5.8.0)
+  - Alamofire (~> 5.10.2)
   - APIClient (~> 0.3.5)
   - Factory (~> 2.5.2)
   - KeychainAccess (~> 4.2.2)
@@ -47,7 +47,7 @@ SPEC REPOS:
     - SwiftyJSON
 
 SPEC CHECKSUMS:
-  Alamofire: 3ca42e259043ee0dc5c0cdd76c4bc568b8e42af7
+  Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
   APIClient: d9b04b1bfa87b9c58544ef08c6a2f87dd1509e52
   Factory: bfc0d3ec51e8f1b0c91e715ea9b541bb2e1a6f85
   KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
@@ -59,6 +59,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 4837c74bdfe2e51e8821c397825996a8d7de6e22
   SwiftyJSON: f5b1bf1cd8dd53cd25887ac0eabcfd92301c6a5a
 
-PODFILE CHECKSUM: d8a1030076eb1449a4f73a979c5debf4090bf49e
+PODFILE CHECKSUM: 9ba18e1c1f0dd232924f9bb7b34d06023321d316
 
 COCOAPODS: 1.16.2

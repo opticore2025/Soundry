@@ -13,7 +13,7 @@ target 'Soundry' do
   pod 'SVProgressHUD', '~> 2.3.1'
   
   # Networking
-  pod 'Alamofire', '~> 5.8.0'
+  pod 'Alamofire', '~> 5.10.2'
   pod 'SDWebImage', '~> 5.21.1'
   pod 'SDWebImageSwiftUI', '~> 3.1.3'
   

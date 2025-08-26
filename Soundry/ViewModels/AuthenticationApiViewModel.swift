@@ -60,7 +60,8 @@ class AuthenticationApiViewModel: ObservableObject {
                 email: data.userInfo?.email ?? "",
                 nickname: data.userInfo?.nickname ?? "",
                 avatar: data.userInfo?.avatar ?? "",
-                balance: data.userInfo?.balance?.int32Value ?? 0
+                balance: data.userInfo?.balance?.int32Value ?? 0,
+                isVip: nil
             )
             let authData = AuthorizationInfo(
                 accessToken: data.token ?? "",
@@ -72,7 +73,7 @@ class AuthenticationApiViewModel: ObservableObject {
             )
             
             isLoginSuccess = true
-            print("Email login successful")
+            print("Email login successful, \(data)")
         } catch {
             errorMessage = "Login error: \(error.localizedDescription)"
             print("Login error: \(error)")
@@ -117,7 +118,8 @@ class AuthenticationApiViewModel: ObservableObject {
                 email: data.userInfo?.email ?? "",
                 nickname: data.userInfo?.nickname ?? "",
                 avatar: data.userInfo?.avatar ?? "",
-                balance: data.userInfo?.balance?.int32Value ?? 0
+                balance: data.userInfo?.balance?.int32Value ?? 0,
+                isVip: nil
             )
             let authData = AuthorizationInfo(
                 accessToken: data.token ?? "",
@@ -174,7 +176,8 @@ class AuthenticationApiViewModel: ObservableObject {
                 email: data.userInfo?.email ?? "",
                 nickname: data.userInfo?.nickname ?? "",
                 avatar: data.userInfo?.avatar ?? "",
-                balance: data.userInfo?.balance?.int32Value ?? 0
+                balance: data.userInfo?.balance?.int32Value ?? 0,
+                isVip: nil
             )
             let authData = AuthorizationInfo(
                 accessToken: data.token ?? "",

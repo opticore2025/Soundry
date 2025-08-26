@@ -11,7 +11,7 @@ struct MusicItemView: View {
     @InjectedObject(\.musicPlayerViewModel) var musicPlayerViewModel: MusicPlayerViewModel
     
     let musicItem: MusicHallItem
-    let userItem: APIClient.UserInfo
+    let userItem: APIClient.UserInfo?
     @State private var navigateToReport: Bool = false
     
     private var isLike: Bool {
@@ -39,7 +39,7 @@ struct MusicItemView: View {
                 MusicReportView(
                     musicId: Int(musicItem.id!)!,
                     titleText: musicItem.title ?? "",
-                    artistText: userItem.nickname ?? "",
+                    artistText: userItem?.nickname ?? "",
                     coverURLString: musicItem.coverMediaUrl
                 )
             } label: {
@@ -93,7 +93,7 @@ struct MusicItemView: View {
 
                     HStack {
                         HStack(spacing: 4) {
-                            if let avatar = userItem.avatar,
+                            if let avatar = userItem?.avatar,
                                let url = ResourceUtils.shared.imageURL(avatar)
                             {
                                 WebImage(url: url) { image in
@@ -109,7 +109,7 @@ struct MusicItemView: View {
                                     .frame(width: 20, height: 20)
                                     .foregroundColor(.white)
                             }
-                            Text(userItem.nickname ?? "Unknown User")
+                            Text(userItem?.nickname ?? "Unknown")
                                 .font(.system(size: 12))
                                 .foregroundColor(.white)
                                 .padding(.leading, 4)

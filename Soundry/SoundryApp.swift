@@ -7,6 +7,7 @@ struct SoundryApp: App {
     @InjectedObject(\.appState) private var appState
     @InjectedObject(\.musicPlayerViewModel) private var musicPlayer
     @InjectedObject(\.userSessionViewModel) private var userSession
+    @InjectedObject(\.appApiViewModel) private var appApiViewModel
     @InjectedObject(\.musicApiViewModel) private var musicApiViewModel
     
     var body: some Scene {
@@ -15,6 +16,16 @@ struct SoundryApp: App {
                 .preferredColorScheme(.dark)
                 .onAppear {
                     setupApp()
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+                    Task {
+                        await appApiViewModel.openApp()
+                    }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+                    Task {
+                        await appApiViewModel.closeApp()
+                    }
                 }
         }
     }
@@ -30,6 +41,7 @@ struct SoundryApp: App {
         userSession.loadStoredSession()
         
         Task {
+            await appApiViewModel.initializeApp()
             await musicApiViewModel.getMusicOptions()
         }
     }

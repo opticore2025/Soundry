@@ -106,7 +106,7 @@ struct HomeView: View {
                                 ForEach(musicApiViewModel.musicHallData ?? [], id: \.id) { musicItem in
                                     MusicItemView(
                                         musicItem: musicItem,
-                                        userItem: musicApiViewModel.musicHallUserInfoMap[musicItem.uid!]!
+                                        userItem: musicItem.uid != nil ? musicApiViewModel.musicHallUserInfoMap[musicItem.uid!] : nil
                                     )
                                     .id(musicItem.id)
                                 }

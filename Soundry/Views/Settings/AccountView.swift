@@ -1,38 +1,6 @@
 import SwiftUI
 import Factory
 
-// MARK: - Constants
-private enum Constants {
-    static let animationDuration: Double = 0.3
-    static let cornerRadius: CGFloat = 20
-    static let buttonHeight: CGFloat = 48
-    static let iconSize: CGFloat = 24
-    static let logoSize: CGFloat = 64
-    static let titleFontSize: CGFloat = 30
-    static let subtitleFontSize: CGFloat = 16
-    static let buttonFontSize: CGFloat = 16
-    static let smallFontSize: CGFloat = 12
-    static let spacing: CGFloat = 20
-    static let smallSpacing: CGFloat = 16
-    static let largeSpacing: CGFloat = 48
-    static let mediumSpacing: CGFloat = 26
-    static let bottomSpacing: CGFloat = 40
-    static let overlayHeightRatio: CGFloat = 0.74
-    static let transparentHeightRatio: CGFloat = 0.26
-    static let maxOverlayHeight: CGFloat = 600
-    static let backgroundOpacity: Double = 0.4
-    static let disabledOpacity: Double = 0.5
-
-    // MARK: - Custom Colors for Theme Consistency
-    static let darkBackground: Color = Color(red: 0.15, green: 0.15, blue: 0.16) // 弹窗背景色
-    static let primaryTextColor: Color = .white // 主要文本颜色
-    static let secondaryTextColor: Color = .white.opacity(0.7) // 次要文本颜色，比纯灰色更亮，对比度更好
-    static let destructiveColor: Color = .red // 危险操作（删除）的颜色
-    static let buttonBackgroundColor: Color = .white.opacity(0.15) // 通用按钮背景色 (如取消按钮)
-    static let textFieldBackgroundColor: Color = .white.opacity(0.1) // 输入框背景色
-}
-
-// Helper for specific corner radius (使底部弹窗只有顶部有圆角)
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape(RoundedCorner(radius: radius, corners: corners))
@@ -48,7 +16,6 @@ struct RoundedCorner: Shape {
         return Path(path.cgPath)
     }
 }
-
 
 struct AccountView: View {
     @State private var showingDeleteConfirmation = false
@@ -120,11 +87,9 @@ struct AccountView: View {
             }
             
             // 删除确认弹窗
-            BottomSheet(isPresented: showingDeleteConfirmation, onDismiss: {
-                // 只有在不处于删除加载状态时才允许通过点击背景关闭弹窗
-                if !isDeletingAccount {
-                    showingDeleteConfirmation = false
-                }
+            BottomSheet(isPresented: showingDeleteConfirmation,
+                        onDismiss: {
+
             }) {
                 DeleteAccountConfirmationView(onCancel: {
                     showingDeleteConfirmation = false
@@ -133,8 +98,6 @@ struct AccountView: View {
                         isDeletingAccount = true // 开始加载
                         do{
                             await authenVM.deleteAccount()
-                            print("task")
-//                            try? await Task.sleep(for: .seconds(2)) // 模拟2秒延迟
                             sessionVM.logout()
 
                             // 2. 隐藏加载动画并关闭底部弹窗
@@ -157,9 +120,9 @@ struct AccountView: View {
                     ProgressView("Deleting account...")
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         .foregroundColor(.white)
-                        .padding(Constants.spacing)
-                        .background(Constants.darkBackground) // 使用统一的深色背景
-                        .cornerRadius(Constants.cornerRadius / 2) // 加载框的圆角
+                        .padding(20)
+                        .background(Color(red:0.15,green: 0.15,blue: 0.16)) // 使用统一的深色背景
+                        .cornerRadius(10) // 加载框的圆角
                 }
             }
         }
@@ -285,89 +248,120 @@ struct AppleLoginView: View {
     }
 }
 
+
 // 删除账户确认弹窗
 struct DeleteAccountConfirmationView: View {
     @State private var inputText = ""
     @State private var isDeleteEnabled = false
+    @State private var isKeyboardVisible = false // 跟踪键盘是否显示
     let onCancel: () -> Void
-    let onConfirm: () -> Void // 更改为 onConfirm
+    let onConfirm: () -> Void
     
     private let requiredText = "delete account"
     
     var body: some View {
-        VStack(spacing: Constants.spacing) { // 使用常量间距
-            // 删除图标
-            Image(systemName: "trash")
-                .font(.system(size: Constants.logoSize / 2, weight: .bold)) // 使用常量定义图标大小
-                .foregroundColor(Constants.destructiveColor)
-            
-            // 三个文字区域
-            VStack(spacing: Constants.smallSpacing) { // 使用常量间距
-                Text("Are you sure you want to delete your account?")
-                    .font(.system(size: Constants.subtitleFontSize + 2, weight: .semibold)) // 略大于副标题的字体大小
-                    .foregroundColor(Constants.primaryTextColor)
-                    .multilineTextAlignment(.center)
+        VStack {
+            // 删除图标 - 键盘显示时隐藏
+            if !isKeyboardVisible {
+                Image(systemName: "trash")
+                    .font(.system(size: 60))
+                    .foregroundColor(.red)
                 
-                Text("If you delete your account, all your data will be removed, including all the songs you have created.") // 修正了 "yu" -> "you" 的拼写错误
-                    .font(.system(size: Constants.smallFontSize + 2)) // 略大于小字体的字体大小
-                    .foregroundColor(Constants.secondaryTextColor) // 使用次要文本颜色，对比度更好
-                    .multilineTextAlignment(.center)
-                
-                Text("""
-                    If you wish to continue with your account deletion,
-                    please type the words \"delete account\" below.
-                    Then click \"Delete\" button.
-                    """)
-                    .font(.system(size: Constants.smallFontSize + 2)) // 略大于小字体的字体大小
-                    .foregroundColor(Constants.secondaryTextColor) // 使用次要文本颜色，对比度更好
-                    .multilineTextAlignment(.center)
+                Spacer()
+                    .frame(height: 20)
             }
             
+            // 文本区域 - 根据键盘状态显示不同内容
+            VStack(spacing: 18) {
+                // 第一行文本 - 键盘显示时隐藏
+                if !isKeyboardVisible {
+                    Text("Are you sure you want to delete your account?")
+                        .font(.system(size: 22))
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                }
+                
+                // 第二行文本 - 键盘显示时隐藏
+                if !isKeyboardVisible {
+                    Text("If you delete your account, all your data will be removed, including all the songs you have created.")
+                        .font(.system(size: 20))
+                        .foregroundColor(.white.opacity(0.85))
+                        .multilineTextAlignment(.center)
+                }
+                
+                // 第三行文本 - 始终显示
+                Text("If you wish to continue with your account deletion, please type the words \"delete account\" below. Then click \"Delete\" button.")
+                    .font(.system(size: 18))
+                    .foregroundColor(.white.opacity(0.7))
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.horizontal)
+            
             // 输入框
-            TextField("", text: $inputText, prompt: Text("Type \"delete account\" to confirm").foregroundColor(.gray)) // 改进提示文本，并设置颜色
-                .padding(.vertical, 12) // 增加垂直内边距
-                .padding(.horizontal, 16) // 增加水平内边距
-                .background(Constants.textFieldBackgroundColor) // 自定义背景色
-                .cornerRadius(8) // 圆角
-                .foregroundColor(Constants.primaryTextColor) // 输入文本颜色
-                .accentColor(Constants.primaryTextColor) // 光标颜色
-                .autocorrectionDisabled() // 禁用自动纠正，因为需要精确输入
-                .textInputAutocapitalization(.never) // 禁用首字母大写
-                .padding(.horizontal, Constants.spacing) // 使用常量水平内边距
+            TextField("", text: $inputText, prompt: Text("Enter").foregroundColor(.gray))
+                .padding(.vertical, 12)
+                .padding(.horizontal, 16)
+                .background(.white.opacity(0.1))
+                .cornerRadius(8)
+                .foregroundColor(.white)
+                .accentColor(.white)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .padding(.horizontal, 20)
                 .onChange(of: inputText) { newValue in
                     isDeleteEnabled = newValue.lowercased() == requiredText
                 }
             
             // 按钮区域
-            HStack(spacing: Constants.smallSpacing) { // 使用常量间距
+            HStack(spacing: 16) {
                 // 取消按钮
                 Button(action: onCancel) {
                     Text("Cancel")
-                        .font(.system(size: Constants.buttonFontSize, weight: .medium))
-                        .foregroundColor(Constants.primaryTextColor)
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, Constants.smallSpacing) // 使用常量垂直内边距
-                        .background(Constants.buttonBackgroundColor) // 使用通用按钮背景色
+                        .padding(.vertical, 16)
+                        .background(.white.opacity(0.15))
                         .cornerRadius(8)
                 }
                 
                 // 删除按钮
-                Button(action: onConfirm) { // 更改为 onConfirm
+                Button(action: onConfirm) {
                     Text("Delete")
-                        .font(.system(size: Constants.buttonFontSize, weight: .medium))
-                        .foregroundColor(Constants.primaryTextColor)
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, Constants.smallSpacing) // 使用常量垂直内边距
-                        .background(isDeleteEnabled ? Constants.destructiveColor : Constants.destructiveColor.opacity(Constants.disabledOpacity)) // 使用危险色和禁用透明度
+                        .padding(.vertical, 16)
+                        .background(isDeleteEnabled ? .red : .red.opacity(0.5))
                         .cornerRadius(8)
                 }
                 .disabled(!isDeleteEnabled)
             }
-            .padding(.horizontal, Constants.spacing) // 使用常量水平内边距
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
         }
-        .padding(.vertical, Constants.bottomSpacing) 
+        .frame(maxHeight: .infinity)
+        // 监听键盘通知
+        .onAppear {
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { _ in
+                withAnimation {
+                    isKeyboardVisible = true
+                }
+            }
+            
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+                withAnimation {
+                    isKeyboardVisible = false
+                }
+            }
+        }
+        .onDisappear {
+            // 移除通知监听
+            NotificationCenter.default.removeObserver(self)
+        }
     }
 }
+
 
 #Preview {
     AccountView()

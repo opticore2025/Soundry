@@ -102,14 +102,15 @@ class UserSessionViewModel: ObservableObject {
     }
 
     // MARK: - Update profile without touching tokens
-    func updateProfile(nickname: String?, avatar: String?) {
+    func updateProfile(nickname: String?, avatar: String?, isVip: Bool? = nil) {
         guard let current = userInfo else { return }
         let updated = UserInfo(
             uid: current.uid,
             email: current.email,
             nickname: nickname ?? current.nickname,
             avatar: avatar ?? current.avatar,
-            balance: current.balance
+            balance: current.balance,
+            isVip: isVip ?? current.isVip
         )
         do {
             try saveUserInfo(updated)

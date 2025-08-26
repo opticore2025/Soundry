@@ -6,6 +6,7 @@ struct UserInfo: Codable {
     let nickname: String
     let avatar: String
     let balance: Int32
+    let isVip: Bool?
 }
 
 struct AuthorizationInfo: Codable {
