@@ -48,7 +48,7 @@ struct MeView: View {
                             UserInfoView(onCopy: {
                                 showToast()
                             })
-                           CreditsSectionView()
+//                           CreditsSectionView()
                             TabsSectionView()
                         }
                         .padding(.top)
@@ -306,66 +306,66 @@ struct UserInfoView: View {
 }
 
 // 积分区域组件
-struct CreditsSectionView: View {
-    @InjectedObject(\.appState) var appState: AppState
-    @InjectedObject(\.userSessionViewModel) var userSession: UserSessionViewModel
-    @State private var navigateToVip: Bool = false
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            HStack {
-                Text("Remaining Credits")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-                Spacer()
-                HStack(spacing: 6) {
-                    Image("credit_icon")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 25, height: 25)
-                        .foregroundColor(.yellow)
-                    if userSession.isLoggedIn {
-                        Text("\(userSession.userInfo?.balance ?? 0)") // TODO: 从API获取真实积分
-                            .fontWeight(.bold)
-                            .foregroundColor(.yellow)
-                    } else {
-                        Text("0")
-                            .fontWeight(.bold)
-                            .foregroundColor(.gray)
-                    }
-                }
-            }
-
-            Button {
-                if userSession.isLoggedIn {
-                    // 已登录：跳转到 VIP 购买页
-                    navigateToVip = true
-                } else {
-                    // 未登录状态下弹出登录界面
-                    appState.showLogin()
-                }
-            } label: {
-                Text("Add Credits")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Color(UIColor.systemYellow).opacity(0.2))
-                    .foregroundColor(.yellow)
-                    .cornerRadius(12)
-                    .shadow(color: .blue.opacity(0.2), radius: 4, x: 0, y: 2)
-            }
-        }
-        .padding(20)
-        .cornerRadius(18)
-        .padding(.horizontal)
-        .frame(height: 160)
-        .fullScreenCover(isPresented: $navigateToVip) {
-            VipView()
-        }
-    }
-}
+//struct CreditsSectionView: View {
+//    @InjectedObject(\.appState) var appState: AppState
+//    @InjectedObject(\.userSessionViewModel) var userSession: UserSessionViewModel
+//    @State private var navigateToVip: Bool = false
+//    
+//    var body: some View {
+//        VStack(spacing: 20) {
+//            HStack {
+//                Text("Remaining Credits")
+//                    .font(.headline)
+//                    .fontWeight(.semibold)
+//                    .foregroundColor(.white)
+//                Spacer()
+//                HStack(spacing: 6) {
+//                    Image("credit_icon")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 25, height: 25)
+//                        .foregroundColor(.yellow)
+//                    if userSession.isLoggedIn {
+//                        Text("\(userSession.userInfo?.balance ?? 0)") // TODO: 从API获取真实积分
+//                            .fontWeight(.bold)
+//                            .foregroundColor(.yellow)
+//                    } else {
+//                        Text("0")
+//                            .fontWeight(.bold)
+//                            .foregroundColor(.gray)
+//                    }
+//                }
+//            }
+//
+//            Button {
+//                if userSession.isLoggedIn {
+//                    // 已登录：跳转到 VIP 购买页
+//                    navigateToVip = true
+//                } else {
+//                    // 未登录状态下弹出登录界面
+//                    appState.showLogin()
+//                }
+//            } label: {
+//                Text("Add Credits")
+//                    .font(.headline)
+//                    .fontWeight(.semibold)
+//                    .frame(maxWidth: .infinity)
+//                    .padding(.vertical, 12)
+//                    .background(Color(UIColor.systemYellow).opacity(0.2))
+//                    .foregroundColor(.yellow)
+//                    .cornerRadius(12)
+//                    .shadow(color: .blue.opacity(0.2), radius: 4, x: 0, y: 2)
+//            }
+//        }
+//        .padding(20)
+//        .cornerRadius(18)
+//        .padding(.horizontal)
+//        .frame(height: 160)
+//        .fullScreenCover(isPresented: $navigateToVip) {
+//            VipView()
+//        }
+//    }
+//}
 
 // 标签区域组件
 struct TabsSectionView: View {

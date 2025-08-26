@@ -43,13 +43,13 @@ final class SubscriptionService {
             print("[SubscriptionService] Invalid goodsId. Raw id=\(String(describing: plan.id)) type=\(type(of: plan.id))")
             throw SubscriptionError.invalidPlan
         }
-        let sku = "vip_one_m"
+//        let sku = "vip_one_m"
         // parse sku from backend
-//        let sku: String = {
-//            if let s = plan.sku as? String { return s.trimmingCharacters(in: .whitespacesAndNewlines) }
-//            if let n = plan.sku as? NSNumber { return n.stringValue }
-//            return ""
-//        }()
+        let sku: String = {
+            if let s = plan.sku as? String { return s.trimmingCharacters(in: .whitespacesAndNewlines) }
+            if let n = plan.sku as? NSNumber { return n.stringValue }
+            return ""
+        }()
         guard !sku.isEmpty else {
             print("[SubscriptionService] Invalid sku. Raw sku=\(String(describing: plan.sku)) type=\(type(of: plan.sku))")
             throw SubscriptionError.invalidPlan
