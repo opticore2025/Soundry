@@ -1,15 +1,20 @@
 import Factory
 import SwiftUI
 import SDWebImageSwiftUI
+import SVProgressHUD
 
 struct PlayerDetailView: View {
     @InjectedObject(\.musicPlayerViewModel) var musicPlayer:
         MusicPlayerViewModel
     @InjectedObject(\.musicApiViewModel) var musicApiViewModel:
         MusicApiViewModel
+    @InjectedObject(\.blackListApiViewModel) var blackListApiViewModel:
+        BlackListApiViewModel
     @Environment(\.dismiss) var dismiss
     @State private var isDraggingProgress = false
     @State private var draggedProgress: Double = 0
+    @State private var showReportView = false  // 使用 sheet/fullScreenCover 方式
+    @State private var showBlockAlert = false  // 拉黑弹窗状态
 
     private var isLiked: Bool {
         if musicPlayer.currentSong == nil {
@@ -64,8 +69,58 @@ struct PlayerDetailView: View {
                     .padding(.bottom, 32)
             }
         }
+        .fullScreenCover(isPresented: $showReportView) {
+            if let currentSong = musicPlayer.currentSong,
+               let musicId = currentSong.id,
+               let intId = Int(musicId) {
+                NavigationView {
+                    MusicReportView(
+                        musicId: intId,
+                        titleText: currentSong.title ?? "",
+                        artistText: currentSong.userInfo?.nickname ?? "",
+                        coverURLString: currentSong.coverMediaUrl
+                    )
+                }
+            } else {
+                NavigationView {
+                    VStack {
+                        Text("无法加载举报页面")
+                            .foregroundColor(.white)
+                        Button("关闭") {
+                            showReportView = false
+                        }
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.black)
+                }
+            }
+        }
+        .alert("Are you sure to block this user?", isPresented: $showBlockAlert) {
+            Button("OK") {
+                Task {
+                    guard let uid = musicPlayer.currentSong?.userInfo?.uid?.int64Value
+                    else {
+                        return
+                    }
+                    SVProgressHUD.show()
+                    await blackListApiViewModel.blockUser(uid: uid)
+                    // 可以根据需要刷新相关数据
+                    // await musicApiViewModel.getMusicHall()
+                    DispatchQueue.main.async {
+                        SVProgressHUD.dismiss()
+                    }
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                
+            }
+        }
     }
-
+       
     // MARK: - Top Bar
     private var topBar: some View {
         HStack {
@@ -85,12 +140,23 @@ struct PlayerDetailView: View {
 
             Spacer()
 
-//            Button(action: {
-//                // More options
-//            }) {
-//                Image(systemName: "ellipsis")
-//                    .font(.system(size: 24, weight: .medium))
-//                    .foregroundColor(.white)
+//            HStack(spacing: 16) {
+//                Button {
+//                    showBlockAlert = true
+//                } label: {
+//                    Image("blockUserIcon")
+//                        .resizable()
+//                        .frame(width: 32, height: 32)
+//                        .foregroundColor(.white)
+//                }
+//                Button {
+//                    showReportView = true
+//                } label: {
+//                    Image("reportMusicIcon")
+//                        .resizable()
+//                        .frame(width: 32, height: 32)
+//                        .foregroundColor(.white)
+//                }
 //            }
         }
         .padding(.horizontal, 20)
@@ -296,14 +362,7 @@ struct PlayerDetailView: View {
                     )
             }
 
-            // Share
-            //            Button(action: {
-            //                // Share functionality
-            //            }) {
-            //                Image(systemName: "square.and.arrow.up")
-            //                    .font(.system(size: 24))
-            //                    .foregroundColor(.white.opacity(0.7))
-            //            }
+        
         }
     }
 

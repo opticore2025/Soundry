@@ -78,6 +78,7 @@ extension Container {
 
     // MARK: - ViewModels
     /// ignore warning, fk swift6
+    ///
     @MainActor
     var appState: Factory<AppState> {
         self { @MainActor in AppState() }.singleton
@@ -87,7 +88,7 @@ extension Container {
     var meViewState: Factory<MeViewState> {
         self { @MainActor in MeViewState() }.singleton
     }
-
+    
     @MainActor
     var userSessionViewModel: Factory<UserSessionViewModel> {
         self { @MainActor in UserSessionViewModel() }.singleton
@@ -96,6 +97,12 @@ extension Container {
     @MainActor
     var musicPlayerViewModel: Factory<MusicPlayerViewModel> {
         self { @MainActor in MusicPlayerViewModel() }.singleton
+    }
+    
+    @MainActor
+    var blackListApiViewModel: Factory<BlackListApiViewModel>{
+        self { @MainActor in BlackListApiViewModel(client: self.httpClient()) }
+            .singleton
     }
 
     @MainActor

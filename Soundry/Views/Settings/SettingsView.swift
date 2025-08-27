@@ -16,6 +16,7 @@ struct SettingsView: View {
     @State private var showProfile = false
     @State private var showAccount = false
     @State private var showReport = false
+    @State private var showBlack = false
     @State private var showingSafari = false
     @State private var targetURL: URL?
     @State private var showingURLError = false
@@ -92,6 +93,14 @@ struct SettingsView: View {
                                 SettingsRowView(title: "Privacy Policy") {
                                     openURL(privacyPolicyURL)
                                 }
+                            }
+                            // 仅在已登陆状态显示拉黑列表
+                            VStack(spacing: 1) {
+                                SettingsRowView(title: "Blacklist") {
+                                    showBlack = true
+                                    
+                                }
+
                             }
 
                             // 混合区域 - 根据登录状态显示不同内容
@@ -182,6 +191,9 @@ struct SettingsView: View {
         }
         .fullScreenCover(isPresented: $showReport) {
             FeedbackView()
+        }
+        .fullScreenCover(isPresented: $showBlack){
+            BlackListView()
         }
         // 全屏展示带返回按钮的Safari视图
         .fullScreenCover(isPresented: $showingSafari) {

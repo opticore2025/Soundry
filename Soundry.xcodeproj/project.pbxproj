@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B82F7642E5EF32C00535886 /* BlackListApiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B82F7632E5EF32C00535886 /* BlackListApiViewModel.swift */; };
+		4B82F7662E5EF76B00535886 /* BlackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B82F7652E5EF76B00535886 /* BlackListView.swift */; };
 		4BFF6DE22E56FDD100EB0D35 /* StoreKitSubscriptionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF6DDE2E56FDD100EB0D35 /* StoreKitSubscriptionProvider.swift */; };
 		4BFF6DE32E56FDD100EB0D35 /* SubscriptionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF6DDF2E56FDD100EB0D35 /* SubscriptionProvider.swift */; };
 		4BFF6DE42E56FDD100EB0D35 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFF6DE02E56FDD100EB0D35 /* SubscriptionService.swift */; };
@@ -65,6 +67,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4B82F7632E5EF32C00535886 /* BlackListApiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackListApiViewModel.swift; sourceTree = "<group>"; };
+		4B82F7652E5EF76B00535886 /* BlackListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackListView.swift; sourceTree = "<group>"; };
 		4BFF6DDE2E56FDD100EB0D35 /* StoreKitSubscriptionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitSubscriptionProvider.swift; sourceTree = "<group>"; };
 		4BFF6DDF2E56FDD100EB0D35 /* SubscriptionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionProvider.swift; sourceTree = "<group>"; };
 		4BFF6DE02E56FDD100EB0D35 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
@@ -240,6 +244,7 @@
 				91EB7BC92E55704500257CC8 /* UploadApiViewModel.swift */,
 				91EB7BCA2E55704500257CC8 /* UserSessionViewModel.swift */,
 				91EB7BCB2E55704500257CC8 /* VIPApiViewModel.swift */,
+				4B82F7632E5EF32C00535886 /* BlackListApiViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -336,6 +341,7 @@
 				91EB7BED2E55704500257CC8 /* AccountView.swift */,
 				91EB7BEE2E55704500257CC8 /* ProfileView.swift */,
 				91EB7BF02E55704500257CC8 /* SettingsView.swift */,
+				4B82F7652E5EF76B00535886 /* BlackListView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -518,7 +524,9 @@
 				91EB7BFE2E55704500257CC8 /* MeViewState.swift in Sources */,
 				91EB7BFF2E55704500257CC8 /* TokenManager.swift in Sources */,
 				91EB7C002E55704500257CC8 /* Container.swift in Sources */,
+				4B82F7642E5EF32C00535886 /* BlackListApiViewModel.swift in Sources */,
 				91EB7C012E55704500257CC8 /* Color+Extensions.swift in Sources */,
+				4B82F7662E5EF76B00535886 /* BlackListView.swift in Sources */,
 				91EB7C022E55704500257CC8 /* AuthModels.swift in Sources */,
 				91EB7C032E55704500257CC8 /* ResourceUtils.swift in Sources */,
 				91EB7C042E55704500257CC8 /* AppApiViewModel.swift in Sources */,
@@ -699,11 +707,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Soundry/Soundry.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JZT9NPY56A;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = JZT9NPY56A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "This app needs access to Apple Music to enhance your music experience.";
@@ -724,7 +730,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.opticore.soundry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Soundry_dist;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -742,11 +747,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Soundry/Soundry.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JZT9NPY56A;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = JZT9NPY56A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "This app needs access to Apple Music to enhance your music experience.";
@@ -767,7 +770,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.opticore.soundry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Soundry_dist;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

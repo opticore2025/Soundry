@@ -1,26 +1,35 @@
-import SwiftUI
+import APIClient
 import Factory
 import SDWebImageSwiftUI
 import SVProgressHUD
-import APIClient
+import SwiftUI
 
 struct MusicItemView: View {
     @InjectedObject(\.appState) var appState: AppState
-    @InjectedObject(\.userSessionViewModel) var userSessionViewModel: UserSessionViewModel
-    @InjectedObject(\.musicApiViewModel) var musicApiViewModel: MusicApiViewModel
-    @InjectedObject(\.musicPlayerViewModel) var musicPlayerViewModel: MusicPlayerViewModel
-    
+    @InjectedObject(\.userSessionViewModel) var userSessionViewModel:
+        UserSessionViewModel
+    @InjectedObject(\.musicApiViewModel) var musicApiViewModel:
+        MusicApiViewModel
+    @InjectedObject(\.musicPlayerViewModel) var musicPlayerViewModel:
+        MusicPlayerViewModel
+    @InjectedObject(\.blackListApiViewModel) var blackListApiViewModel:
+        BlackListApiViewModel
+
     let musicItem: MusicHallItem
     let userItem: APIClient.UserInfo?
     @State private var navigateToReport: Bool = false
     
+    @State private var showBlockAlert: Bool = false
+
     private var isLike: Bool {
-        get {
-            guard let musicID = musicItem.id, let rawIsLike = musicItem.isLike else {
-                return false
-            }
-            return musicApiViewModel.isLiked(musicID: Int32(musicID)!, rawIsLike: rawIsLike)
+        guard let musicID = musicItem.id, let rawIsLike = musicItem.isLike
+        else {
+            return false
         }
+        return musicApiViewModel.isLiked(
+            musicID: Int32(musicID)!,
+            rawIsLike: rawIsLike
+        )
     }
 
     // A simple number formatter for thousands
@@ -46,7 +55,9 @@ struct MusicItemView: View {
                 EmptyView()
             }
             // Background Image
-            WebImage(url: ResourceUtils.shared.imageURL(musicItem.coverMediaUrl!)) { image in
+            WebImage(
+                url: ResourceUtils.shared.imageURL(musicItem.coverMediaUrl!)
+            ) { image in
                 image.resizable()
             } placeholder: {
                 Color(white: 0.1, opacity: 1.0)
@@ -60,18 +71,34 @@ struct MusicItemView: View {
                 // Report Button Area
                 HStack {
                     Spacer()
-                    Button {
-                        if !userSessionViewModel.isLoggedIn {
-                            appState.showLogin()
-                            return
+                    HStack(spacing: 8) {
+                        Button {
+                            if !userSessionViewModel.isLoggedIn {
+                                appState.showLogin()
+                                return
+                            }
+                            // TODO display block screen
+                            showBlockAlert = true
+                        } label: {
+                            Image("blockUserIcon")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(.white)
                         }
-                        navigateToReport = true
-                    } label: {
-                        Image(systemName: "exclamationmark.triangle")
-                            .foregroundColor(.white)
-                            .frame(width: 14, height: 14)
+                        Button {
+                            if !userSessionViewModel.isLoggedIn {
+                                appState.showLogin()
+                                return
+                            }
+                            navigateToReport = true
+                        } label: {
+                            Image("reportMusicIcon")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(.white)
+                        }
                     }
-                    .padding(16)
+                    .padding(12)
                 }
                 .background(
                     LinearGradient(
@@ -94,7 +121,7 @@ struct MusicItemView: View {
                     HStack {
                         HStack(spacing: 4) {
                             if let avatar = userItem?.avatar,
-                               let url = ResourceUtils.shared.imageURL(avatar)
+                                let url = ResourceUtils.shared.imageURL(avatar)
                             {
                                 WebImage(url: url) { image in
                                     image.resizable()
@@ -122,9 +149,13 @@ struct MusicItemView: View {
                                 Task {
                                     SVProgressHUD.show()
                                     if isLike {
-                                        await musicApiViewModel.unlikeMusic(Int32(musicItem.id!)!)
+                                        await musicApiViewModel.unlikeMusic(
+                                            Int32(musicItem.id!)!
+                                        )
                                     } else {
-                                        await musicApiViewModel.likeMusic(Int32(musicItem.id!)!)
+                                        await musicApiViewModel.likeMusic(
+                                            Int32(musicItem.id!)!
+                                        )
                                     }
                                     DispatchQueue.main.async {
                                         SVProgressHUD.dismiss()
@@ -160,11 +191,32 @@ struct MusicItemView: View {
         .onTapGesture {
             Task {
                 SVProgressHUD.show()
-                await musicApiViewModel.getMusicDetail(id: Int32(musicItem.id!)!)
+                await musicApiViewModel.getMusicDetail(
+                    id: Int32(musicItem.id!)!
+                )
                 musicPlayerViewModel.play(song: musicApiViewModel.musicDetail!)
                 DispatchQueue.main.async {
                     SVProgressHUD.dismiss()
                 }
+            }
+        }
+        .alert("Are you sure to block this user?", isPresented: $showBlockAlert) {
+            Button("OK") {
+                Task {
+                    guard let uid = userItem?.uid?.int64Value
+                    else {
+                        return
+                    }
+                    SVProgressHUD.show()
+                    await blackListApiViewModel.blockUser(uid: uid)
+                    await musicApiViewModel.getMusicHall()
+                    DispatchQueue.main.async {
+                        SVProgressHUD.dismiss()
+                    }
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                
             }
         }
     }

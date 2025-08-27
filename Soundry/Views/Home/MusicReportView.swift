@@ -40,10 +40,16 @@ struct MusicReportView: View {
     private func navigationBar(topInset: CGFloat) -> some View {
         HStack {
             Button(action: { dismiss() }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 24, weight: .medium))
-                    .foregroundColor(.white)
+                HStack {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 24, weight: .medium))
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                .frame(width: 60, height: 44) // 设置更大的可点击区域
+                .contentShape(Rectangle()) // 确保整个区域都可点击
             }
+            .buttonStyle(PlainButtonStyle()) // 移除默认按钮样式
             Spacer()
             Text("Report")
                 .font(.system(size: 18, weight: .semibold))
