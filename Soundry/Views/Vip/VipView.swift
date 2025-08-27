@@ -448,46 +448,46 @@ struct VipView: View {
     }
     
     private func fetchPlans() async {
-            let userSession = Container.shared.userSessionViewModel()
-//            let uidString = userSession.userInfo?.uid != nil ? String(userSession.userInfo!.uid) : "Not logged in"
-//            let email = userSession.userInfo?.email ?? "None"
-        
-        do {
-            await vipVM.getVIPList()
-            
-            guard let data = vipVM.vipList else {
-                return
-            }
-            
-            if let apiMainTitle = (data.mainTitle) {
-                self.mainTitle = apiMainTitle
-            }
-
-            if let status = data.userVipStatus {
-                let isVipFlag = ((status.isVip as? Int) == 1) || ((status.isVip as? Bool) == true)
-
-                // 过期时间，单位秒
-                let expSeconds = (status.vipExp as? Int) ?? 0
-                let expDate: Date? = expSeconds > 0 ? Date(timeIntervalSince1970: TimeInterval(expSeconds)) : nil
-
-                
-                let remainDays = (status.remainingDays as? Int) ?? 0
-
-                let vipType = (status.vipType as? Int)
-
-                userVipStatus = UserVIPStatus(
-                    isVip: isVipFlag,
-                    vipExp: expDate,
-                    remainingDays: remainDays,
-                    vipType: vipType
-                )
-            }
-            self.vipItems = data.vipList ?? []
-
-            
-        } catch {
-
-        }
+//            let userSession = Container.shared.userSessionViewModel()
+////            let uidString = userSession.userInfo?.uid != nil ? String(userSession.userInfo!.uid) : "Not logged in"
+////            let email = userSession.userInfo?.email ?? "None"
+//        
+//        do {
+//            await vipVM.getVIPList()
+//            
+//            guard let data = vipVM.vipList else {
+//                return
+//            }
+//            
+//            if let apiMainTitle = (data.mainTitle) {
+//                self.mainTitle = apiMainTitle
+//            }
+//
+//            if let status = data.userVipStatus {
+//                let isVipFlag = ((status.isVip as? Int) == 1) || ((status.isVip as? Bool) == true)
+//
+//                // 过期时间，单位秒
+//                let expSeconds = (status.vipExp as? Int) ?? 0
+//                let expDate: Date? = expSeconds > 0 ? Date(timeIntervalSince1970: TimeInterval(expSeconds)) : nil
+//
+//                
+//                let remainDays = (status.remainingDays as? Int) ?? 0
+//
+//                let vipType = (status.vipType as? Int)
+//
+//                userVipStatus = UserVIPStatus(
+//                    isVip: isVipFlag,
+//                    vipExp: expDate,
+//                    remainingDays: remainDays,
+//                    vipType: vipType
+//                )
+//            }
+//            self.vipItems = data.vipList ?? []
+//
+//            
+//        } catch {
+//
+//        }
     }
     
 

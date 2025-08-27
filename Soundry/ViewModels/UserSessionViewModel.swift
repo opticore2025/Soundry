@@ -110,7 +110,7 @@ class UserSessionViewModel: ObservableObject {
             nickname: nickname ?? current.nickname,
             avatar: avatar ?? current.avatar,
             balance: current.balance,
-            isVip: isVip ?? current.isVip,
+            isVip: isVip ?? current.isVip
         )
         do {
             try saveUserInfo(updated)
