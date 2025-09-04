@@ -90,18 +90,18 @@ private struct SmallCapsuleToggleStyle: ToggleStyle {
 struct MusicGenerationView: View {
     @Environment(\.dismiss) var dismiss
     @InjectedObject(\.musicApiViewModel) var musicApiViewModel:
-        MusicApiViewModel
+    MusicApiViewModel
     @InjectedObject(\.uploadApiViewModel) var uploadApiViewModel: UploadApiViewModel
     @InjectedObject(\.musicPlayerViewModel) var musicPlayer:
-        MusicPlayerViewModel
+    MusicPlayerViewModel
     @InjectedObject(\.appState) var appState: AppState
-
+    
     // Tabs and selections
     private let tabs: [GeneratorTab] = [
         .style, .mood, .language, .instrument, .lyrics,
     ]
     @State private var currentTabIndex: Int = 0
-
+    
     @State private var selectedStyles: Set<MusicOption> = []
     @State private var selectedMoods: Set<MusicOption> = []
     @State private var selectedLanguages: Set<MusicOption> = []
@@ -109,10 +109,10 @@ struct MusicGenerationView: View {
     @State private var lyricsTitle: String = ""
     @State private var lyricsText: String = ""
     @State private var isInstrumental: Bool = false
-
+    
     // Random stars
     @State private var randomStars: [Star] = []
-
+    
     // Swipe/gesture
     @State private var isSwipeActive: Bool = false
     @State private var swipeDirection: String = ""  // left | right
@@ -120,14 +120,14 @@ struct MusicGenerationView: View {
     @State private var isTransitioning: Bool = false
     @State private var animationKey: Int = 0
     @State private var centerAngle: Angle = .degrees(0)
-
+    
     // Orbit geometry
     private let ellipseA: CGFloat = 120
     private let ellipseB: CGFloat = 60
-
+    
     // Tips overlay
     @State private var isShowTip: Bool = true
-
+    
     // Result area
     @State private var showResult: Bool = false
     @State private var resultType: String = ""  // voice | text | image
@@ -135,44 +135,45 @@ struct MusicGenerationView: View {
     @State private var resultImagePath: String = ""
     @State private var resultVoicePath: String = ""
     @State private var resultVoiceDuration: Double = 0
-
+    
     @State private var isAudioPlaying: Bool = false
     @State private var voiceCurrentTime: Double = 0
     @State private var voiceDuration: Double = 120
-
+    
     // AttachGenerate presentation
     @State private var showVoiceGenerate: Bool = false
     @State private var showTextGenerate: Bool = false
     @State private var showImageGenerate: Bool = false
-
+    
     // Generate state
     @State private var isGenerating: Bool = false
     @State private var showGenerationSubmitSuccessAlert: Bool = false
-
+    @State private var showGenerationSubmitFailedAlert: Bool = false
+    
     @State private var player: AVAudioPlayer?
-
+    
     // MARK: - Computed
     private var currentTab: GeneratorTab { return tabs[currentTabIndex] }
     private var hasGenerationData: Bool {
         return !selectedStyles.isEmpty
-            || !selectedMoods.isEmpty
-            || !selectedLanguages.isEmpty
-            || !selectedInstruments.isEmpty
-            || (!lyricsText.trimmingCharacters(in: .whitespacesAndNewlines)
-                .isEmpty
-                && !lyricsTitle.trimmingCharacters(in: .whitespacesAndNewlines)
-                    .isEmpty)
-            || !resultText.isEmpty
-            || !resultVoicePath.isEmpty
-            || !resultImagePath.isEmpty
+        || !selectedMoods.isEmpty
+        || !selectedLanguages.isEmpty
+        || !selectedInstruments.isEmpty
+        || (!lyricsText.trimmingCharacters(in: .whitespacesAndNewlines)
+            .isEmpty
+            && !lyricsTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+            .isEmpty)
+        || !resultText.isEmpty
+        || !resultVoicePath.isEmpty
+        || !resultImagePath.isEmpty
     }
-
+    
     var body: some View {
         ZStack {
             Color.appBackground
                 .ignoresSafeArea()
                 .onTapGesture { endEditing() }
-
+            
             VStack(spacing: 0) {
                 navigationBar
                 VStack {
@@ -218,7 +219,13 @@ struct MusicGenerationView: View {
         } message: {
             Text("You can view the completed music in 'Me - My Library'.")
         }
+        .alert(musicApiViewModel.lastError ?? "Generate Failed", isPresented: $showGenerationSubmitFailedAlert) {
+            Button("OK",role: .cancel){
+                musicApiViewModel.clearError()
+            }
+        }
     }
+
 
     private func endEditing() {
         UIApplication.shared.sendAction(
@@ -233,7 +240,8 @@ struct MusicGenerationView: View {
     private var navigationBar: some View {
         HStack {
             Button {
-                appState.currentTab = appState.previousTab
+                // 发送通知关闭底部弹窗
+                NotificationCenter.default.post(name: Notification.Name("HideMusicGenerationView"), object: nil)
             } label: {
                 Image(systemName: "chevron.backward")
                     .font(.system(size: 18, weight: .medium))
@@ -723,14 +731,14 @@ struct MusicGenerationView: View {
                             hasGenerationData
                                 ? .white : Color.white.opacity(0.5)
                         )
-//                    Image(systemName: "diamond.fill")
-//                        .foregroundColor(.white)
-//                        .opacity(hasGenerationData ? 1 : 0.5)
-//                    Text("100")
-//                        .foregroundColor(
-//                            hasGenerationData
-//                                ? .white : Color.yellow.opacity(0.5)
-//                        )
+                    Image(systemName: "diamond.fill")
+                        .foregroundColor(.white)
+                        .opacity(hasGenerationData ? 1 : 0.5)
+                    Text("10")
+                        .foregroundColor(
+                            hasGenerationData
+                                ? .white : Color.yellow.opacity(0.5)
+                        )
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 56)
@@ -1180,13 +1188,17 @@ struct MusicGenerationView: View {
                 }
                 return
             }
-            
             DispatchQueue.main.async {
                 SVProgressHUD.dismiss()
             }
-            clearGenerationData()
             isGenerating = false
-            showGenerationSubmitSuccessAlert = true
+            if musicApiViewModel.lastError == nil {
+                clearGenerationData()
+                showGenerationSubmitSuccessAlert = true
+            }else{
+                showGenerationSubmitFailedAlert = true
+            }
+
         }
     }
 

@@ -37,29 +37,28 @@ struct SearchView: View {
                     .foregroundColor(.white)
                     .focused($isSearchFieldFocused)
                     .textFieldStyle(PlainTextFieldStyle())
-                // 添加键盘工具栏：包含完成按钮
                     .toolbar {
-                    ToolbarItem(placement: .keyboard) {
+                        ToolbarItem(placement: .keyboard) {
                             HStack {
                                 Spacer()
-                                    Button("Done") {
-                                        // 收起键盘
-                                        isSearchFieldFocused = false
-                                    // 可选：点击完成时自动执行搜索
+                                Button("Done") {
+                                    isSearchFieldFocused = false
                                     performSearch()
-                                    }
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 16, weight: .semibold))
-                                        }
-                                    }
                                 }
-                                .navigationBarTitleDisplayMode(.inline)
+                                .foregroundColor(.white)
+                                .font(.system(size: 16, weight: .semibold))
+                            }
+                        }
+                    }
+                    .navigationBarTitleDisplayMode(.inline)
 
                 Button(action: {
                     performSearch()
                     isSearchFieldFocused = false
                 }) {
-                    Image(systemName: "magnifyingglass")
+                    Image("search-icon")
+                        .resizable()
+                        .scaledToFit()
                         .font(.system(size: 16))
                         .foregroundColor(.white)
                         .opacity(searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? 0.5 : 1.0)
@@ -105,18 +104,24 @@ struct SearchView: View {
         }
     }
 
+    // 修改后的未找到结果视图，位置上移
     private var nothingFoundView: some View {
         VStack(spacing: 16) {
-            Image(systemName: "magnifyingglass")
+            // 顶部添加小的空白间隔
+            Spacer(minLength: 60)
+            
+            Image("search-background-icon")
                 .font(.system(size: 40))
                 .foregroundColor(.white.opacity(0.8))
             Text("nothing found").foregroundColor(.white.opacity(0.9))
+            
+            // 底部添加更大的空白间隔，将内容推上去
+            Spacer(minLength: 400)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private func resultsView(_ list: [MusicHallItem]) -> some View {
-        // 过滤掉缺少用户信息的项，保证网格闭包总能返回有效视图
         let filtered = list.filter { item in
             guard let uid = item.uid else { return false }
             return musicApiViewModel.musicHallSearchUserInfoMap["\(uid)"] != nil
@@ -156,5 +161,3 @@ struct SearchView: View {
     SearchView()
         .preferredColorScheme(.dark)
 }
-
-

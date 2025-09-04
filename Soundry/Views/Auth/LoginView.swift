@@ -1,17 +1,17 @@
 import SwiftUI
 import Factory
 import AuthenticationServices
+import SVProgressHUD
 
 // MARK: - Login View
 struct LoginView: View {
     @InjectedObject(\.meViewState) var meviewstate: MeViewState
-    @InjectedObject(\.appState) var appstate: AppState
+    @InjectedObject(\.appState) var appState: AppState
     @InjectedObject(\.userSessionViewModel) var userSessionViewModel: UserSessionViewModel
     @InjectedObject(\.authenticationApiViewModel) var authorizationApiViewModel: AuthenticationApiViewModel
     @State private var isAgreed = false
     @State private var showAgreementPrompt = false
-    @State private var showToast = false
-    @State private var toastMessage = ""
+
     @State private var targetURL: URL?
     @State private var showingURLError = false
     @State private var showingSafari = false
@@ -19,7 +19,7 @@ struct LoginView: View {
     var body: some View {
         VStack(spacing: 0) {
             // 顶部返回按钮区域
-            BackButtonView(action: appstate.goBack)
+            BackButtonView(action: appState.goBack)
             
             // 内容区域
             ScrollView(.vertical, showsIndicators: false) {
@@ -33,14 +33,14 @@ struct LoginView: View {
                         isLoading: authorizationApiViewModel.isLoading, // 传递加载状态
                         onEmailLogin: {
                             if isAgreed {
-                                appstate.navigateToEmailLogin()
+                                appState.navigateToEmailLogin()
                             } else {
                                 showAgreementAlert()
                             }
                         },
                         onEmailSignup: {
                             if isAgreed {
-                                appstate.navigateToEmailSignup()
+                                appState.navigateToEmailSignup()
                             } else {
                                 showAgreementAlert()
                             }
@@ -63,16 +63,18 @@ struct LoginView: View {
         }
         .onChange(of: userSessionViewModel.isLoggedIn) { isLoggedIn in
             if isLoggedIn {
-                showToast(message: "Login successful")
+                SVProgressHUD.showSuccess(withStatus: "Login successful")
+                SVProgressHUD.dismiss(withDelay: 1.5)
                 // 延迟返回，让用户看到成功提示
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    appstate.goBack()
+                    appState.goBack()
                 }
             }
         }
         .onChange(of: authorizationApiViewModel.errorMessage) { errorMsg in
             if let msg = errorMsg, !msg.isEmpty {
-                showToast(message: msg)
+                SVProgressHUD.showError(withStatus: msg)
+                SVProgressHUD.dismiss(withDelay: 2.0)
             }
         }
         .alert("Please agree to the User Agreement & Privacy Policy", isPresented: $showAgreementPrompt) {
@@ -81,8 +83,7 @@ struct LoginView: View {
         } message: {
             Text("To continue, please agree to the User Agreement and Privacy Policy.")
         }
-        // 登录结果提示弹窗
-        .toast(isPresented: $showToast, message: toastMessage)
+
     }
     
     // 处理Apple登录结果
@@ -95,7 +96,8 @@ struct LoginView: View {
         switch result {
         case .success(let authorization):
             guard let cred = authorization.credential as? ASAuthorizationAppleIDCredential else {
-                showToast(message: "Invalid Apple ID credential")
+                SVProgressHUD.showError(withStatus: "Invalid Apple ID credential")
+                SVProgressHUD.dismiss(withDelay: 2.0)
                 return
             }
             
@@ -117,7 +119,8 @@ struct LoginView: View {
             
         case .failure(let error):
             let errorMsg = "Apple Sign In failed: \(error.localizedDescription)"
-            showToast(message: errorMsg)
+            SVProgressHUD.showError(withStatus: errorMsg)
+            SVProgressHUD.dismiss(withDelay: 2.0)
             print(errorMsg)
         }
     }
@@ -175,13 +178,7 @@ struct LoginView: View {
         showAgreementPrompt = true
     }
     
-    private func showToast(message: String) {
-        toastMessage = message
-        showToast = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            showToast = false
-        }
-    }
+
     
     // MARK: - 打开协议和隐私政策的方法
     private func openUserAgreement() {
@@ -313,31 +310,6 @@ struct LoginButtonsView: View {
     
 }
 
-// 扩展：简易Toast提示
-extension View {
-    func toast(isPresented: Binding<Bool>, message: String) -> some View {
-        modifier(ToastModifier(isPresented: isPresented, message: message))
-    }
-}
-
-struct ToastModifier: ViewModifier {
-    @Binding var isPresented: Bool
-    let message: String
-    
-    func body(content: Content) -> some View {
-        ZStack {
-            content
-            if isPresented {
-                Text(message)
-                    .padding(12)
-                    .background(Color.black.opacity(0.8))
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-                    .transition(.opacity.combined(with: .scale))
-            }
-        }
-    }
-}
 
 // 其他视图保持不变（LogoTitleView等）
 struct LogoTitleView: View {

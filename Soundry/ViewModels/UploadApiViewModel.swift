@@ -130,7 +130,7 @@ class UploadApiViewModel: ObservableObject {
         
         let dir = data.dir
         
-        if data.isUpload == .yes {
+        if data.isUpload == 1 {
             print("Already uploaded: \(String(describing: data.uploadId))")
             return (data.uploadId!.int32Value, dir.path)
         }

@@ -36,33 +36,7 @@ struct MusicReportView: View {
         return !selectedTypeIds.isEmpty || !customReason.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
-    // 拆分：导航栏（根据安全区动态下移）
-    private func navigationBar(topInset: CGFloat) -> some View {
-        HStack {
-            Button(action: { dismiss() }) {
-                HStack {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 24, weight: .medium))
-                        .foregroundColor(.white)
-                    Spacer()
-                }
-                .frame(width: 60, height: 44) // 设置更大的可点击区域
-                .contentShape(Rectangle()) // 确保整个区域都可点击
-            }
-            .buttonStyle(PlainButtonStyle()) // 移除默认按钮样式
-            Spacer()
-            Text("Report")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(.white)
-            Spacer()
-            Image(systemName: "chevron.left")
-                .font(.system(size: 20))
-                .foregroundColor(.clear)
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, topInset + 8)
-        .frame(height: 44)
-    }
+
     
     // 拆分：音乐信息区域
     private var musicInfoSection: some View {
@@ -194,8 +168,31 @@ struct MusicReportView: View {
                     .opacity(0.5)
 
                 VStack(spacing: 0) {
-                    // 导航栏
-                    navigationBar(topInset: geometry.safeAreaInsets.top)
+                    HStack {
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundColor(.white)
+                        }
+
+                        Spacer()
+
+                        Text("Report")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(.white)
+
+                        Spacer()
+
+                        // 平衡左侧按钮的空白占位
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 20, weight: .medium))
+                            .foregroundColor(.clear)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                    .frame(height: 44)
 
                     ScrollView {
                         VStack(spacing: 20) {

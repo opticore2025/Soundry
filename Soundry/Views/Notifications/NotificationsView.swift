@@ -10,52 +10,51 @@ struct NotificationsView: View {
     @State private var isLoading: Bool = false
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                // Background
-                Color.appBackground
-                    .ignoresSafeArea()
-                
-                VStack(spacing: 0) {
-                    // Navigation Bar
-                    HStack {
-                        Button(action: {
-                            appState.currentTab = appState.previousTab
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .font(.system(size: 20, weight: .medium))
-                                .foregroundColor(.white)
-                        }
-                        
-                        Spacer()
-                        
-                        Text("Notifications")
-                            .font(.system(size: 18, weight: .semibold))
+        ZStack {
+            // Background
+            Color.appBackground
+                .ignoresSafeArea()
+            
+            VStack(spacing: 0) {
+                // Navigation Bar
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 20, weight: .medium))
                             .foregroundColor(.white)
-                        
-                        Spacer()
-
-                        Button(action: markAllAsRead) {
-                            Text("Mark All Read")
-                                .font(.system(size: 14))
-                                .foregroundColor(.purple)
-                        }
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 12)
-                    .frame(height: 44)
                     
-                    if isLoading {
-                        VStack { Spacer(); ProgressView().tint(.white); Spacer() }
-                    } else if notifications.isEmpty {
-                        emptyStateView
-                    } else {
-                        notificationsList
+                    Spacer()
+                    
+                    Text("Notifications")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+
+                    Button(action: markAllAsRead) {
+                        Text("Mark All Read")
+                            .font(.system(size: 14))
+                            .foregroundColor(.purple)
                     }
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+                .frame(height: 44)
+                
+                if isLoading {
+                    VStack { Spacer(); ProgressView().tint(.white); Spacer() }
+                } else if notifications.isEmpty {
+                    emptyStateView
+                } else {
+                    notificationsList
                 }
             }
         }
         .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
         .task { await loadNotices() }
         .refreshable { await loadNotices() }
     }

@@ -4,36 +4,13 @@ import SDWebImageSwiftUI
 import AuthenticationServices
 import UIKit
 import APIClient
-
-// MARK: - Constants
-private enum Constants {
-    static let animationDuration: Double = 0.3
-    static let cornerRadius: CGFloat = 20
-    static let buttonHeight: CGFloat = 48
-    static let iconSize: CGFloat = 24
-    static let logoSize: CGFloat = 64
-    static let titleFontSize: CGFloat = 30
-    static let subtitleFontSize: CGFloat = 16
-    static let buttonFontSize: CGFloat = 16
-    static let smallFontSize: CGFloat = 12
-    static let spacing: CGFloat = 20
-    static let smallSpacing: CGFloat = 16
-    static let largeSpacing: CGFloat = 48
-    static let mediumSpacing: CGFloat = 26
-    static let bottomSpacing: CGFloat = 40
-    static let overlayHeightRatio: CGFloat = 0.74
-    static let transparentHeightRatio: CGFloat = 0.26
-    static let maxOverlayHeight: CGFloat = 600
-    static let backgroundOpacity: Double = 0.4
-    static let disabledOpacity: Double = 0.5
-}
+import SVProgressHUD
 
 struct MeView: View {
     @InjectedObject(\.appState) var appState: AppState
     @InjectedObject(\.meViewState) var meViewState: MeViewState
     @InjectedObject(\.userSessionViewModel) var userSession: UserSessionViewModel
     @InjectedObject(\.musicApiViewModel) var musicVM: MusicApiViewModel
-    @State private var showCopyToast: Bool = false
     
     var body: some View {
         NavigationView {
@@ -44,126 +21,35 @@ struct MeView: View {
                 VStack(spacing: 0) {
                     ScrollView {
                         VStack(spacing: 20) {
-                            // 传递复制回调函数到UserInfoView
-                            UserInfoView(onCopy: {
-                                showToast()
-                            })
-//                           CreditsSectionView()
-                            TabsSectionView()
+                            UserInfoView(onCopy: {})
+                            CreditsSectionView()
+                            TabsSectionView(meViewState: meViewState)
                         }
                         .padding(.top)
                         .padding(.bottom, 80)
                     }
                     .scrollDisabled(appState.showingLogin)
-                }
-            }
-        }
-        .overlay(alignment: .top) {
-            // 复制成功弹窗
-            CopyToastView(isShowing: showCopyToast)
-        }
-    }
-    
-    // MARK: - 显示复制成功弹窗
-    private func showToast() {
-        withAnimation(.easeInOut(duration: 0.15)) {
-            showCopyToast = true
-        }
-        
-        // 1.4秒后自动隐藏弹窗
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
-            withAnimation(.easeOut(duration: 0.2)) {
-                showCopyToast = false
-            }
-        }
-    }
-}
-
-// MARK: - 复制成功弹窗组件
-struct CopyToastView: View {
-    let isShowing: Bool
-    
-    var body: some View {
-        if isShowing {
-            HStack(spacing: 8) {
-                // 成功图标
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(.green)
-                    .font(.system(size: 16, weight: .semibold))
-                
-                Text("Copied")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.white)
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.black.opacity(0.85))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                    )
-            )
-            .transition(.asymmetric(
-                insertion: .scale.combined(with: .opacity),
-                removal: .opacity
-            ))
-            .padding(.top, 60)
-        }
-    }
-}
-
-// 通用底部弹出容器
-struct BottomSheet<Content: View>: View {
-    let isPresented: Bool
-    let onDismiss: () -> Void
-    let content: Content
-    
-    init(isPresented: Bool, onDismiss: @escaping () -> Void, @ViewBuilder content: () -> Content) {
-        self.isPresented = isPresented
-        self.onDismiss = onDismiss
-        self.content = content()
-    }
-    
-    var body: some View {
-        if isPresented {
-            GeometryReader { geometry in
-                ZStack {
-                    // 半透明背景遮罩
-                    Color.black.opacity(Constants.backgroundOpacity)
-                        .ignoresSafeArea()
-                        .onTapGesture {
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                onDismiss()
-                            }
+                    .refreshable {
+                        if userSession.isLoggedIn{
+                            await meViewState.handleRefresh()
+                            
                         }
-                    
-                    // 内容区域
-                    VStack(spacing: 0) {
-                        // 增加上半部分透明区域
-                        Spacer()
-                            .frame(height: geometry.size.height * Constants.transparentHeightRatio)
-                        
-                        VStack(spacing: 0) {
-                            // 内容
-                            content
-                                .background(
-                                    Color(red: 0.15, green: 0.15, blue: 0.16)
-                                        .cornerRadius(Constants.cornerRadius)
-                                )
-                                .frame(height: min(geometry.size.height * Constants.overlayHeightRatio, Constants.maxOverlayHeight))
+
                         }
                     }
                 }
             }
-            .transition(.opacity.combined(with: .move(edge: .bottom)))
-            .allowsHitTesting(true)
+        //监听用户信息变化
+        .onChange(of: userSession.isLoggedIn){ isLoggedIn in
+            if !isLoggedIn {
+                // 用户登出清空数据
+                meViewState.clearAllDataOnLogout()
+            }
         }
     }
 }
 
-// 用户信息组件 - 优化复制按钮功能
+// 用户信息组件
 struct UserInfoView: View {
     @InjectedObject(\.appState) var appState: AppState
     @InjectedObject(\.userSessionViewModel) var userSession: UserSessionViewModel
@@ -177,19 +63,7 @@ struct UserInfoView: View {
     
     var body: some View {
         HStack(spacing: 15) {
-            // 头像显示
-            // if let avatar = userAvatar {
-            //     Image(uiImage: avatar)
-            //         .resizable()
-            //         .scaledToFill()
-            //         .frame(width: 80, height: 80)
-            //         .clipShape(Circle())
-            // } else {
-            //     Image(systemName: "person.crop.circle.fill")
-            //         .resizable()
-            //         .frame(width: 80, height: 80)
-            //         .foregroundColor(.gray)
-            // }
+
             if let avatarUrlStr = userSession.userInfo?.avatar, !avatarUrlStr.isEmpty {
                 WebImage(url: ResourceUtils.shared.imageURL(avatarUrlStr))
                     .scaledToFill()
@@ -205,13 +79,23 @@ struct UserInfoView: View {
             VStack(alignment: .leading, spacing: 6) {
                 if userSession.isLoggedIn {
                     if let userInfo = userSession.userInfo {
-                        Text(userInfo.nickname)
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
+                        HStack{
+                            Text(userInfo.nickname)
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            if userInfo.isVip ?? false{
+                                Image("vip-icon")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 22)
+                                    .alignmentGuide(.firstTextBaseline) { $0[.bottom] }
+                            }
+                        }
+                        
                         
                         HStack(spacing: 8) {
-                            Text("ID: \(userInfo.uid)")
+                            Text(String(format: "ID: %ld", userInfo.uid))
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
                             
@@ -259,6 +143,7 @@ struct UserInfoView: View {
         .padding(.horizontal)
         .onAppear {
             loadUserAvatar()
+            
         }
         .onChange(of: userSession.userInfo?.avatar) { _ in
             // 当用户头像信息更新时，重新加载头像
@@ -269,21 +154,20 @@ struct UserInfoView: View {
     // MARK: - 复制到剪贴板
     private func copyToClipboard() {
         guard let userInfo = userSession.userInfo else { return }
-        
+            
         // 触觉反馈
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        
+            
         // 复制到剪贴板
         UIPasteboard.general.string = "\(userInfo.uid)"
-        
-        // 按钮点击动画
-        withAnimation(.spring(response: 0.15, dampingFraction: 0.6)) {
-            copyTapped = true
-        }
-        
+            
+        // 使用SVProgressHUD显示复制成功提示
+        SVProgressHUD.showSuccess(withStatus: "Copied successfully")
+        SVProgressHUD.dismiss(withDelay: 0.5)
+            
         // 调用复制成功回调
         onCopy()
-        
+            
         // 恢复按钮状态
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             withAnimation(.spring(response: 0.15, dampingFraction: 0.7)) {
@@ -291,13 +175,14 @@ struct UserInfoView: View {
             }
         }
     }
+
     
     // 加载用户头像
     private func loadUserAvatar() {
         if let uid = userSession.userInfo?.uid,
-           let avatarPath = UserDefaults.standard.string(forKey: "userAvatarPath_\(uid)"),
-           let imageData = try? Data(contentsOf: URL(fileURLWithPath: avatarPath)),
-           let image = UIImage(data: imageData) {
+            let avatarPath = UserDefaults.standard.string(forKey: "userAvatarPath_\(uid)"),
+            let imageData = try? Data(contentsOf: URL(fileURLWithPath: avatarPath)),
+            let image = UIImage(data: imageData) {
             userAvatar = image
         } else {
             userAvatar = nil
@@ -305,74 +190,76 @@ struct UserInfoView: View {
     }
 }
 
-// 积分区域组件
-//struct CreditsSectionView: View {
-//    @InjectedObject(\.appState) var appState: AppState
-//    @InjectedObject(\.userSessionViewModel) var userSession: UserSessionViewModel
-//    @State private var navigateToVip: Bool = false
-//    
-//    var body: some View {
-//        VStack(spacing: 20) {
-//            HStack {
-//                Text("Remaining Credits")
-//                    .font(.headline)
-//                    .fontWeight(.semibold)
-//                    .foregroundColor(.white)
-//                Spacer()
-//                HStack(spacing: 6) {
-//                    Image("credit_icon")
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 25, height: 25)
-//                        .foregroundColor(.yellow)
-//                    if userSession.isLoggedIn {
-//                        Text("\(userSession.userInfo?.balance ?? 0)") // TODO: 从API获取真实积分
-//                            .fontWeight(.bold)
-//                            .foregroundColor(.yellow)
-//                    } else {
-//                        Text("0")
-//                            .fontWeight(.bold)
-//                            .foregroundColor(.gray)
-//                    }
-//                }
-//            }
-//
-//            Button {
-//                if userSession.isLoggedIn {
-//                    // 已登录：跳转到 VIP 购买页
-//                    navigateToVip = true
-//                } else {
-//                    // 未登录状态下弹出登录界面
-//                    appState.showLogin()
-//                }
-//            } label: {
-//                Text("Add Credits")
-//                    .font(.headline)
-//                    .fontWeight(.semibold)
-//                    .frame(maxWidth: .infinity)
-//                    .padding(.vertical, 12)
-//                    .background(Color(UIColor.systemYellow).opacity(0.2))
-//                    .foregroundColor(.yellow)
-//                    .cornerRadius(12)
-//                    .shadow(color: .blue.opacity(0.2), radius: 4, x: 0, y: 2)
-//            }
-//        }
-//        .padding(20)
-//        .cornerRadius(18)
-//        .padding(.horizontal)
-//        .frame(height: 160)
-//        .fullScreenCover(isPresented: $navigateToVip) {
-//            VipView()
-//        }
-//    }
-//}
+ // 积分区域组件
+struct CreditsSectionView: View {
+    @InjectedObject(\.appState) var appState: AppState
+    @InjectedObject(\.userSessionViewModel) var userSession: UserSessionViewModel
+    @State private var navigateToVip: Bool = false
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            HStack {
+                Text("Remaining Credits")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                Spacer()
+                HStack(spacing: 6) {
+                    Image("credit_icon")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 25, height: 25)
+                        .foregroundColor(.yellow)
+                    if userSession.isLoggedIn {
+                        Text("\(userSession.userInfo?.balance ?? 0)")
+                            .fontWeight(.bold)
+                            .foregroundColor(.yellow)
+                    } else {
+                        Text("0")
+                            .fontWeight(.bold)
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
 
-// 标签区域组件
+            Button {
+                if userSession.isLoggedIn {
+                    // 已登录：跳转到 VIP 购买页
+                    navigateToVip = true
+                } else {
+                    // 未登录状态下弹出登录界面
+                    appState.showLogin()
+                }
+            } label: {
+                Text("Add Credits")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(Color(UIColor.systemYellow).opacity(0.2))
+                    .foregroundColor(.yellow)
+                    .cornerRadius(12)
+                    .shadow(color: .blue.opacity(0.2), radius: 4, x: 0, y: 2)
+            }
+        }
+        .padding(20)
+        .cornerRadius(18)
+        .padding(.horizontal)
+        .frame(height: 160)
+        .fullScreenCover(isPresented: $navigateToVip) {
+            VipView()
+        }
+    }
+}
+
+// 优化后的标签区域组件
 struct TabsSectionView: View {
     @InjectedObject(\.appState) var appState: AppState
-    @InjectedObject(\.meViewState) var meViewState: MeViewState
     @InjectedObject(\.userSessionViewModel) var userSession: UserSessionViewModel
     @InjectedObject(\.musicApiViewModel) var musicVM: MusicApiViewModel
+    
+    //接收meviewstate实例
+    @ObservedObject var meViewState : MeViewState
     
     private let tabs = MeViewState.MeTab.allCases
     
@@ -390,17 +277,15 @@ struct TabsSectionView: View {
             TabView(selection: $meViewState.currentTab) {
                 ForEach(tabs, id: \.self) { tab in
                     if userSession.isLoggedIn {
-                        // 已登录状态：根据标签显示不同内容
                         switch tab {
                         case .library:
-                            MyLibraryView()
+                            MyLibraryView(meViewState: meViewState)
                                 .tag(tab)
                         case .likes:
-                            MyLikesView()
+                            MyLikesView(meViewState: meViewState)
                                 .tag(tab)
                         }
                     } else {
-                        // 未登录状态：显示登录提示
                         TabLoginPromptView(appState: appState)
                             .tag(tab)
                     }
@@ -497,64 +382,32 @@ struct TabButton: View {
     }
 }
 
-// MARK: - 我的作品视图
+
+// 优化后的我的作品视图
 struct MyLibraryView: View {
-    @InjectedObject(\.musicApiViewModel) var musicVM: MusicApiViewModel
-    @State private var isLoading = false
-    @State private var hasMore = false
-    @State private var currentPage: Int32 = 1
-    @State private var showError = false
-    @State private var errorMessage = ""
+    // 从环境中获取共享的 MeViewState 实例
+    @ObservedObject var meViewState: MeViewState
     
     var body: some View {
         VStack {
-            // 顶部刷新按钮
-//            HStack {
-//                Spacer()
-//                Button(action: refreshMyWorks) {
-//                    HStack(spacing: 4) {
-//                        Image(systemName: "arrow.clockwise")
-//                            .font(.caption)
-//                        Text("Refresh")
-//                            .font(.caption)
-//                    }
-//                    .foregroundColor(.white)
-//                    .padding(.horizontal, 12)
-//                    .padding(.vertical, 6)
-//                    .background(Color.blue.opacity(0.3))
-//                    .cornerRadius(8)
-//                }
-//                .disabled(isLoading)
-//                .opacity(isLoading ? 0.6 : 1.0)
-//            }
-//            .padding(.horizontal)
-//            .padding(.bottom, 8)
-            
-            if isLoading && (musicVM.musicCategoryList?.list?.isEmpty ?? true) {
-                // 加载状态
+            // UI直接绑定 ViewModel 的属性
+            if meViewState.isLoadingWorks && meViewState.worksList.isEmpty {
                 VStack(spacing: 16) {
-                    ProgressView()
-                        .scaleEffect(1.2)
-                        .foregroundColor(.white)
-                    Text("Loading your works...")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
+                    ProgressView().scaleEffect(1.2)
+                    Text("Loading your works...").foregroundColor(.gray)
                 }
-            } else if let musicList = musicVM.musicCategoryList?.list, !musicList.isEmpty {
-                // 显示我的作品列表
+            } else if !meViewState.worksList.isEmpty {
                 ScrollView {
                     LazyVStack(spacing: 12) {
-                        ForEach(Array(musicList.enumerated()), id: \.offset) { index, musicItem in
+                        ForEach(Array(meViewState.worksList.enumerated()), id: \.offset) { index, musicItem in
                             LikedMusicItemView(musicItem: musicItem)
                             
-                            // 加载更多
-                            if index == musicList.count - 1 && hasMore && !isLoading {
-                                Button(action: loadMore) {
+                            // 上拉加载更多
+                            if index == meViewState.worksList.count - 1 && meViewState.hasMoreWorks && !meViewState.isLoadingWorks {
+                                Button(action: { meViewState.loadMoreWorks() }) {
                                     HStack {
-                                        ProgressView()
-                                            .scaleEffect(0.8)
-                                        Text("Loading more...")
-                                            .font(.caption)
+                                        ProgressView().scaleEffect(0.8)
+                                        Text("Loading more...").font(.caption)
                                     }
                                     .foregroundColor(.gray)
                                     .padding(.vertical, 8)
@@ -566,172 +419,39 @@ struct MyLibraryView: View {
                 }
             } else {
                 // 空状态或错误状态
-                VStack(spacing: 16) {
-                    Image("music_empty")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 80, height: 80)
-                        .opacity(0.6)
-                    
-                    if showError {
-                        Text("Failed to load your works")
-                            .font(.headline)
-                            .fontWeight(.medium)
-                            .foregroundColor(.red)
-                        
-                        Text(errorMessage)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                            .multilineTextAlignment(.center)
-                    } else {
-                        Text("No works yet")
-                            .font(.headline)
-                            .fontWeight(.medium)
-                            .foregroundColor(.gray)
-                        
-                        Text("Create music to see them here")
-                            .font(.subheadline)
-                            .foregroundColor(.gray.opacity(0.8))
-                            .multilineTextAlignment(.center)
-                    }
-                    
-                    // 刷新按钮
-//                    Button(action: refreshMyWorks) {
-//                        HStack(spacing: 4) {
-//                            Image(systemName: "arrow.clockwise")
-//                            Text("Refresh")
-//                        }
-//                        .font(.subheadline)
-//                        .foregroundColor(.white)
-//                        .padding(.horizontal, 16)
-//                        .padding(.vertical, 8)
-//                        .background(Color.blue.opacity(0.3))
-//                        .cornerRadius(8)
-//                    }
-//                    .disabled(isLoading)
-//                    .opacity(isLoading ? 0.6 : 1.0)
-                }
+                TabEmptyStateView()
             }
         }
         .onAppear {
-            // 进入页面时清空旧数据，避免跨账号残留
-            musicVM.musicCategoryList = nil
-            hasMore = false
-            currentPage = 1
-            loadMyWorks()
-        }
-        .onChange(of: musicVM.musicCategoryList) { newValue in
-            if let data = newValue {
-                hasMore = data.hasMoreBoolean
-                showError = false
-            }
-        }
-        .onChange(of: musicVM.lastError) { error in
-            if let error = error {
-                showError = true
-                errorMessage = error
-            }
-        }
-        .onReceive(Container.shared.userSessionViewModel().$userInfo) { _ in
-            // 监控账号切换：重置并重新拉取
-            musicVM.musicCategoryList = nil
-            hasMore = false
-            currentPage = 1
-            loadMyWorks()
-        }
-    }
-    
-    private func loadMyWorks() {
-        guard !isLoading else { return }
-        isLoading = true
-        currentPage = 1
-        Task {
-            await musicVM.getMusicCategoryList(
-                type: .mywork, // 我的作品
-                page: currentPage,
-                pageSize: 20
-            )
-            isLoading = false
-        }
-    }
-    
-    private func refreshMyWorks() {
-        loadMyWorks()
-    }
-    
-    private func loadMore() {
-        guard !isLoading && hasMore else { return }
-        isLoading = true
-        currentPage += 1
-        Task {
-            await musicVM.getMusicCategoryList(
-                type: .mywork, // 我的作品
-                page: currentPage,
-                pageSize: 20
-            )
-            isLoading = false
+            // 视图出现时，让 ViewModel 决定是否需要加载数据
+            meViewState.loadMyWorksIfNeeded()
         }
     }
 }
 
-// MARK: - 我的喜欢音乐视图
+// 优化后的我的喜欢音乐视图
 struct MyLikesView: View {
-    @InjectedObject(\.musicApiViewModel) var musicVM: MusicApiViewModel
-    @State private var isLoading = false
-    @State private var hasMore = false
-    @State private var currentPage: Int32 = 1
-    @State private var showError = false
-    @State private var errorMessage = ""
+    // 从环境中获取共享的 MeViewState 实例
+    @ObservedObject var meViewState: MeViewState
     
     var body: some View {
         VStack {
-            // 顶部刷新按钮
-            HStack {
-                Spacer()
-//                Button(action: refreshLikedMusic) {
-//                    HStack(spacing: 4) {
-//                        Image(systemName: "arrow.clockwise")
-//                            .font(.caption)
-//                        Text("Refresh")
-//                            .font(.caption)
-//                    }
-//                    .foregroundColor(.white)
-//                    .padding(.horizontal, 12)
-//                    .padding(.vertical, 6)
-//                    .background(Color.blue.opacity(0.3))
-//                    .cornerRadius(8)
-//                }
-//                .disabled(isLoading)
-//                .opacity(isLoading ? 0.6 : 1.0)
-            }
-            .padding(.horizontal)
-            .padding(.bottom, 8)
-            
-            if isLoading && (musicVM.musicCategoryList?.list?.isEmpty ?? true) {
-                // 加载状态
+            if meViewState.isLoadingLikes && meViewState.likesList.isEmpty {
                 VStack(spacing: 16) {
-                    ProgressView()
-                        .scaleEffect(1.2)
-                        .foregroundColor(.white)
-                    Text("Loading your liked music...")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
+                    ProgressView().scaleEffect(1.2)
+                    Text("Loading your liked music...").foregroundColor(.gray)
                 }
-            } else if let musicList = musicVM.musicCategoryList?.list, !musicList.isEmpty {
-                // 显示喜欢的音乐列表
+            } else if !meViewState.likesList.isEmpty {
                 ScrollView {
                     LazyVStack(spacing: 12) {
-                        ForEach(Array(musicList.enumerated()), id: \.offset) { index, musicItem in
+                        ForEach(Array(meViewState.likesList.enumerated()), id: \.offset) { index, musicItem in
                             LikedMusicItemView(musicItem: musicItem)
                             
-                            // 加载更多
-                            if index == musicList.count - 1 && hasMore && !isLoading {
-                                Button(action: loadMore) {
-                                    HStack {
-                                        ProgressView()
-                                            .scaleEffect(0.8)
-                                        Text("Loading more...")
-                                            .font(.caption)
+                            if index == meViewState.likesList.count - 1 && meViewState.hasMoreLikes && !meViewState.isLoadingLikes {
+                                Button(action: { meViewState.loadMoreLikes() }) {
+                                     HStack {
+                                        ProgressView().scaleEffect(0.8)
+                                        Text("Loading more...").font(.caption)
                                     }
                                     .foregroundColor(.gray)
                                     .padding(.vertical, 8)
@@ -742,119 +462,15 @@ struct MyLikesView: View {
                     .padding(.horizontal)
                 }
             } else {
-                // 空状态或错误状态
-                VStack(spacing: 16) {
-                    Image("music_empty")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 80, height: 80)
-                        .opacity(0.6)
-                    
-                    if showError {
-                        Text("Failed to load liked music")
-                            .font(.headline)
-                            .fontWeight(.medium)
-                            .foregroundColor(.red)
-                        
-                        Text(errorMessage)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                            .multilineTextAlignment(.center)
-                    } else {
-                        Text("No liked music yet")
-                            .font(.headline)
-                            .fontWeight(.medium)
-                            .foregroundColor(.gray)
-                        
-                        Text("Like some music to see them here")
-                            .font(.subheadline)
-                            .foregroundColor(.gray.opacity(0.8))
-                            .multilineTextAlignment(.center)
-                    }
-                    
-                    // 刷新按钮
-//                    Button(action: refreshLikedMusic) {
-//                        HStack(spacing: 4) {
-//                            Image(systemName: "arrow.clockwise")
-//                            Text("Refresh")
-//                        }
-//                        .font(.subheadline)
-//                        .foregroundColor(.white)
-//                        .padding(.horizontal, 16)
-//                        .padding(.vertical, 8)
-//                        .background(Color.blue.opacity(0.3))
-//                        .cornerRadius(8)
-//                    }
-//                    .disabled(isLoading)
-//                    .opacity(isLoading ? 0.6 : 1.0)
-                }
+                TabEmptyStateView()
             }
         }
         .onAppear {
-            // 进入页面时清空旧数据，避免跨账号残留
-            musicVM.musicCategoryList = nil
-            hasMore = false
-            currentPage = 1
-            loadLikedMusic()
-        }
-        .onChange(of: musicVM.musicCategoryList) { newValue in
-            if let data = newValue {
-                hasMore = data.hasMoreBoolean
-                showError = false
-            }
-        }
-        .onChange(of: musicVM.lastError) { error in
-            if let error = error {
-                showError = true
-                errorMessage = error
-            }
-        }
-        .onReceive(Container.shared.userSessionViewModel().$userInfo) { _ in
-            // 监控账号切换：重置并重新拉取
-            musicVM.musicCategoryList = nil
-            hasMore = false
-            currentPage = 1
-            loadLikedMusic()
-        }
-    }
-    
-    private func loadLikedMusic() {
-        guard !isLoading else { return }
-        
-        isLoading = true
-        currentPage = 1
-        
-        Task {
-            await musicVM.getMusicCategoryList(
-                type: .mylike, // 我的点赞
-                page: currentPage,
-                pageSize: 20
-            )
-            
-            isLoading = false
-        }
-    }
-    
-    private func refreshLikedMusic() {
-        loadLikedMusic()
-    }
-    
-    private func loadMore() {
-        guard !isLoading && hasMore else { return }
-        
-        isLoading = true
-        currentPage += 1
-        
-        Task {
-            await musicVM.getMusicCategoryList(
-                type: .mylike, // 我的点赞
-                page: currentPage,
-                pageSize: 20
-            )
-            isLoading = false
+            meViewState.loadLikedMusicIfNeeded()
         }
     }
 }
+
 
 // MARK: - 喜欢的音乐项视图
 struct LikedMusicItemView: View {
@@ -1012,13 +628,14 @@ struct LikedMusicItemView: View {
     }
     
     private func getPlayCount() -> Int {
-        if let item = musicItem as? MusicListItem { return 0 }
+//      if let item = musicItem as? MusicListItem { return 0 }
         if let v: Int = childValue(["playCount", "plays"]) { return v }
         if let v: Int32 = childValue(["playCount"]) { return Int(v) }
         if let s: String = childValue(["play"]) { return Int(s) ?? 0 }
         return 0
     }
 }
+
 
 #Preview {
     MeView()

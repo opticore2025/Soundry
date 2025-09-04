@@ -41,7 +41,7 @@ class VIPApiViewModel: ObservableObject {
                 return
             }
             vipList = data
-            print("VIP list fetched successfully: \(String(describing: data))")
+   //         print("VIP list fetched successfully: \(String(describing: data))")
             isLoading = false
         } catch {
             errorMessage = "Failed to get VIP list: \(error.localizedDescription)"

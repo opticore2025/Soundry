@@ -203,22 +203,3 @@ struct H_RoundedCorner: Shape {
     }
 }
 
-//#Preview {
-//    VStack {
-//        HStack(spacing: 16) {
-//            HomeStyleMusicCard(
-//                song: Music.demoSongs[0],
-//                currentUser: nil,
-//                onPlay: {},
-//                onLike: {},
-//                onReport: {}
-//            )
-//        }
-//        
-//        Spacer()
-//    }
-//    .padding()
-//    .background(Color.black)
-//    .environmentObject(MusicPlayerViewModel())
-//    .preferredColorScheme(.dark)
-//}

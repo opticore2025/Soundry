@@ -279,7 +279,7 @@ class AuthenticationApiViewModel: ObservableObject {
     }
 
     // MARK: - 重置邮箱密码
-    func resetEmailPassword(email: String, newPassword: String, code: String)
+    func resetEmailPassword(email: String, newPassword: String)
         async
     {
         isLoading = true

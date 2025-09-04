@@ -17,7 +17,10 @@ class BlackListApiViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     
-    @Published var blockList : PageBlockedUserResponseData?
+    @Published var blockList : [BlockedUser]?
+    @Published var blockListHasMore: Bool = false
+    @Published var currentblockListPage: Int32 = 1
+    @Published var isBlockListLoadingMore: Bool = false
 
     
     
@@ -76,12 +79,20 @@ class BlackListApiViewModel: ObservableObject {
                 isLoading = false
                 return
             }
-            self.blockList = data
+            self.currentblockListPage = page
+            if page == 1{
+                self.blockList = data.list
+                self.blockListHasMore = data.hasMore?.intValue == 1
+                return
+            }
+            self.blockList?.append(contentsOf: data.list!)
+            self.blockListHasMore = data.hasMore?.intValue == 1
+            self.isBlockListLoadingMore = false
             print("Page Blocked User successfully: \(String(describing: data))")
-            isLoading = false
         } catch {
         }
         
         
     }
 }
+

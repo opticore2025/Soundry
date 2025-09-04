@@ -1,14 +1,13 @@
 import SwiftUI
 import Factory
-
+import SVProgressHUD
 import UIKit
 import APIClient
 
 struct UserVIPStatus {
-    let isVip: Bool
-    let vipExp: Date?
-    let remainingDays: Int
-    let vipType: Int?
+    let isVip: Int
+    let vipExp: Date? //vip到期时间戳
+    let remainingDays: Int //VIP剩余天数
 }
 
 // MARK: - 响应式布局扩展
@@ -45,18 +44,17 @@ struct VipView: View {
     
     @Injected(\.vipApiViewModel) private var vipVM: VIPApiViewModel
     @Injected(\.subscriptionService) private var subscriptionService: SubscriptionService
+    @Injected(\.applePayApiViewModel)private var applePayApi: ApplePayApiViewModel
 
     
     @State private var selectedPlan: Int = 0
     @State private var vipItems: [VipPackage] = []
-    @State private var isLoading: Bool = true
-    @State private var hasError: Bool = false
     @State private var showRetentionPopup: Bool = false
     @State private var userVipStatus: UserVIPStatus = UserVIPStatus(
-        isVip: false,
+        isVip: 0,
         vipExp: nil,
-        remainingDays: 0,
-        vipType: nil
+        remainingDays: 0
+        // --- REMOVED ---: 移除了末尾多余的逗号，虽然在Swift中合法，但清理后更规范。
     )
     @State private var mainTitle: String = "Unlock Your Music Universe"
     
@@ -65,6 +63,16 @@ struct VipView: View {
     // External URLs
     private let userAgreementURL = "https://giant-flyingfish-c30.notion.site/Soundry-User-Agreement-254270f6474f8031b4e7d59223212c2b?pvs=73"
     private let privacyPolicyURL = "https://giant-flyingfish-c30.notion.site/Soundry-Privacy-Policy-254270f6474f80158ef4ed0805af3ff2?pvs=73"
+    
+    // 提取格式化逻辑
+    private var vipExpirationText: String? {
+        guard userVipStatus.isVip == 1, let expDate = userVipStatus.vipExp else {
+            return nil
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd" // 设置为年/月/日格式
+        return "Expiration: \(formatter.string(from: expDate))"
+    }
 
     
     var body: some View {
@@ -80,7 +88,7 @@ struct VipView: View {
                         // 返回按钮
                         HStack {
                             Button(action: {
-                            if userVipStatus.isVip {
+                            if userVipStatus.isVip == 1 {
                                 dismiss()
                             } else {
                                 showRetentionPopup = true
@@ -97,18 +105,27 @@ struct VipView: View {
                 
                 Spacer()
                 
-                        // 皇冠图标和文字
-                        HStack(spacing: 8) {
-                            Image("crown-icon")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 22, height: 22)
-                                
-                                Text(mainTitle)
-                                    .font(.system(size: 22, weight: .bold))
-                                    .foregroundColor(.white)
-                        }
-                        .padding(.bottom, 10)
+                VStack{
+                    // 皇冠图标和文字
+                    HStack(spacing: 8) {
+                        Image("crown-icon")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 22, height: 22)
+                            
+                            Text(mainTitle)
+                                .font(.system(size: 22, weight: .bold))
+                                .foregroundColor(.white)
+                    }
+                    .padding(.bottom, 10)
+                    // 在视图中使用
+                    if let expirationText = vipExpirationText {
+                        Text(expirationText)
+                            .font(.system(size: 16))
+                            .foregroundColor(.white.opacity(0.85))
+                    }
+
+                }
                     }
                     .frame(maxHeight: geometry.size.height * 0.4)
                     .padding(.horizontal, adaptiveHorizontalPadding(geometry: geometry))
@@ -269,7 +286,7 @@ struct VipView: View {
                     )
                 
                 // Save标签 - 放置在右上角边框线上
-                if let save = plan.save as? String {
+                if let save = plan.save {
                     saveBadge(text: save, geometry: geometry)
                         .offset(x: adaptiveSpacing(geometry: geometry, baseSpacing: 8),
                                 y: -adaptiveSpacing(geometry: geometry, baseSpacing: 8))
@@ -280,7 +297,7 @@ struct VipView: View {
                     // 第一行：标题和周价格
                     HStack(alignment: .center) {
                         HStack(alignment: .center, spacing: 8) {
-                            Text((plan.title as? String) ?? "")
+                            Text((plan.title) ?? "")
                                 .font(.system(size: adaptiveFontSize(geometry: geometry, baseSize: 18), weight: .bold))
                                 .foregroundColor(.white)
                            
@@ -292,17 +309,14 @@ struct VipView: View {
                         // - 年套餐: 上方显示 weekly_price，下方显示 price(年价)
                         // - 周套餐: 仅显示 price（周价），不显示年价
                         Group {
-                            let isYearly = ((plan.isYearly as? Bool) == true) || (((plan.period as? String)?.lowercased()) == "yearly")
+                            let isYearly = plan.period == .yearly
                             let priceText: String = {
                                 if let s = plan.price as? String { return s }
-                                if let d = plan.price as? Double { return String(format: "%.2f", d) }
-                                if let n = plan.price as? NSNumber { return String(format: "%.2f", n.doubleValue) }
                                 return "0"
                             }()
                             let weeklyText: String = {
                                 if let s = plan.weeklyPrice as? String { return s }
-                                if let d = plan.weeklyPrice as? Double { return String(format: "%.2f", d) }
-                                if let n = plan.weeklyPrice as? NSNumber { return String(format: "%.2f", n.doubleValue) }
+        
                                 return priceText
                             }()
                             if isYearly {
@@ -334,7 +348,7 @@ struct VipView: View {
                     
                     // 第二行：积分信息（年价格不再使用 original_price，仅在上方按 period 渲染）
                     HStack(alignment: .center) {
-                        Text((plan.creditsDescription as? String) ?? "")
+                        Text((plan.creditsDescription) ?? "")
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundColor(.yellow)
                     
@@ -343,7 +357,7 @@ struct VipView: View {
                     }
                     
                     // 生成描述
-                    Text((plan.generateDescription as? String) ?? "")
+                    Text((plan.generateDescription) ?? "")
                         .font(.system(size: 13))
                             .foregroundColor(.white.opacity(0.7))
                         .lineLimit(2)
@@ -415,25 +429,10 @@ struct VipView: View {
         .frame(maxHeight: .infinity)
     }
     
-    private func emptyView(geometry: GeometryProxy) -> some View {
-        Text("No available plans")
-            .font(.system(size: 16))
-            .foregroundColor(.white.opacity(0.7))
-            .frame(maxHeight: .infinity)
-    }
-    
-    // MARK: - 交互方法
-    private func handleBack() {
-        if !showRetentionPopup && !userVipStatus.isVip {
-            showRetentionPopup = true
-        } else {
-            dismiss()
-        }
-    }
     
     private func handleSubscribe() {
         guard selectedPlan < vipItems.count else {
-            return 
+            return
         }
         let plan = vipItems[selectedPlan]
         Task {
@@ -448,52 +447,44 @@ struct VipView: View {
     }
     
     private func fetchPlans() async {
-//            let userSession = Container.shared.userSessionViewModel()
-////            let uidString = userSession.userInfo?.uid != nil ? String(userSession.userInfo!.uid) : "Not logged in"
-////            let email = userSession.userInfo?.email ?? "None"
-//        
-//        do {
-//            await vipVM.getVIPList()
-//            
-//            guard let data = vipVM.vipList else {
-//                return
-//            }
-//            
-//            if let apiMainTitle = (data.mainTitle) {
-//                self.mainTitle = apiMainTitle
-//            }
-//
-//            if let status = data.userVipStatus {
-//                let isVipFlag = ((status.isVip as? Int) == 1) || ((status.isVip as? Bool) == true)
-//
-//                // 过期时间，单位秒
-//                let expSeconds = (status.vipExp as? Int) ?? 0
-//                let expDate: Date? = expSeconds > 0 ? Date(timeIntervalSince1970: TimeInterval(expSeconds)) : nil
-//
-//                
-//                let remainDays = (status.remainingDays as? Int) ?? 0
-//
-//                let vipType = (status.vipType as? Int)
-//
-//                userVipStatus = UserVIPStatus(
-//                    isVip: isVipFlag,
-//                    vipExp: expDate,
-//                    remainingDays: remainDays,
-//                    vipType: vipType
-//                )
-//            }
-//            self.vipItems = data.vipList ?? []
-//
-//            
-//        } catch {
-//
-//        }
-    }
-    
 
+        await vipVM.getVIPList()
+        
+        guard let data = await vipVM.vipList else {
+            return
+        }
+        
+        if let apiMainTitle = data.mainTitle {
+            self.mainTitle = apiMainTitle
+        }
+
+        if let status = data.userVipStatus {
+            // --- MODIFIED ---: 使用更安全的方式处理 isVip，避免强制解包。
+            let isVipFlag = status.isVip?.intValue ?? 0
+            
+            var expDate: Date? = nil
+            // --- MODIFIED ---: 确保从 status.vipExp 安全转换为 String。
+            if let expireAt = status.vipExp?.int64Value {
+                expDate = Date(timeIntervalSince1970: TimeInterval(expireAt))
+            }
+            
+            let remainDays = (status.remainingDays as? Int) ?? 0
+
+            // --- REMOVED ---: vipType 变量被声明但从未使用。
+            // let vipType = (status.vipType as? Int)
+
+            userVipStatus = UserVIPStatus(
+                isVip: isVipFlag, // --- MODIFIED ---: 使用安全的 isVipFlag，移除了强制转换 `as! Int`。
+                vipExp: expDate,
+                remainingDays: remainDays
+            )
+        }
+        self.vipItems = data.vipList ?? []
+    }
     
     private func handleRestore() {
         Task {
+            
             do {
                 try await subscriptionService.restore()
                 await fetchPlans()
@@ -502,11 +493,13 @@ struct VipView: View {
             }
         }
     }
+    
     //打开指定URL
     private func openExternalURL(_ urlString: String) {
         guard let url = URL(string: urlString) else { return }
         UIApplication.shared.open(url)
     }
+    
     private func handleLeave() { showRetentionPopup = false; dismiss() }
     private func handleStay() { showRetentionPopup = false }
 }
@@ -515,30 +508,33 @@ struct VipView: View {
 struct VIPRetentionPopup: View {
     let onLeave: () -> Void
     let onStay: () -> Void
+    private let customColor : Color = Color(red: 0.2, green: 0.2, blue: 0.2)
     
     var body: some View {
         ZStack {
-            // 背景图片完全覆盖整个弹窗
-            Image("vip-popup-bg")
-                .resizable()
-                .scaledToFill()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .clipped()
+            Color.black
+            VStack{
+                Image("vip-popup-bg")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 280)
+                    .clipped()
+                Spacer()
+            }
             
             // 渐变遮罩层 - 从图片顶部到底部的渐变，确保文字可读性
             LinearGradient(
-                gradient: Gradient(colors: [
-                    .clear,
-                    .clear,
-                    .black.opacity(0.1),
-                    .black.opacity(0.3),
-                    .black.opacity(0.6),
-                    .black.opacity(0.8),
-                    .black.opacity(0.95)
-                ]),
+                stops: [
+                    .init(color: .clear, location: 0),
+                    .init(color: .black.opacity(0.5), location: 0.4),
+                    .init(color: .black.opacity(0.9), location: 0.5),
+                    .init(color: .black, location: 1)
+                ],
                 startPoint: .top,
                 endPoint: .bottom
             )
+
             
             // 内容层 - 垂直排列的文本和按钮
             VStack(spacing: 0) {
@@ -615,4 +611,3 @@ struct VIPRetentionPopup: View {
     VipView()
         .preferredColorScheme(.dark)
 }
-

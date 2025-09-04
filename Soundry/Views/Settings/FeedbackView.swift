@@ -375,6 +375,8 @@ struct FeedbackView: View {
                 }
             }
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
         .alert("Send successful", isPresented: $showSuccessAlert) {
             Button("OK") {
                 // 延迟关闭，确保用户看到成功提示

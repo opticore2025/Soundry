@@ -9,7 +9,11 @@ class MusicApiViewModel: ObservableObject {
     @Published var lastError: String?
 
     // Music category list data
-    @Published var musicCategoryList: GetMusicCategoryList200ResponseData?
+    @Published var myMusicList: GetMusicCategoryList200ResponseData?
+    @Published var myLikeList: GetMusicCategoryList200ResponseData?
+//    @Published var myDraftList: GetMusicCategoryList200ResponseData?
+//    @Published var myDownloadList: GetMusicCategoryList200ResponseData?
+    
 
     // Music hall data
     @Published var musicHallData: [MusicHallItem]?
@@ -31,7 +35,7 @@ class MusicApiViewModel: ObservableObject {
     @Published var musicDetail: MusicDetail?
 
     // My music data
-    @Published var myMusic: GetMusicMy200ResponseData?
+    @Published var myData: GetMusicMy200ResponseData?
 
     // Music options data
     @Published var musicOptions: GetMusicOptions200ResponseData?
@@ -60,19 +64,33 @@ class MusicApiViewModel: ObservableObject {
     ///   - type: 分类类型：1=我的作品，2=我的点赞，3=草稿（暂未实现），4=下载记录
     ///   - page: 页码（可选，默认为1）
     ///   - pageSize: 每页数量（可选，默认为20）
-    func getMusicCategoryList(
-        type: MusicApi.TypeGetMusicCategoryList,
+    func getMyLikes(
         page: Int32 = 1,
         pageSize: Int32 = 20
     ) async {
         await performAPICall {
             let response = try await self.musicApi.getMusicCategoryList(
-                type: type,
+                type: .mylike,
                 page: KotlinInt(int: page),
                 pageSize: KotlinInt(int: pageSize)
             )
             let body = try await response.body()
-            self.musicCategoryList = body.data
+            self.myLikeList = body.data
+        }
+    }
+    
+    func getMyMusic(
+        page: Int32 = 1,
+        pageSize: Int32 = 20
+    ) async {
+        await performAPICall {
+            let response = try await self.musicApi.getMusicCategoryList(
+                type: .mywork,
+                page: KotlinInt(int: page),
+                pageSize: KotlinInt(int: pageSize)
+            )
+            let body = try await response.body()
+            self.myMusicList = body.data
         }
     }
 
@@ -135,7 +153,7 @@ class MusicApiViewModel: ObservableObject {
         }
     }
 
-    /// 获取音乐大厅列表
+    /// 获取搜索音乐列表
     /// - Parameters:
     ///   - page: 页码（可选，默认为1）
     ///   - pageSize: 每页数量（可选，默认为20）
@@ -165,6 +183,7 @@ class MusicApiViewModel: ObservableObject {
                 self.currentHomeHallSearchPage = 1
                 return
             }
+
             self.currentHomeHallPage = page
             if page == 1 {
                 self.musicHallSearchData = data.list ?? []
@@ -212,7 +231,7 @@ class MusicApiViewModel: ObservableObject {
                 // TODO 改为通用形式
                 return
             }
-            self.myMusic = data
+            self.myData = data
         }
     }
 
@@ -291,7 +310,8 @@ class MusicApiViewModel: ObservableObject {
                 postMusicCreateRequest: request
             )
             let body = try await response.body()
-            guard let result = body.data, body.ok != 0 else {
+            guard let result = body.data, body.ok == 1 else {
+                self.lastError = body.msg
                 return
             }
             self.createMusicResult = result
@@ -308,6 +328,8 @@ class MusicApiViewModel: ObservableObject {
             )
         }
     }
+    
+
 
     /// 记录音乐下载
     /// - Parameter musicId: 音乐ID
@@ -393,7 +415,8 @@ class MusicApiViewModel: ObservableObject {
     func clearData() {
         isLoading = false
         lastError = nil
-        musicCategoryList = nil
+        myLikeList = nil
+        myMusicList = nil
         musicHallData = nil
         musicHallHasMore = false
         musicHallUserInfoMap = [:]
@@ -407,7 +430,7 @@ class MusicApiViewModel: ObservableObject {
         modifiedLikeMusicList = [:]
         musicList = nil
         musicDetail = nil
-        myMusic = nil
+        myData = nil
         musicOptions = nil
         createMusicResult = nil
         musicStatus = nil
@@ -451,8 +474,8 @@ extension MusicApiViewModel {
         lastError = nil
     }
     
-    func isLiked(musicID: Int32, rawIsLike: MusicHallItem.IsLike) -> Bool {
-        let isLike = rawIsLike == .yes
+    func isLiked(musicID: Int32, rawIsLike: KotlinInt?) -> Bool {
+        let isLike = rawIsLike?.intValue == 1
         if let modified = modifiedLikeMusicList[musicID] {
             return modified
         }

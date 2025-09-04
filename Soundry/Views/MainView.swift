@@ -6,6 +6,11 @@ struct MainView: View {
     @InjectedObject(\.meViewState) var meViewState: MeViewState
     @InjectedObject(\.userSessionViewModel) var userSessionViewModel:
         UserSessionViewModel
+    @State private var showMusicGenerationView = false
+    @State private var animateMusicView = false
+    
+    private let showMusicGenerationViewNotification = Notification.Name("ShowMusicGenerationView")
+    private let hideMusicGenerationViewNotification = Notification.Name("HideMusicGenerationView")
 
     var body: some View {
         NavigationView {
@@ -15,24 +20,34 @@ struct MainView: View {
                     case .home:
                         HomeView()
                     case .ai:
-                        MusicGenerationView()
+                        if !showMusicGenerationView {
+                            MusicGenerationView()
+                        }
                     case .me:
                         MeView()
                     case .notifications:
                         NotificationsView()
-                            .navigationBarHidden(true)
                     case .settings:
                         SettingsView()
-                            .navigationBarHidden(true)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                if appState.currentTab != .ai
-                    && appState.currentTab != .notifications
-                    && appState.currentTab != .settings
-                {
-                    RootTabBar(currentTab: $appState.currentTab)
+                if appState.currentTab != .ai {
+                    RootTabBar(currentTab: $appState.currentTab, showMusicGenerationView: $showMusicGenerationView)
+                }
+            }
+            .onAppear {
+                setupMusicGenerationViewObserver()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: showMusicGenerationViewNotification)) { _ in
+                withAnimation(.easeOut(duration: 0.3)) {
+                    showMusicGenerationView = true
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: hideMusicGenerationViewNotification)) { _ in
+                withAnimation(.easeOut(duration: 0.3)) {
+                    showMusicGenerationView = false
                 }
             }
             .toolbar {
@@ -48,6 +63,23 @@ struct MainView: View {
                 LoginOverlaysView()
             )
         }
+        .overlay(
+            Group {
+                if showMusicGenerationView {
+                    MusicGenerationView()
+                        .transition(.move(edge: .bottom))
+                        .zIndex(1)
+                        .onAppear {
+                            withAnimation(.easeOut(duration: 0.3)) {
+                                animateMusicView = true
+                            }
+                        }
+                        .onDisappear {
+                            animateMusicView = false
+                        }
+                }
+            }
+        )
         .preferredColorScheme(.dark)
     }
 
@@ -59,13 +91,7 @@ struct MainView: View {
                 .font(.title)
                 .bold()
         case .me:
-            Button {
-                if userSessionViewModel.isLoggedIn {
-                    appState.currentTab = .notifications
-                } else {
-                    appState.showLogin()
-                }
-            } label: {
+            NavigationLink(destination: NotificationsView()) {
                 Image("notification-icon")
                     .resizable()
                     .scaledToFit()
@@ -87,9 +113,7 @@ struct MainView: View {
                     .frame(width: 24, height: 24)
             }
         case .me:
-            Button {
-                appState.currentTab = .settings
-            } label: {
+            NavigationLink(destination: SettingsView()) {
                 Image("setting-icon")
                     .resizable()
                     .scaledToFit()
@@ -97,6 +121,20 @@ struct MainView: View {
             }
         default:
             EmptyView()
+        }
+    }
+    
+    private func setupMusicGenerationViewObserver() {
+        NotificationCenter.default.addObserver(forName: showMusicGenerationViewNotification, object: nil, queue: .main) { _ in
+            withAnimation(.easeOut(duration: 0.3)) {
+                showMusicGenerationView = true
+            }
+        }
+        
+        NotificationCenter.default.addObserver(forName: hideMusicGenerationViewNotification, object: nil, queue: .main) { _ in
+            withAnimation(.easeOut(duration: 0.3)) {
+                showMusicGenerationView = false
+            }
         }
     }
 

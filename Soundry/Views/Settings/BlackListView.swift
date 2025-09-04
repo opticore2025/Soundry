@@ -110,27 +110,19 @@ struct BlackListView: View {
                 .frame(height: 44)
                 
                 // 主要内容区域
-                if let pageData = blackListApiViewModel.blockList,
-                   let userList = pageData.list, !userList.isEmpty {
+                if let userList = blackListApiViewModel.blockList, !userList.isEmpty {
                     
-                    // 调试信息
-                    let _ = print("🔍 Debug: Total users in list: \(userList.count)")
-                    let _ = userList.enumerated().forEach { index, user in
-                        print("🔍 Debug: User \(index): uid=\(user.blackUID), nickname=\(user.userInfo.nickname ?? "nil")")
-                    }
                     
                     ScrollView {
                         LazyVStack(spacing: 12) {
-                            ForEach(Array(userList.enumerated()), id: \.offset) { index, userInfo in
-//                                let _ = print("🔍 Debug: Rendering user \(index): \(userInfo.userInfo.uid)")
-                                
+                            ForEach(Array(userList.enumerated()), id: \.offset) { index, blockedRecord in
                                 BlockedUserCell(
-                                    userInfo: userInfo.userInfo,
+                                    userInfo: blockedRecord.userInfo,
                                     onUnblock: {
                                         Task {
                                             print("unblock ----- ")
                                             SVProgressHUD.show()
-                                            await blackListApiViewModel.unblockUser(uid: Int64(userInfo.blackUID) ?? 0)
+                                            await blackListApiViewModel.unblockUser(uid: Int64(blockedRecord.blackUID) ?? 0)
                                             // 取消拉黑后刷新列表
                                             await blackListApiViewModel.pageblockUser()
                                             DispatchQueue.main.async {
@@ -143,6 +135,48 @@ struct BlackListView: View {
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 20)
+                        .padding(.bottom,blackListApiViewModel.blockListHasMore ? 20 : 80)
+                        
+                        // 上拉加载更多区域
+                        if blackListApiViewModel.blockListHasMore{
+                            VStack(spacing: 10){
+                                HStack{
+                                    Spacer()
+                                    if blackListApiViewModel.blockListHasMore
+                                    {
+                                        //正在加载
+                                        HStack{
+                                            ProgressView()
+                                                .scaleEffect(0.8)
+                                            Text("Loading...")
+                                                .font(.caption)
+                                                .foregroundColor(.gray)
+                                        }
+                                        .padding(.bottom,40)
+                                    }else{
+                                        //显示上拉加载提示
+                                        HStack{
+                                            Image(systemName: "arrow.down.circle")
+                                                .foregroundColor(.gray)
+                                            Text("Pull to loading more..")
+                                                .font(.caption)
+                                                .foregroundColor(.gray)
+                                        }
+                                        .padding(.bottom,10)
+                                    }
+                                    Spacer()
+                                }
+                            }
+                            .onAppear{
+                                //当加载更多指示器出现，自动加载下一页
+                                if !blackListApiViewModel.isBlockListLoadingMore{
+                                    Task{
+                                        let nextPage = blackListApiViewModel.currentblockListPage + 1
+                                        await blackListApiViewModel.pageblockUser(page: nextPage)
+                                    }
+                                }
+                            }
+                        }
                     }
                 } else {
                     // 空状态
@@ -169,12 +203,13 @@ struct BlackListView: View {
                 await blackListApiViewModel.pageblockUser()
             }
         }
-        
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
 }
 
     
-    
+
 
 
 

@@ -9,6 +9,9 @@ enum AuthViewState: CaseIterable {
     case emailLogin
     case emailSignup
     case forgotPassword
+    case craeteUserName
+    case verificationCode
+    case resetPassword
 }
 
 
@@ -23,6 +26,9 @@ class AppState: ObservableObject {
     @Published var previousTab: Tab = .home
     @Published var showPlayerBar: Bool = false
     @Published var isNetworkAvailable: Bool = true
+    //用于存储验证邮箱和验证码
+    @Published var verificationEmail: String?
+    @Published var verificationCode: String?
     
     // 认证界面状态管理
         @Published var currentAuthView: AuthViewState = .none
@@ -46,6 +52,16 @@ class AppState: ObservableObject {
         
         var showingForgotPassword: Bool {
             currentAuthView == .forgotPassword
+        }
+        var showCreatUserName: Bool{
+            currentAuthView == .craeteUserName
+        }
+        var VerificationCode : Bool{
+            currentAuthView == .verificationCode
+        }
+        
+        var resetPassword: Bool {
+            currentAuthView == .resetPassword
         }
 
     enum Tab: String, CaseIterable {
@@ -99,17 +115,33 @@ class AppState: ObservableObject {
                     currentAuthView = .none
                 case .emailLogin:
                     // 从邮箱登录返回到登录界面
-                    currentAuthView = .login
+                    currentAuthView = .none
                 case .emailSignup:
                     // 从邮箱注册返回到登录界面
                     currentAuthView = .none
                 case .forgotPassword:
                     // 从忘记密码返回到邮箱登录
                     currentAuthView = .emailLogin
+                case .craeteUserName:
+                    //从创建名字返回主界面
+                    currentAuthView = .none
+                case .verificationCode:
+                    //从验证验证吗到忘记密码
+                    currentAuthView = .forgotPassword
+                case .resetPassword:
+                    //从重置密码返回到验证码界面
+                    currentAuthView = .verificationCode
+                    
                 }
             }
         }
-        
+        //导航方法 - 携带输入的邮箱
+    func navigateToVerificationCode(with email: String) {
+        withAnimation(AppState.animation) {
+            verificationEmail = email  // 存储邮箱
+            currentAuthView = .verificationCode
+        }
+    }
         // 导航方法 - 更新为层级导航
         func showLogin() {
             withAnimation(AppState.animation) {
@@ -134,6 +166,20 @@ class AppState: ObservableObject {
                 currentAuthView = .forgotPassword
             }
         }
+        func navigateToCreatUserName() {
+            withAnimation(AppState.animation) {
+                currentAuthView = .craeteUserName
+            }
+        }
+        
+        func navigateToResetPassword() {
+            withAnimation(AppState.animation) {
+                currentAuthView = .resetPassword
+            }
+        }
+
+
+    
         
         // 关闭所有认证界面的方法
         func closeAllAuth() {

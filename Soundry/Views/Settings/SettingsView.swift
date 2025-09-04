@@ -38,132 +38,119 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                // 背景色
                 Color.appBackground
                     .ignoresSafeArea()
-
+                
                 VStack(spacing: 0) {
+                    // 导航栏
                     HStack {
-                        Button(action: {
-                            appState.currentTab = appState.previousTab
-                        }) {
+                        Button(action: { dismiss() }) {
                             Image(systemName: "chevron.left")
                                 .font(.system(size: 20, weight: .medium))
                                 .foregroundColor(.white)
                         }
-
+                        
                         Spacer()
-
+                        
                         Text("Settings")
                             .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(.white)
-
+                        
                         Spacer()
-
-                        // 平衡左侧按钮的空白占位
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 20, weight: .medium))
-                            .foregroundColor(.clear)
+                        
+                        Color.clear
+                            .frame(width: 20, height: 20)
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 12)
                     .frame(height: 44)
-
+                    
                     ScrollView {
-                        VStack(spacing: 30) {
-                            // 仅在已登录状态显示个人资料和账户设置
+                        VStack(spacing: 32) {
+                            // 用户设置区域（仅登录用户）
                             if userSession.isLoggedIn {
-                                VStack(spacing: 1) {
-                                    SettingsRowView(title: "Profile") {
-                                        showProfile = true
+                                SettingsSection {
+                                    NavigationLink(destination: ProfileView()) {
+                                        SettingsRowView(title: "Profile", isLast: false)
                                     }
-
-                                    SettingsRowView(title: "Account") {
-                                        showAccount = true
-                                    }
-                                }
-                            }
-
-                            // 始终显示用户协议和隐私政策
-                            VStack(spacing: 1) {
-                                SettingsRowView(title: "User Agreement") {
-                                    openURL(userAgreementURL)
-                                }
-
-                                SettingsRowView(title: "Privacy Policy") {
-                                    openURL(privacyPolicyURL)
-                                }
-                            }
-                            // 仅在已登陆状态显示拉黑列表
-                            VStack(spacing: 1) {
-                                SettingsRowView(title: "Blacklist") {
-                                    showBlack = true
                                     
-                                }
-
-                            }
-
-                            // 混合区域 - 根据登录状态显示不同内容
-                            VStack(spacing: 1) {
-                                // 仅在已登录状态显示问题报告
-                                if userSession.isLoggedIn {
-                                    SettingsRowView(title: "Report an Issue") {
-                                        showReport = true
+                                    NavigationLink(destination: AccountView()) {
+                                        SettingsRowView(title: "Account", isLast: true)
                                     }
                                 }
-
-                                // 始终显示关于我们
-                                SettingsRowView(
-                                    title: "About Us",
-                                    detailText: "V\(AppConfig.info.version)"
-                                ) {
-                                    showingAboutUs = true
+                            }
+                            
+                            // 通用设置区域
+                            SettingsSection {
+                                Button(action: { openURL(userAgreementURL) }) {
+                                    SettingsRowView(title: "User Agreement", isLast: false)
                                 }
-
-                                // 始终显示清除缓存
-                                SettingsRowView(
-                                    title: "Clear Cache",
-                                    detailText: cacheSize
-                                ) {
-                                    clearCache()
+                                
+                                Button(action: { openURL(privacyPolicyURL) }) {
+                                    SettingsRowView(title: "Privacy Policy", isLast: true)
                                 }
                             }
-
-                            // 仅在已登录状态显示退出登录按钮
+                            
+                            // 用户相关设置（仅登录用户）
                             if userSession.isLoggedIn {
-                                VStack {
-                                    Spacer(minLength: 60)
-
-                                    Button(action: {
-                                        showingLogoutAlert = true
-                                    }) {
-                                        Text("Log Out")
-                                            .font(
-                                                .system(
-                                                    size: 16,
-                                                    weight: .medium
-                                                )
-                                            )
-                                            .foregroundColor(.red)
-                                            .padding(.horizontal, 30)
-                                            .padding(.vertical, 16)
-                                            .background(
-                                                RoundedRectangle(
-                                                    cornerRadius: 12
-                                                )
-                                                .fill(Color.red.opacity(0.1))
-                                            )
+                                SettingsSection {
+                                    NavigationLink(destination: BlackListView()) {
+                                        SettingsRowView(title: "Blacklist", isLast: false)
                                     }
-                                    .padding(.bottom, 40)
+                                    
+                                    NavigationLink(destination: FeedbackView()) {
+                                        SettingsRowView(title: "Report an Issue", isLast: true)
+                                    }
                                 }
+                            }
+                            
+                            // 应用信息区域
+                            SettingsSection {
+                                NavigationLink(destination: AboutUsView()) {
+                                    SettingsRowView(
+                                        title: "About Us",
+                                        detailText: "V\(AppConfig.info.version)",
+                                        isLast: false
+                                    )
+                                }
+                                
+                                Button(action: { clearCache() }) {
+                                    SettingsRowView(
+                                        title: "Clear Cache",
+                                        detailText: isClearingCache ? "Clearing..." : cacheSize,
+                                        isLast: true
+                                    )
+                                }
+                            }
+                            
+                            // 退出登录按钮（仅登录用户）
+                            if userSession.isLoggedIn {
+                                Button(action: {
+                                    showingLogoutAlert = true
+                                }) {
+                                    Text("Log Out")
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.red)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 16)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .fill(Color.red.opacity(0.1))
+                                        )
+                                }
+                                .padding(.horizontal, 20)
                             }
                         }
-                        .padding(.top, 20)
+                        .padding(.vertical, 20)
                     }
                 }
             }
+            .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
         }
-        .navigationBarHidden(true)
+        .onAppear{
+            calculateCacheSize()
+        }
         .alert("Log Out", isPresented: $showingLogoutAlert) {
             Button("Cancel", role: .cancel) {}
             Button("Log Out", role: .destructive) {
@@ -180,43 +167,17 @@ struct SettingsView: View {
         } message: {
             Text("The link could not be opened. Please try again later.")
         }
-        .fullScreenCover(isPresented: $showingAboutUs) {
-            AboutUsView()
-        }
-        .fullScreenCover(isPresented: $showProfile) {
-            ProfileView()
-        }
-        .fullScreenCover(isPresented: $showAccount) {
-            AccountView()
-        }
-        .fullScreenCover(isPresented: $showReport) {
-            FeedbackView()
-        }
-        .fullScreenCover(isPresented: $showBlack){
-            BlackListView()
-        }
-        // 全屏展示带返回按钮的Safari视图
-        .fullScreenCover(isPresented: $showingSafari) {
-            if let url = targetURL {
-                SafariWithBackButtonView(url: url)
-            }
-        }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
 
     // 计算缓存大小
     private func calculateCacheSize() {
         DispatchQueue.global().async {
             let cacheURLs: [URL?] = [
-                FileManager.default.urls(
-                    for: .cachesDirectory,
-                    in: .userDomainMask
-                ).first,
-                FileManager.default.urls(
-                    for: .documentDirectory,
-                    in: .userDomainMask
-                ).first,
+                FileManager.default.urls(for: .cachesDirectory,in: .userDomainMask).first,
+                URL(fileURLWithPath: NSTemporaryDirectory())//临时目录
             ]
-
             var totalSize: UInt64 = 0
 
             for url in cacheURLs {
@@ -279,20 +240,12 @@ struct SettingsView: View {
     // 清除缓存
     private func clearCache() {
         isClearingCache = true
-        cacheSize = "Clearing..."
-
+        
         DispatchQueue.global().async {
             let cacheURLs: [URL?] = [
-                FileManager.default.urls(
-                    for: .cachesDirectory,
-                    in: .userDomainMask
-                ).first,
-                FileManager.default.urls(
-                    for: .documentDirectory,
-                    in: .userDomainMask
-                ).first,
+                FileManager.default.urls(for: .cachesDirectory,in: .userDomainMask).first,
+                URL(fileURLWithPath: NSTemporaryDirectory())
             ]
-
             for url in cacheURLs {
                 if let url = url {
                     do {
@@ -311,11 +264,28 @@ struct SettingsView: View {
                 }
             }
 
-            DispatchQueue.main.async {
-                self.cacheSize = "0 KB"
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.isClearingCache = false
+                self.calculateCacheSize()
             }
         }
+    }
+}
+
+struct SettingsSection<Content: View>: View {
+    let content: Content
+    
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            content
+        }
+        .background(Color.white.opacity(0.05))
+        .cornerRadius(12)
+        .padding(.horizontal, 20)
     }
 }
 
@@ -323,22 +293,25 @@ struct SettingsRowView: View {
     let title: String
     let image: String?
     let detailText: String?
-    let action: () -> Void
+    let action: (() -> Void)?
+    let isLast: Bool
 
     init(
         title: String,
         image: String? = nil,
         detailText: String? = nil,
-        action: @escaping () -> Void
+        action: (() -> Void)? = nil,
+        isLast: Bool = false
     ) {
         self.title = title
         self.image = image
         self.detailText = detailText
         self.action = action
+        self.isLast = isLast
     }
 
     var body: some View {
-        Button(action: action) {
+        VStack(spacing: 0) {
             HStack(spacing: 16) {
                 if let image = image {
                     Image(image)
@@ -365,9 +338,13 @@ struct SettingsRowView: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
-            .background(Color.white.opacity(0.05))
+            
+            if !isLast {
+                Divider()
+                    .background(Color.white.opacity(0.1))
+                    .padding(.leading, 20)
+            }
         }
-        .buttonStyle(PlainButtonStyle())
     }
 }
 

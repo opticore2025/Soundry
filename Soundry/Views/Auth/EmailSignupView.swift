@@ -16,6 +16,8 @@ struct EmailSignupView: View {
     @State private var emailValid = true
     @State private var passwordValid = true
     
+    @State private var showCreateUsername = false
+    
     // Focus management
     @FocusState private var focusedField: Field?
     
@@ -97,7 +99,13 @@ struct EmailSignupView: View {
                             Task {
                                 await authorizationApiViewModel.registerWithEmail(email: email, password: password)
                                 
-                                if !authorizationApiViewModel.isRegisterSuccess {
+                                
+                                if authorizationApiViewModel.isRegisterSuccess{
+                                    appState.navigateToCreatUserName()
+                                    
+                                    
+                                    
+                                } else if !authorizationApiViewModel.isRegisterSuccess {
                                     DispatchQueue.main.async {
                                         SVProgressHUD.showError(withStatus: authorizationApiViewModel.errorMessage)
                                         SVProgressHUD.dismiss(withDelay: 2)
@@ -142,33 +150,8 @@ struct EmailSignupView: View {
                 }
             }
         }
-        .onChange(of: userSessionViewModel.isLoggedIn) { isLoggedIn in
-            if isLoggedIn {
-                // 注册成功后返回
-                appState.goBack()
-            }
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                KeyboardToolbar(
-                    onPrevious: {
-                        if focusedField == .password {
-                            focusedField = .email
-                        }
-                    },
-                    onNext: {
-                        if focusedField == .email {
-                            focusedField = .password
-                        }
-                    },
-                    onDone: {
-                        focusedField = nil
-                    },
-                    canGoPrevious: focusedField == .password,
-                    canGoNext: focusedField == .email
-                )
-            }
-        }
+
+
     }
 }
 

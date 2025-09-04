@@ -121,6 +121,7 @@ struct ProfileView: View {
             }
         }
         .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
         .onAppear {
             // 同步会话里的昵称到本地展示，避免进入时被重置
             if let current = userSessionViewModel.userInfo {

@@ -4,6 +4,9 @@ import Factory
 struct RootTabBar: View {
     @Binding var currentTab: AppState.Tab
     @InjectedObject(\.musicPlayerViewModel) var musicPlayerViewModel: MusicPlayerViewModel
+    @InjectedObject(\.userSessionViewModel) var userSession: UserSessionViewModel
+    @InjectedObject(\.appState) var appState: AppState
+    @Binding var showMusicGenerationView: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -24,7 +27,14 @@ struct RootTabBar: View {
                 .background(Color.black.ignoresSafeArea(.all, edges: .bottom))
                 
                 Button {
-                    currentTab = .ai
+                    withAnimation(.easeOut(duration: 0.3)) {
+                        if !userSession.isLoggedIn {
+                            appState.showLogin()
+                            return
+                        }
+                        showMusicGenerationView = true
+                        
+                    }
                 } label: {
                     Image("tabbar_music")
                         .resizable()

@@ -1,123 +1,157 @@
 import Foundation
 import StoreKit
 
-final class StoreKitSubscriptionProvider: SubscriptionProvider {
-    init() {}
+/// 用于向 App 其他部分广播需要处理的交易。
+extension Notification.Name {
+    /// 当监听到一笔需要服务器验证的交易时发送此通知。
+    static let storeKitTransactionReceived = Notification.Name("StoreKitTransactionReceived")
+    /// 当交易处理完成时发送此通知
+    static let subscriptionProcessed = Notification.Name("SubscriptionProcessed")
+}
 
-    func purchase(sku: String) async throws -> SubscriptionPurchase {
-        print("[StoreKit] Start purchase, sku=\(sku)")
+/// 自定义错误类型。
+enum StoreKitError: Error {
+    case productNotFound
+    case purchaseFailed(String)
+    case verificationFailed(Error)
+    case receiptError(Error)
+}
+
+final class StoreKitSubscriptionProvider: SubscriptionProvider {
+    
+    private var transactionListener: Task<Void, Error>?
+
+    init() {
+        // 启动后台监听器，只处理自动续订和恢复购买的交易
+        transactionListener = listenForTransactions()
+    }
+    
+    deinit {
+        transactionListener?.cancel()
+    }
+
+    /// 启动购买流程，并附带一个账户令牌。
+    func purchase(sku: String, appAccountToken: UUID?) async throws -> SubscriptionPurchase {
+        print("[StoreKit] Starting purchase for sku: \(sku)")
         
-        let products = try await Product.products(for: [sku])
-        print("[StoreKit] Fetched products count=\(products.count)")
-        
-        guard let product = products.first else {
-            print("[StoreKit] Product not found for sku=\(sku)")
-            throw SubscriptionError.productNotFound
+        guard let product = try await Product.products(for: [sku]).first else {
+            throw StoreKitError.productNotFound
         }
 
+        // 设置购买选项，将 appAccountToken 传递给 Apple
+        var purchaseOptions: Set<Product.PurchaseOption> = []
+        if let token = appAccountToken {
+            print("[StoreKit] Attaching appAccountToken: \(token.uuidString)")
+            purchaseOptions.insert(.appAccountToken(token))
+        }
 
-        let result = try await product.purchase()
+        print("⏳ [StoreKit] About to await product.purchase()... The task will suspend here.")
+        let result = try await product.purchase(options: purchaseOptions)
+        print("✅ [StoreKit] Await for product.purchase() has returned a result. Task was NOT cancelled.") // <--- 如果任务被取消，你将永远看不到这行日志
+
         switch result {
         case .success(let verificationResult):
-  
-            let transaction = try verificationResult.payloadValue
-            let id = String(transaction.id)
+            let transaction = try checkVerified(verificationResult)
             let receipt = try await loadAppReceiptBase64()
             
-            await transaction.finish()
-            print("[StoreKit] Transaction finished")
+            // 重要：此时不调用 `finish()`。
+            return SubscriptionPurchase(
+                transaction: transaction,
+                receiptData: receipt,
+                rawTransaction: transaction
+            )
             
-            return SubscriptionPurchase(transactionId: id, receiptData: receipt)
         case .userCancelled:
-            print("[StoreKit] Purchase cancelled by user")
-            
-            throw SubscriptionError.purchaseFailed("User cancelled")
+            throw StoreKitError.purchaseFailed("User cancelled")
         case .pending:
-            print("[StoreKit] Purchase pending")
-            
-            throw SubscriptionError.purchaseFailed("Pending")
+            throw StoreKitError.purchaseFailed("Pending")
         @unknown default:
-            print("[StoreKit] Purchase unknown result")
-            throw SubscriptionError.purchaseFailed("Unknown purchase result")
+            throw StoreKitError.purchaseFailed("Unknown purchase result")
         }
     }
 
+    /// 恢复购买。
     func restore() async throws {
-        print("[StoreKit] Start restore")
+        print("[StoreKit] Starting restore...")
         try await AppStore.sync()
-        print("[StoreKit] Restore finished")
     }
-    // 定义收据相关错误类型
-    enum ReceiptError: Error {
-        case missingURL                  // 收据URL为nil
-        case fileNotFound                // 收据文件不存在
-        case emptyData                   // 收据数据为空
-        case base64EncodingFailed        // Base64编码失败
-        case readFailed(Error)           // 文件读取失败
+    
+    /// 在服务器成功验证后，完成交易。
+    func finish(transaction: Transaction) async {
+        await transaction.finish()
+        print("[StoreKit] Transaction finished: \(transaction.id)")
     }
+    
+    /// **交易监听器**：处理所有交易更新，作为兜底机制
+    private func listenForTransactions() -> Task<Void, Error> {
+        return Task(priority: .background) {
+            for await result in Transaction.updates {
+                do {
+                    let transaction = try self.checkVerified(result)
+                    print("[StoreKit] Listener received transaction update: \(transaction.id)")
+                    
+                    // 延迟处理，给手动通知机制一些时间
+                    try await Task.sleep(nanoseconds: 2_000_000_000) // 2秒延迟
+                    
+                    let receipt = try await self.loadAppReceiptBase64()
+                    
+                    if transaction.appAccountToken == nil {
+                        print("[StoreKit] Processing auto-renewal or restore transaction: \(transaction.id)")
+                    } else {
+                        print("[StoreKit] Processing transaction with appAccountToken as fallback: \(transaction.id)")
+                    }
+                    
+                    await MainActor.run {
+                        NotificationCenter.default.post(
+                            name: .storeKitTransactionReceived,
+                            object: nil,
+                            userInfo: [
+                                "transaction": transaction,
+                                "receiptData": receipt,
+                                "appAccountToken": transaction.appAccountToken as Any
+                            ]
+                        )
+                    }
+                } catch {
+                    print("[StoreKit] Transaction listener failed: \(error)")
+                }
+            }
+        }
+    }
+    
+    /// 检查交易验证结果。
+    private func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
+        switch result {
+        case .verified(let safe):
+            return safe
+        case .unverified(_, let error):
+            throw StoreKitError.verificationFailed(error)
+        }
+    }
+    
+    // MARK: - Legacy Receipt Handling
+    
+    private enum ReceiptError: Error {
+        case missingURL, fileNotFound, emptyData, readFailed(Error)
+    }
+
     private func loadAppReceiptBase64() async throws -> String {
-        // 检查收据URL是否存在
         guard let receiptURL = Bundle.main.appStoreReceiptURL else {
             throw ReceiptError.missingURL
         }
-        let fileManager = FileManager.default
-        // 检查收据文件是否存在
-        guard fileManager.fileExists(atPath: receiptURL.path) else {
-            throw ReceiptError.fileNotFound
+        
+        if !FileManager.default.fileExists(atPath: receiptURL.path) {
+            print("[StoreKit] Receipt file not found. Requesting refresh...")
+            try? await SKReceiptRefreshRequest().start()
         }
+
         do {
-            // 异步读取文件内容（推荐使用异步API）
-            let receiptData = try  Data(contentsOf: receiptURL)
-            
-            // 检查数据是否为空
-            guard !receiptData.isEmpty else {
-                throw ReceiptError.emptyData
-            }
-            // 转换为Base64编码
-            let base64String = receiptData.base64EncodedString()
-            guard !base64String.isEmpty else {
-                throw ReceiptError.base64EncodingFailed
-            }
-            
-            return base64String
+            let receiptData = try Data(contentsOf: receiptURL)
+            guard !receiptData.isEmpty else { throw ReceiptError.emptyData }
+            return receiptData.base64EncodedString()
         } catch {
-            // 捕获并包装文件读取错误
             throw ReceiptError.readFailed(error)
         }
     }
-    // Fallback via StoreKit 1 API
-    private func refreshReceiptLegacy() async throws {
-        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            let request = SKReceiptRefreshRequest(receiptProperties: nil)
-            let delegate = ReceiptRefreshDelegate { error in
-                if let error { continuation.resume(throwing: error) } else { continuation.resume() }
-            }
-            request.delegate = delegate
-            // Retain delegate until completion
-            ReceiptRefreshDelegateStore.shared.store(delegate: delegate)
-            request.start()
-        }
-    }
 }
-
-private final class ReceiptRefreshDelegate: NSObject, SKRequestDelegate {
-    private let completion: (Error?) -> Void
-    init(completion: @escaping (Error?) -> Void) { self.completion = completion }
-    func requestDidFinish(_ request: SKRequest) {
-        completion(nil)
-        ReceiptRefreshDelegateStore.shared.clear()
-    }
-    func request(_ request: SKRequest, didFailWithError error: Error) {
-        completion(error)
-        ReceiptRefreshDelegateStore.shared.clear()
-    }
-}
-
-private final class ReceiptRefreshDelegateStore {
-    static let shared = ReceiptRefreshDelegateStore()
-    private var strongDelegate: ReceiptRefreshDelegate?
-    func store(delegate: ReceiptRefreshDelegate) { strongDelegate = delegate }
-    func clear() { strongDelegate = nil }
-}
-
 

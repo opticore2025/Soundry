@@ -145,6 +145,8 @@ struct AboutUsView: View {
         } message: {
             Text("The link could not be opened. Please try again later.")
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
 }
 

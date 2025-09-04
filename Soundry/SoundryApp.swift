@@ -9,6 +9,9 @@ struct SoundryApp: App {
     @InjectedObject(\.userSessionViewModel) private var userSession
     @InjectedObject(\.appApiViewModel) private var appApiViewModel
     @InjectedObject(\.musicApiViewModel) private var musicApiViewModel
+    @Injected(\.subscriptionService) private var subscriptionService
+    
+    
     
     var body: some Scene {
         WindowGroup {
@@ -31,6 +34,12 @@ struct SoundryApp: App {
     }
     
     private func setupApp() {
+        
+        // 主动调用一次 subscriptionService，确保它的实例被创建，监听器开始运行
+        // 我们不需要用它做什么，所以用 _ 忽略返回值即可
+        _ = self.subscriptionService
+        print("🚀 SubscriptionService has been initialized and is listening for transactions.")
+        
         // Configure app appearance
         configureAppearance()
         
@@ -44,6 +53,8 @@ struct SoundryApp: App {
             await appApiViewModel.initializeApp()
             await musicApiViewModel.getMusicOptions()
         }
+        
+        
     }
     
     private func configureAppearance() {

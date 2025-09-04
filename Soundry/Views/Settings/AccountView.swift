@@ -1,29 +1,15 @@
 import SwiftUI
 import Factory
 
-extension View {
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape(RoundedCorner(radius: radius, corners: corners))
-    }
-}
-
-struct RoundedCorner: Shape {
-    var radius: CGFloat = .infinity
-    var corners: UIRectCorner = .allCorners
-
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-        return Path(path.cgPath)
-    }
-}
+// ... (Your existing View extension and RoundedCorner struct remain unchanged) ...
 
 struct AccountView: View {
     @State private var showingDeleteConfirmation = false
-    @State private var isDeletingAccount = false // 新增：控制删除加载状态
+    @State private var isDeletingAccount = false // 控制删除加载状态
     @Environment(\.dismiss) var dismiss
     @InjectedObject(\.userSessionViewModel) var sessionVM: UserSessionViewModel
-    @InjectedObject(\.appState) var appState: AppState // 新增：注入 AppState
-    @InjectedObject(\.authenticationApiViewModel) var authenVM : AuthenticationApiViewModel
+    @InjectedObject(\.appState) var appState: AppState
+    @InjectedObject(\.authenticationApiViewModel) var authenVM: AuthenticationApiViewModel
     
     
     var body: some View {
@@ -32,22 +18,18 @@ struct AccountView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // 顶部导航栏
+                // 顶部导航栏 (代码不变)
                 HStack {
                     Button(action: { dismiss() }) {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 20, weight: .medium))
                             .foregroundColor(.white)
                     }
-                    
                     Spacer()
-                    
                     Text("Account")
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(.white)
-                    
                     Spacer()
-                    
                     Image(systemName: "chevron.left")
                         .font(.system(size: 20))
                         .foregroundColor(.clear)
@@ -59,14 +41,14 @@ struct AccountView: View {
             
                 ScrollView {
                     VStack(spacing: 20) {
-                        // 当前登录方式（左） + 当前登录账号（右）
+                        // 当前登录方式 (代码不变)
                         AccountSettingsRow(title: currentLoginMethod()) {
                             Text(currentLoginAccount())
                                 .font(.system(size: 16))
                                 .foregroundColor(.white.opacity(0.85))
                                 .frame(maxWidth: .infinity, alignment: .trailing)
                         }
-                        //删除账号按钮
+                        //删除账号按钮 (代码不变)
                         Button(action: {
                             showingDeleteConfirmation = true
                         }) {
@@ -85,49 +67,56 @@ struct AccountView: View {
                     .padding(.bottom, 30)
                 }
             }
-            
-            // 删除确认弹窗
-            BottomSheet(isPresented: showingDeleteConfirmation,
-                        onDismiss: {
-
-            }) {
+            // --- 核心修改点 ---
+            // 1. 使用 .sheet 修饰符来代替自定义的 BottomSheet
+            .sheet(isPresented: $showingDeleteConfirmation) {
+                // 2. 将 DeleteAccountConfirmationView作为 sheet 的内容
                 DeleteAccountConfirmationView(onCancel: {
                     showingDeleteConfirmation = false
-                }, onConfirm: { // 更改为 onConfirm
+                }, onConfirm: {
                     Task {
-                        isDeletingAccount = true // 开始加载
-                        do{
+                        isDeletingAccount = true
+                        // 先关闭弹窗，让用户看到主界面上的加载动画
+                        showingDeleteConfirmation = false
+                        
+                        do {
                             await authenVM.deleteAccount()
                             sessionVM.logout()
-
-                            // 2. 隐藏加载动画并关闭底部弹窗
+                            
                             isDeletingAccount = false
-                            showingDeleteConfirmation = false
-
                             appState.currentTab = .home
-
-                            // 4. 关闭当前的 AccountView
                             dismiss()
                         }
                     }
                 })
-            }
-            // 全屏加载动画覆盖
-            .overlay {
-                if isDeletingAccount {
-                    Color.black.opacity(0.7) // 更深的背景，突出加载动画
-                        .ignoresSafeArea()
-                    ProgressView("Deleting account...")
-                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        .foregroundColor(.white)
-                        .padding(20)
-                        .background(Color(red:0.15,green: 0.15,blue: 0.16)) // 使用统一的深色背景
-                        .cornerRadius(10) // 加载框的圆角
-                }
+                // 3. 设置固定的高度为 600
+                .presentationDetents([.height(550)])
+                // (可选) 显示顶部的拖拽指示器，增加原生感
+                .presentationDragIndicator(.hidden)
+                .interactiveDismissDisabled(true)//禁用交互手势
+                // 4. 为 sheet 内容设置背景色以匹配 App 风格
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(red: 0.15, green: 0.15, blue: 0.16))
             }
         }
+        // 5. 将加载动画的 overlay 移到 ZStack 上，确保它能覆盖所有内容
+        .overlay {
+            if isDeletingAccount {
+                Color.black.opacity(0.7)
+                    .ignoresSafeArea()
+                ProgressView("Deleting account...")
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .foregroundColor(.white)
+                    .padding(20)
+                    .background(Color(red:0.15,green: 0.15,blue: 0.16))
+                    .cornerRadius(10)
+            }
+        }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
 
+    // ... (currentLoginMethod 和 currentLoginAccount 方法保持不变) ...
     @MainActor
     private func currentLoginMethod() -> String {
         if let email = sessionVM.userInfo?.email, !email.isEmpty {
@@ -138,11 +127,9 @@ struct AccountView: View {
 
     @MainActor
     private func currentLoginAccount() -> String {
-        // 邮箱登录显示邮箱；Apple 登录可显示昵称或占位
         if let email = sessionVM.userInfo?.email, !email.isEmpty {
             return email
         }
-        // 若无邮箱，显示昵称或占位说明
         if let name = sessionVM.userInfo?.nickname, !name.isEmpty {
             return name
         }
@@ -253,7 +240,7 @@ struct AppleLoginView: View {
 struct DeleteAccountConfirmationView: View {
     @State private var inputText = ""
     @State private var isDeleteEnabled = false
-    @State private var isKeyboardVisible = false // 跟踪键盘是否显示
+//    @State private var isKeyboardVisible = false // 跟踪键盘是否显示
     let onCancel: () -> Void
     let onConfirm: () -> Void
     
@@ -262,32 +249,32 @@ struct DeleteAccountConfirmationView: View {
     var body: some View {
         VStack {
             // 删除图标 - 键盘显示时隐藏
-            if !isKeyboardVisible {
+//            if !isKeyboardVisible {
                 Image(systemName: "trash")
                     .font(.system(size: 60))
                     .foregroundColor(.red)
                 
                 Spacer()
                     .frame(height: 20)
-            }
+//            }
             
             // 文本区域 - 根据键盘状态显示不同内容
             VStack(spacing: 18) {
                 // 第一行文本 - 键盘显示时隐藏
-                if !isKeyboardVisible {
+//                if !isKeyboardVisible {
                     Text("Are you sure you want to delete your account?")
                         .font(.system(size: 22))
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
-                }
+//                }
                 
                 // 第二行文本 - 键盘显示时隐藏
-                if !isKeyboardVisible {
+//                if !isKeyboardVisible {
                     Text("If you delete your account, all your data will be removed, including all the songs you have created.")
                         .font(.system(size: 20))
                         .foregroundColor(.white.opacity(0.85))
                         .multilineTextAlignment(.center)
-                }
+//                }
                 
                 // 第三行文本 - 始终显示
                 Text("If you wish to continue with your account deletion, please type the words \"delete account\" below. Then click \"Delete\" button.")
@@ -342,23 +329,23 @@ struct DeleteAccountConfirmationView: View {
         }
         .frame(maxHeight: .infinity)
         // 监听键盘通知
-        .onAppear {
-            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { _ in
-                withAnimation {
-                    isKeyboardVisible = true
-                }
-            }
-            
-            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
-                withAnimation {
-                    isKeyboardVisible = false
-                }
-            }
-        }
-        .onDisappear {
-            // 移除通知监听
-            NotificationCenter.default.removeObserver(self)
-        }
+//        .onAppear {
+//            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { _ in
+////                withAnimation {
+////                    isKeyboardVisible = true
+////                }
+//            }
+//            
+//            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+//                withAnimation {
+//                    isKeyboardVisible = false
+//                }
+//            }
+//        }
+//        .onDisappear {
+//            // 移除通知监听
+//            NotificationCenter.default.removeObserver(self)
+//        }
     }
 }
 

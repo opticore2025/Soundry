@@ -21,54 +21,6 @@ struct BackButtonView: View {
     }
 }
 
-// MARK: - Keyboard Toolbar Component
-struct KeyboardToolbar: View {
-    let onPrevious: () -> Void
-    let onNext: () -> Void
-    let onDone: () -> Void
-    let canGoPrevious: Bool
-    let canGoNext: Bool
-    
-    var body: some View {
-        HStack {
-            // 左侧箭头按钮
-            HStack(spacing: 8) {
-                Button(action: onPrevious) {
-                    Image(systemName: "chevron.up")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(canGoPrevious ? .white : .gray)
-                }
-                .disabled(!canGoPrevious)
-                
-                Button(action: onNext) {
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(canGoNext ? .white : .gray)
-                }
-                .disabled(!canGoNext)
-            }
-            
-            Spacer()
-            
-            // 右侧完成按钮
-            Button(action: onDone) {
-                Text("Done")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.white)
-            }
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
-        .background(Color(red: 0.15, green: 0.15, blue: 0.16))
-        .overlay(
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(Color.white.opacity(0.1)),
-            alignment: .top
-        )
-    }
-}
-
 // MARK: - Input Components
 struct EmailInputField: View {
     @Binding var email: String
@@ -146,9 +98,9 @@ struct PasswordInputField: View {
                 HStack {
                     Group {
                         if showPassword {
-                            TextField("Password (Least 6 chars)", text: $password)
+                            TextField("Password", text: $password)
                         } else {
-                            SecureField("Password (Least 6 chars)", text: $password)
+                            SecureField("Password", text: $password)
                         }
                     }
                     .font(.system(size: 16))
@@ -213,5 +165,215 @@ struct PasswordInputField: View {
             return
         }
         passwordValid = password.count >= 6
+    }
+}
+
+
+
+struct UsernameInputField: View {
+    @Binding var userName: String
+    @Binding var userNameValid: Bool
+    @Binding var userNameTouched: Bool
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Input box
+            HStack {
+                TextField("Username", text: $userName)
+                    .font(.system(size: 16))
+                    .foregroundColor(.white)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .onChange(of: userName) { _ in
+                        validateUsernameOnChange()
+                    }
+                    .onSubmit {
+                        validateUsernameOnBlur()
+                    }
+                    .onTapGesture {
+                        // Handle focus if needed
+                    }
+            }
+            .padding(.horizontal, 16)
+            .frame(height: 48)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.white.opacity(0.05))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    )
+            )
+            .padding(.horizontal, 24)
+        }
+    }
+    
+    // Username validation logic
+    private func validateUsernameOnChange() {
+        // onChange时只校验按钮状态，不显示错误提示
+        if userName.trimmingCharacters(in: .whitespaces).isEmpty {
+            userNameValid = false
+            return
+        }
+        userNameValid = userName.count >= 2
+    }
+    
+    private func validateUsernameOnBlur() {
+        userNameTouched = true
+        if userName.trimmingCharacters(in: .whitespaces).isEmpty {
+            userNameValid = false
+            return
+        }
+        userNameValid = userName.count >= 2
+    }
+}
+ 
+
+struct VerificationCodeInputField: View {
+    @Binding var code: String
+    @Binding var codeValid: Bool
+    @Binding var codeTouched: Bool
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Input box
+            HStack {
+                TextField("Verification Code ", text: $code)
+                    .font(.system(size: 16))
+                    .foregroundColor(.white)
+                    .keyboardType(.numberPad)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .onChange(of: code) { _ in
+                        validateCodeOnChange()
+                    }
+                    .onSubmit {
+                        validateCodeOnBlur()
+                    }
+                    .onTapGesture {
+                        // Handle focus if needed
+                    }
+            }
+            .padding(.horizontal, 16)
+            .frame(height: 48)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.white.opacity(0.05))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    )
+            )
+            .padding(.horizontal, 24)
+        }
+    }
+    
+    // Code validation logic
+    private func validateCodeOnChange() {
+        // onChange时只校验按钮状态，不显示错误提示
+        if code.trimmingCharacters(in: .whitespaces).isEmpty {
+            codeValid = false
+            return
+        }
+        codeValid = code.count >= 4
+    }
+    
+    private func validateCodeOnBlur() {
+        codeTouched = true
+        if code.trimmingCharacters(in: .whitespaces).isEmpty {
+            codeValid = false
+            return
+        }
+        codeValid = code.count >= 4
+    }
+}
+
+struct ResetPasswordInputField: View {
+    @Binding var password: String
+    @Binding var showPassword: Bool
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Input box
+            ZStack {
+                HStack {
+                    Group {
+                        if showPassword {
+                            TextField("New Password", text: $password)
+                        } else {
+                            SecureField("New Password", text: $password)
+                        }
+                    }
+                    .font(.system(size: 16))
+                    .foregroundColor(.white)
+                    .onChange(of: password) { _ in
+                        // Validation can be added here if needed
+                    }
+                    
+                    Button(action: {
+                        showPassword.toggle()
+                    }) {
+                        Image(systemName: showPassword ? "eye.slash" : "eye")
+                            .foregroundColor(.gray)
+                    }
+                }
+                .padding(.horizontal, 16)
+                .frame(height: 48)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.white.opacity(0.05))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        )
+                )
+                .padding(.horizontal, 24)
+            }
+        }
+    }
+}
+
+struct ConfirmPasswordInputField: View {
+    @Binding var password: String
+    @Binding var showPassword: Bool
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Input box
+            ZStack {
+                HStack {
+                    Group {
+                        if showPassword {
+                            TextField("Confirm Password", text: $password)
+                        } else {
+                            SecureField("Confirm Password", text: $password)
+                        }
+                    }
+                    .font(.system(size: 16))
+                    .foregroundColor(.white)
+                    .onChange(of: password) { _ in
+                        // Validation can be added here if needed
+                    }
+                    
+                    Button(action: {
+                        showPassword.toggle()
+                    }) {
+                        Image(systemName: showPassword ? "eye.slash" : "eye")
+                            .foregroundColor(.gray)
+                    }
+                }
+                .padding(.horizontal, 16)
+                .frame(height: 48)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.white.opacity(0.05))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        )
+                )
+                .padding(.horizontal, 24)
+            }
+        }
     }
 }

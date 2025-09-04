@@ -75,15 +75,29 @@ struct ForgotPasswordView: View {
                         
                         // Continue button
                         Button(action: {
-                            // TODO: Implement forgot password logic
+                            Task{
+                                await authorizationApiViewModel.sendEmailCode(email: email, type: .forgetpassword)
+                                //发送验证码后进入验证界面
+                                if authorizationApiViewModel.isEmailCodeSent{
+                                    appState.navigateToVerificationCode(with: email)
+                                }else if
+                                    !authorizationApiViewModel.isEmailCodeSent{
+                                    DispatchQueue.main.async {
+                                        SVProgressHUD.showError(withStatus: authorizationApiViewModel.errorMessage)
+                                        SVProgressHUD.dismiss(withDelay: 2)
+                                    }
+                                    
+                                }
+                                
+                            }
                         }) {
                             ZStack {
                                 Text("Continue")
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(.white)
-                                    .opacity(isLoading ? 0 : 1)
+                                    .opacity(authorizationApiViewModel.isLoading ? 0 : 1)
                                 
-                                if isLoading {
+                                if authorizationApiViewModel.isLoading {
                                     ProgressView()
                                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                                 }
@@ -114,23 +128,7 @@ struct ForgotPasswordView: View {
                 }
             }
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                KeyboardToolbar(
-                    onPrevious: {
-                        // 只有一个输入框，无法向上
-                    },
-                    onNext: {
-                        // 只有一个输入框，无法向下
-                    },
-                    onDone: {
-                        focusedField = nil
-                    },
-                    canGoPrevious: false,
-                    canGoNext: false
-                )
-            }
-        }
+
     }
 }
 

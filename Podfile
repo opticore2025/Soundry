@@ -29,7 +29,9 @@ target 'Soundry' do
   pod 'SQLite.swift', '~> 0.15.4'
 
 
-  pod 'APIClient', '~> 0.3.6'
+
+  pod 'APIClient', '~> 0.3.12'
+
 
 end
 

@@ -148,33 +148,13 @@ struct EmailLoginView: View {
                 }
             }
         }
-        .onChange(of: userSessionViewModel.isLoggedIn) { isLoggedIn in
-            if isLoggedIn {
+        .onChange(of: authorizationApiViewModel.isLoginSuccess) { isLoginSuccess in
+            if isLoginSuccess {
                 // 登录成功后返回
                 appState.closeAllAuth()
             }
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                KeyboardToolbar(
-                    onPrevious: {
-                        if focusedField == .password {
-                            focusedField = .email
-                        }
-                    },
-                    onNext: {
-                        if focusedField == .email {
-                            focusedField = .password
-                        }
-                    },
-                    onDone: {
-                        focusedField = nil
-                    },
-                    canGoPrevious: focusedField == .password,
-                    canGoNext: focusedField == .email
-                )
-            }
-        }
+
     }
 }
 
