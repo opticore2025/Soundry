@@ -6,7 +6,7 @@ struct AppConfig {
     static let picURL = "https://pic.aisoundry.com/"
     static let info = AppInfo(
         name: "Soundry",
-        version: "1.0.0",
+        version: "1.0.1",
         logo: "logo"
     )
 }
