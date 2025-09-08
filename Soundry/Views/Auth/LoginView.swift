@@ -100,7 +100,7 @@ struct LoginView: View {
                 SVProgressHUD.dismiss(withDelay: 2.0)
                 return
             }
-            
+            SVProgressHUD.show(withStatus: "Logging In...")
             let appleUserId = cred.user
             let identityTokenString = cred.identityToken.flatMap { String(data: $0, encoding: .utf8) }
             
