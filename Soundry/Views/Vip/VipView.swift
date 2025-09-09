@@ -322,26 +322,31 @@ struct VipView: View {
                             if isYearly {
                                 VStack(alignment: .trailing, spacing: 2) {
                                     HStack(alignment: .bottom, spacing: 1) {
-                                        Text("$\(weeklyText)")
+                                        Text("$\(priceText)")
                                             .font(.system(size: 22, weight: .bold))
                                             .foregroundColor(.white)
-                                        Text("/wk")
-                                            .font(.system(size: 13))
+                                        Text("/yr")
+                                            .font(.system(size: 18))
                                             .foregroundColor(.white.opacity(0.7))
                                     }
                                     HStack(alignment: .bottom, spacing: 1) {
-                                        Text("($\(priceText)")
+                                        Text("($\(weeklyText)")
                                             .font(.system(size: 14, weight: .semibold))
                                             .foregroundColor(.white.opacity(0.85))
-                                        Text("/yr)")
+                                        Text("/wk)")
                                             .font(.system(size: 12))
                                             .foregroundColor(.white.opacity(0.7))
                                     }
                                 }
                             } else {
-                                Text("$\(priceText)")
-                                    .font(.system(size: 22, weight: .bold))
-                                    .foregroundColor(.white)
+                                HStack(alignment: .bottom, spacing: 1){
+                                    Text("$\(priceText)")
+                                        .font(.system(size: 22, weight: .bold))
+                                        .foregroundColor(.white)
+                                    Text("/wk")
+                                        .font(.system(size: 18))
+                                        .foregroundColor(.white.opacity(0.7))
+                                }
                             }
                         }
                     }
@@ -470,11 +475,9 @@ struct VipView: View {
             
             let remainDays = (status.remainingDays as? Int) ?? 0
 
-            // --- REMOVED ---: vipType 变量被声明但从未使用。
-            // let vipType = (status.vipType as? Int)
 
             userVipStatus = UserVIPStatus(
-                isVip: isVipFlag, // --- MODIFIED ---: 使用安全的 isVipFlag，移除了强制转换 `as! Int`。
+                isVip: isVipFlag,
                 vipExp: expDate,
                 remainingDays: remainDays
             )
